@@ -67,68 +67,68 @@ generateChart()
                 "overall-css-comments": getData("css")["comments"],
 
                 // "koss-sf-signals": charts['koss-sf-signals'],
-                // "koss-sf-surroundings": charts['koss-sf-surroundings'],
-                // "koss-sf-instability": charts['koss-sf-instability'],
-                // "koss-sf-demands": charts['koss-sf-demands'],
-                // "koss-sf-culture": charts['koss-sf-culture'],
-                // "koss-sf-autonomy": charts['koss-sf-autonomy'],
-                // "koss-sf-system": charts['koss-sf-system'],
-                // "koss-sf-conflict": charts['koss-sf-conflict'],
-                // "koss-sf-changes-by-year": charts['koss-sf-changes-by-year'],
+                "koss-sf-surroundings": charts['koss-sf-surroundings'],
+                "koss-sf-instability": charts['koss-sf-instability'],
+                "koss-sf-demands": charts['koss-sf-demands'],
+                "koss-sf-culture": charts['koss-sf-culture'],
+                "koss-sf-autonomy": charts['koss-sf-autonomy'],
+                "koss-sf-system": charts['koss-sf-system'],
+                "koss-sf-conflict": charts['koss-sf-conflict'],
+                "koss-sf-changes-by-year": charts['koss-sf-changes-by-year'],
                 "koss-sf-comment-details": getData("koss-sf")["comment-details"],
 
                 // "phq-9-signals": charts['phq-9-signals'],
                 "phq-9-rates": getData("phq-9")["rates"].toString(),
                 "phq-9-signal-texts": getData("phq-9")["signal-texts"],
-                // "phq-9-rate-bar": charts['phq-9-rate-bar'],
+                "phq-9-rate-bar": charts['phq-9-rate-bar'],
                 "phq-9-comments": getData("phq-9")["comments"],
                 "phq-9-requirements": getData("phq-9")["requirements"],
-                // "phq-9-changes-by-year": charts['phq-9-changes-by-year'],
+                "phq-9-changes-by-year": charts['phq-9-changes-by-year'],
                 "phq-9-comment-details": getData("phq-9")["comment-details"],
 
                 // "gad-7-signals": charts['gad-7-signals'],
                 "gad-7-rates": getData("gad-7")["rates"].toString(),
                 "gad-7-signal-texts": getData("gad-7")["signal-texts"],
-                // "gad-7-rate-bar": charts['gad-7-rate-bar'],
+                "gad-7-rate-bar": charts['gad-7-rate-bar'],
                 "gad-7-comments": getData("gad-7")["comments"],
                 "gad-7-requirements": getData("gad-7")["requirements"],
-                // "gad-7-changes-by-year": charts['gad-7-changes-by-year'],
+                "gad-7-changes-by-year": charts['gad-7-changes-by-year'],
                 "gad-7-comment-details": getData("gad-7")["comment-details"],
 
                 // "adnm-4-signals": charts['adnm-4-signals'],
                 "adnm-4-rates": getData("adnm-4")["rates"].toString(),
                 "adnm-4-signal-texts": getData("adnm-4")["signal-texts"],
-                // "adnm-4-rate-bar": charts['adnm-4-rate-bar'],
+                "adnm-4-rate-bar": charts['adnm-4-rate-bar'],
                 "adnm-4-comments": getData("adnm-4")["comments"],
                 "adnm-4-requirements": getData("adnm-4")["requirements"],
-                // "adnm-4-changes-by-year": charts['adnm-4-changes-by-year'],
+                "adnm-4-changes-by-year": charts['adnm-4-changes-by-year'],
                 "adnm-4-comment-details": getData("adnm-4")["comment-details"],
 
                 // "pc-ptsd-5-signals": charts['pc-ptsd-5-signals'],
                 "pc-ptsd-5-rates": getData("pc-ptsd-5")["rates"].toString(),
                 "pc-ptsd-5-signal-texts": getData("pc-ptsd-5")["signal-texts"],
-                // "pc-ptsd-5-rate-bar": charts['pc-ptsd-5-rate-bar'],
+                "pc-ptsd-5-rate-bar": charts['pc-ptsd-5-rate-bar'],
                 "pc-ptsd-5-comments": getData("pc-ptsd-5")["comments"],
                 "pc-ptsd-5-requirements": getData("pc-ptsd-5")["requirements"],
-                // "pc-ptsd-5-changes-by-year": charts['pc-ptsd-5-changes-by-year'],
+                "pc-ptsd-5-changes-by-year": charts['pc-ptsd-5-changes-by-year'],
                 "pc-ptsd-5-comment-details": getData("pc-ptsd-5")["comment-details"],
 
                 // "isi-signals": charts['isi-signals'],
                 "isi-rates": getData("isi")["rates"].toString(),
                 "isi-signal-texts": getData("isi")["signal-texts"],
-                // "isi-rate-bar": charts['isi-rate-bar'],
+                "isi-rate-bar": charts['isi-rate-bar'],
                 "isi-comments": getData("isi")["comments"],
                 "isi-requirements": getData("isi")["requirements"],
-                // "isi-changes-by-year": charts['isi-changes-by-year'],
+                "isi-changes-by-year": charts['isi-changes-by-year'],
                 "isi-comment-details": getData("isi")["comment-details"],
 
                 // "css-signals": charts['css-signals'],
                 "css-rates": getData("css")["rates"].toString(),
                 "css-signal-texts": getData("css")["signal-texts"],
-                // "css-rate-bar": charts['css-rate-bar'],
+                "css-rate-bar": charts['css-rate-bar'],
                 "css-comments": getData("css")["comments"],
                 "css-requirements": getData("css")["requirements"],
-                // "css-changes-by-year": charts['css-changes-by-year'],
+                "css-changes-by-year": charts['css-changes-by-year'],
                 "css-comment-details": getData("css")["comment-details"],
             }
         ];
@@ -136,7 +136,7 @@ generateChart()
 
         labelmake({ inputs, template, font })
             .then((pdf) => {
-                fs.writeFileSync(__dirname + "/complete_til_general_220107_3.pdf", pdf, "utf-8"); // jpg 출력 방법은?
+                fs.writeFileSync(__dirname + "/personal_report_test_1.pdf", pdf, "utf-8"); // jpg 출력 방법은?
             });
     })
 

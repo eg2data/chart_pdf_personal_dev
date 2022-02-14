@@ -47,7 +47,7 @@ const kosssfCanvas = new ChartJSNodeCanvas({ width: 240, height: 36 });
 // 3. <defaults>
 //  1) 신호등
 
-//  2) 가로바(채움) + (점)
+//  2) 가로바(채움)
 const rateBarScales =  {
     x: {
         grid: {
@@ -84,21 +84,15 @@ const changesByYearLabels = [
 const changesByYearScales = {
     x: {
         grid: {
-            display: false
+            display: false,
+            drawBorder: false,
         },
         ticks: {
             font: {
-                size: 18,
-                weight: 'bold',
-                lineHeight: 0
+                size: 10,
+                lineHeight: 0.1,
+                weight: "bold",
             },
-            color: [
-                'rgb(0, 0, 0)',
-                'rgb(0, 0, 0)',
-                'rgb(0, 0, 0)',
-                'rgb(0, 0, 0)',
-                'rgb(0, 0, 0)', // white로 하면 글자 아예 안보이네
-            ],
         },
     },
     y: {
@@ -106,12 +100,8 @@ const changesByYearScales = {
         grid: {
             drawBorder: false,
             color: [
-                'black',
-                'rgb(239, 239, 239)',
-                'rgb(251, 240, 220)',
-                'rgb(244, 209, 212)',
-                'rgb(223, 207, 209)'
-            ], // black 안넣고 표현 안되나.. 시작이 0이 아니도록.
+                'white',
+            ],
         },
         ticks: {
             display: false,
@@ -123,6 +113,29 @@ const changesByYearScales = {
     }
 }
 
+//  4) 가로바(점)
+const kosssfScales =  {
+    x: {
+        grid: {
+            drawBorder: false,
+            display: false
+        },
+        ticks: {
+            display: false,
+        },
+        min: 0,
+        max: 50,
+    },
+    y: {
+        grid: {
+            drawBorder: false,
+            display: false,
+        },
+        ticks: {
+            display: false,
+        }
+    }
+}
 
 
 async function generateChart() {
@@ -163,6 +176,156 @@ async function generateChart() {
 
 
     //  2) 가로바(채움)
+    const phq9RateBarConfig = { // radius 아쉽다
+        type: 'bar',
+        data: {
+            labels: ['a'],
+            datasets: [
+                {
+                    data: phq9RateBarData,
+                    barPercentage: 100,
+                    backgroundColor: [
+                        "#339999"
+                    ]
+                }
+            ]
+        },
+        options: {
+            indexAxis: 'y',
+            scales: rateBarScales,
+            plugins: {
+                legend: {
+                    display: false
+                },
+
+            }
+        }
+    }
+    const gad7RateBarConfig = { // radius 아쉽다
+        type: 'bar',
+        data: {
+            labels: ['a'],
+            datasets: [
+                {
+                    data: gad7RateBarData,
+                    barPercentage: 100,
+                    backgroundColor: [
+                        "#339999"
+                    ]
+                }
+            ]
+        },
+        options: {
+            indexAxis: 'y',
+            scales: rateBarScales,
+            plugins: {
+                legend: {
+                    display: false
+                },
+
+            }
+        }
+    }
+    const adnm4RateBarConfig = { // radius 아쉽다
+        type: 'bar',
+        data: {
+            labels: ['a'],
+            datasets: [
+                {
+                    data: adnm4RateBarData,
+                    barPercentage: 100,
+                    backgroundColor: [
+                        "#339999"
+                    ]
+                }
+            ]
+        },
+        options: {
+            indexAxis: 'y',
+            scales: rateBarScales,
+            plugins: {
+                legend: {
+                    display: false
+                },
+
+            }
+        }
+    }
+    const pcptsd5RateBarConfig = { // radius 아쉽다
+        type: 'bar',
+        data: {
+            labels: ['a'],
+            datasets: [
+                {
+                    data: pcptsd5RateBarData,
+                    barPercentage: 100,
+                    backgroundColor: [
+                        "#339999"
+                    ]
+                }
+            ]
+        },
+        options: {
+            indexAxis: 'y',
+            scales: rateBarScales,
+            plugins: {
+                legend: {
+                    display: false
+                },
+
+            }
+        }
+    }
+    const isiRateBarConfig = { // radius 아쉽다
+        type: 'bar',
+        data: {
+            labels: ['a'],
+            datasets: [
+                {
+                    data: isiRateBarData,
+                    barPercentage: 100,
+                    backgroundColor: [
+                        "#339999"
+                    ]
+                }
+            ]
+        },
+        options: {
+            indexAxis: 'y',
+            scales: rateBarScales,
+            plugins: {
+                legend: {
+                    display: false
+                },
+
+            }
+        }
+    }
+    const cssRateBarConfig = { // radius 아쉽다
+        type: 'bar',
+        data: {
+            labels: ['a'],
+            datasets: [
+                {
+                    data: cssRateBarData,
+                    barPercentage: 100,
+                    backgroundColor: [
+                        "#339999"
+                    ]
+                }
+            ]
+        },
+        options: {
+            indexAxis: 'y',
+            scales: rateBarScales,
+            plugins: {
+                legend: {
+                    display: false
+                },
+
+            }
+        }
+    }
 
 
     //  3) 연도별
@@ -174,12 +337,185 @@ async function generateChart() {
                 {
                     data: kosssfChangesByYearData,
                     barPercentage: 0.3,
-                    backgroundColor: [],
+                    backgroundColor: [
+                        "black",
+                        "black",
+                        "black",
+                        "black",
+                        "red"
+                    ],
                 }
             ]
         },
         options: {
             scales: changesByYearScales,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        },
+    };
+    const phq9ChangeByYearConfig = {
+        type: 'bar',
+        data: {
+            labels: changesByYearLabels,
+            datasets: [
+                {
+                    data: phq9ChangesByYearData,
+                    barPercentage: 0.3,
+                    backgroundColor: [
+                        "black",
+                        "black",
+                        "black",
+                        "black",
+                        "red"
+                    ],
+                }
+            ]
+        },
+        options: {
+            scales: changesByYearScales,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        },
+    };
+    const gad7ChangeByYearConfig = {
+        type: 'bar',
+        data: {
+            labels: changesByYearLabels,
+            datasets: [
+                {
+                    data: gad7ChangesByYearData,
+                    barPercentage: 0.3,
+                    backgroundColor: [
+                        "black",
+                        "black",
+                        "black",
+                        "black",
+                        "red"
+                    ],
+                }
+            ]
+        },
+        options: {
+            scales: changesByYearScales,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        },
+    };
+    const adnm4ChangeByYearConfig = {
+        type: 'bar',
+        data: {
+            labels: changesByYearLabels,
+            datasets: [
+                {
+                    data: adnm4ChangesByYearData,
+                    barPercentage: 0.3,
+                    backgroundColor: [
+                        "black",
+                        "black",
+                        "black",
+                        "black",
+                        "red"
+                    ],
+                }
+            ]
+        },
+        options: {
+            scales: changesByYearScales,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        },
+    };
+    const pcptsd5ChangeByYearConfig = {
+        type: 'bar',
+        data: {
+            labels: changesByYearLabels,
+            datasets: [
+                {
+                    data: pcptsd5ChangesByYearData,
+                    barPercentage: 0.3,
+                    backgroundColor: [
+                        "black",
+                        "black",
+                        "black",
+                        "black",
+                        "red"
+                    ],
+                }
+            ]
+        },
+        options: {
+            scales: changesByYearScales,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        },
+    };
+    const isiChangeByYearConfig = {
+        type: 'bar',
+        data: {
+            labels: changesByYearLabels,
+            datasets: [
+                {
+                    data: isiChangesByYearData,
+                    barPercentage: 0.3,
+                    backgroundColor: [
+                        "black",
+                        "black",
+                        "black",
+                        "black",
+                        "red"
+                    ],
+                }
+            ]
+        },
+        options: {
+            scales: changesByYearScales,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        },
+    };
+    const cssChangeByYearConfig = {
+        type: 'bar',
+        data: {
+            labels: changesByYearLabels,
+            datasets: [
+                {
+                    data: cssChangesByYearData,
+                    barPercentage: 0.3,
+                    backgroundColor: [
+                        "black",
+                        "black",
+                        "black",
+                        "black",
+                        "red"
+                    ],
+                }
+            ]
+        },
+        options: {
+            scales: changesByYearScales,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
         },
     };
 
@@ -191,7 +527,7 @@ async function generateChart() {
             labels: ['a'],
             datasets: [
                 {
-                    data: kosssfSurroundingsData[0],
+                    data: kosssfSurroundingsData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
                     barPercentage: 0.0,
                 }
             ]
@@ -199,7 +535,7 @@ async function generateChart() {
         plugins: [ChartDataLabels],
         options: {
             indexAxis: 'y',
-            scales: rateBarScales,
+            scales: kosssfScales,
             plugins: {
                 datalabels: {
                     color: ['red'],
@@ -207,10 +543,10 @@ async function generateChart() {
                     align: 'center',
                     // offset:
                     backgroundColor: ['red'],
-                    borderWidth: 5,
-                    borderRadius: 5,
+                    borderWidth: 15,
+                    borderRadius: 50,
                     font: {
-                        size: 5,
+                        size: 1,
                         weight: 'bold'
                     },
                 },
@@ -220,7 +556,216 @@ async function generateChart() {
             }
         },
     };
-
+    const kosssfInstabilityConfig = {
+        type: 'bar',
+        data: {
+            labels: ['a'],
+            datasets: [
+                {
+                    data: kosssfInstabilityData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    barPercentage: 0.0,
+                }
+            ]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            indexAxis: 'y',
+            scales: kosssfScales,
+            plugins: {
+                datalabels: {
+                    color: ['red'],
+                    anchor: 'end',
+                    align: 'center',
+                    // offset:
+                    backgroundColor: ['red'],
+                    borderWidth: 15,
+                    borderRadius: 50,
+                    font: {
+                        size: 1,
+                        weight: 'bold'
+                    },
+                },
+                legend: {
+                    display: false
+                }
+            }
+        },
+    };
+    const kosssfDemandsConfig = {
+        type: 'bar',
+        data: {
+            labels: ['a'],
+            datasets: [
+                {
+                    data: kosssfDemandsData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    barPercentage: 0.0,
+                }
+            ]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            indexAxis: 'y',
+            scales: kosssfScales,
+            plugins: {
+                datalabels: {
+                    color: ['red'],
+                    anchor: 'end',
+                    align: 'center',
+                    // offset:
+                    backgroundColor: ['red'],
+                    borderWidth: 15,
+                    borderRadius: 50,
+                    font: {
+                        size: 1,
+                        weight: 'bold'
+                    },
+                },
+                legend: {
+                    display: false
+                }
+            }
+        },
+    };
+    const kosssfCultureConfig = {
+        type: 'bar',
+        data: {
+            labels: ['a'],
+            datasets: [
+                {
+                    data: kosssfCultureData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    barPercentage: 0.0,
+                }
+            ]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            indexAxis: 'y',
+            scales: kosssfScales,
+            plugins: {
+                datalabels: {
+                    color: ['red'],
+                    anchor: 'end',
+                    align: 'center',
+                    // offset:
+                    backgroundColor: ['red'],
+                    borderWidth: 15,
+                    borderRadius: 50,
+                    font: {
+                        size: 1,
+                        weight: 'bold'
+                    },
+                },
+                legend: {
+                    display: false
+                }
+            }
+        },
+    };
+    const kosssfAutonomyConfig = {
+        type: 'bar',
+        data: {
+            labels: ['a'],
+            datasets: [
+                {
+                    data: kosssfAutonomyData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    barPercentage: 0.0,
+                }
+            ]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            indexAxis: 'y',
+            scales: kosssfScales,
+            plugins: {
+                datalabels: {
+                    color: ['red'],
+                    anchor: 'end',
+                    align: 'center',
+                    // offset:
+                    backgroundColor: ['red'],
+                    borderWidth: 15,
+                    borderRadius: 50,
+                    font: {
+                        size: 1,
+                        weight: 'bold'
+                    },
+                },
+                legend: {
+                    display: false
+                }
+            }
+        },
+    };
+    const kosssfSystemConfig = {
+        type: 'bar',
+        data: {
+            labels: ['a'],
+            datasets: [
+                {
+                    data: kosssfSystemData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    barPercentage: 0.0,
+                }
+            ]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            indexAxis: 'y',
+            scales: kosssfScales,
+            plugins: {
+                datalabels: {
+                    color: ['red'],
+                    anchor: 'end',
+                    align: 'center',
+                    // offset:
+                    backgroundColor: ['red'],
+                    borderWidth: 15,
+                    borderRadius: 50,
+                    font: {
+                        size: 1,
+                        weight: 'bold'
+                    },
+                },
+                legend: {
+                    display: false
+                }
+            }
+        },
+    };
+    const kosssfConflictConfig = {
+        type: 'bar',
+        data: {
+            labels: ['a'],
+            datasets: [
+                {
+                    data: kosssfConflictData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    barPercentage: 0.0,
+                }
+            ]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            indexAxis: 'y',
+            scales: kosssfScales,
+            plugins: {
+                datalabels: {
+                    color: ['red'],
+                    anchor: 'end',
+                    align: 'center',
+                    // offset:
+                    backgroundColor: ['red'],
+                    borderWidth: 15,
+                    borderRadius: 50,
+                    font: {
+                        size: 1,
+                        weight: 'bold'
+                    },
+                },
+                legend: {
+                    display: false
+                }
+            }
+        },
+    };
 
 
     // 5. <generate base64 types img through renderToDataURL>
@@ -234,30 +779,30 @@ async function generateChart() {
     // const cssSignalsChart = await signalsCanvas.renderToDataURL(<configuration>)
 
     //  2) 가로바(채움)
-    // const phq9RateBarChart = await
-    // const gad7RateBarChart = await
-    // const adnm4RateBarChart = await
-    // const pcptsd5RateBarChart = await
-    // const isiRateBarChart = await
-    // const cssRateBarChart = await
+    const phq9RateBarChart = await rateBarCanvas.renderToDataURL(phq9RateBarConfig)
+    const gad7RateBarChart = await rateBarCanvas.renderToDataURL(gad7RateBarConfig)
+    const adnm4RateBarChart = await rateBarCanvas.renderToDataURL(adnm4RateBarConfig)
+    const pcptsd5RateBarChart = await rateBarCanvas.renderToDataURL(pcptsd5RateBarConfig)
+    const isiRateBarChart = await rateBarCanvas.renderToDataURL(isiRateBarConfig)
+    const cssRateBarChart = await rateBarCanvas.renderToDataURL(cssRateBarConfig)
 
     //  3) 연도별
-    // const kosssfChangesByYearChart = await
-    // const phq9ChangesByYearChart = await
-    // const gad7ChangesByYearChart = await
-    // const adnm4ChangesByYearChart = await
-    // const pcptsd5ChangesByYearChart = await
-    // const isiChangesByYearChart = await
-    // const cssChangesByYearChart = await
+    const kosssfChangesByYearChart = await changesByYearCanvas.renderToDataURL(kosssfChangeByYearConfig)
+    const phq9ChangesByYearChart = await changesByYearCanvas.renderToDataURL(phq9ChangeByYearConfig)
+    const gad7ChangesByYearChart = await changesByYearCanvas.renderToDataURL(gad7ChangeByYearConfig)
+    const adnm4ChangesByYearChart = await changesByYearCanvas.renderToDataURL(adnm4ChangeByYearConfig)
+    const pcptsd5ChangesByYearChart = await changesByYearCanvas.renderToDataURL(pcptsd5ChangeByYearConfig)
+    const isiChangesByYearChart = await changesByYearCanvas.renderToDataURL(isiChangeByYearConfig)
+    const cssChangesByYearChart = await changesByYearCanvas.renderToDataURL(cssChangeByYearConfig)
 
     //  4) 가로바(점)
-    // const kosssfSurroundingsChart = await
-    // const kosssfInstabilityChart = await
-    // const kosssfDemandsChart = await
-    // const kosssfCultureChart = await
-    // const kosssfAutonomyChart = await
-    // const kosssfSystemChart = await
-    // const kosssfConflictChart = await
+    const kosssfSurroundingsChart = await kosssfCanvas.renderToDataURL(kosssfSurroundingsConfig)
+    const kosssfInstabilityChart = await kosssfCanvas.renderToDataURL(kosssfInstabilityConfig)
+    const kosssfDemandsChart = await kosssfCanvas.renderToDataURL(kosssfDemandsConfig)
+    const kosssfCultureChart = await kosssfCanvas.renderToDataURL(kosssfCultureConfig)
+    const kosssfAutonomyChart = await kosssfCanvas.renderToDataURL(kosssfAutonomyConfig)
+    const kosssfSystemChart = await kosssfCanvas.renderToDataURL(kosssfSystemConfig)
+    const kosssfConflictChart = await kosssfCanvas.renderToDataURL(kosssfConflictConfig)
 
 
     // 6. <add to charts and return>
@@ -270,28 +815,28 @@ async function generateChart() {
         // "isi-signals": isiSignalsChart,
         // "css-signals": cssSignalsChart,
         //
-        // "phq-9-rate-bar": phq9RateBarChart,
-        // "gad-7-rate-bar": gad7RateBarChart,
-        // "adnm-4-rate-bar": adnm4RateBarChart,
-        // "pc-ptsd-5-rate-bar": pcptsd5RateBarChart,
-        // "isi-rate-bar": isiRateBarChart,
-        // "css-rate-bar": cssRateBarChart,
+        "phq-9-rate-bar": phq9RateBarChart,
+        "gad-7-rate-bar": gad7RateBarChart,
+        "adnm-4-rate-bar": adnm4RateBarChart,
+        "pc-ptsd-5-rate-bar": pcptsd5RateBarChart,
+        "isi-rate-bar": isiRateBarChart,
+        "css-rate-bar": cssRateBarChart,
         //
-        // "koss-sf-changes-by-year": kosssfChangesByYearChart,
-        // "phq-9-changes-by-year": phq9ChangesByYearChart,
-        // "gad-7-changes-by-year": gad7ChangesByYearChart,
-        // "adnm-4-changes-by-year": adnm4ChangesByYearChart,
-        // "pc-ptsd-5-changes-by-year": pcptsd5ChangesByYearChart,
-        // "isi-changes-by-year": isiChangesByYearChart,
-        // "css-changes-by-year": cssChangesByYearChart,
-        //
-        // "koss-sf-surroundings": kosssfSurroundingsChart,
-        // "koss-sf-instability": kosssfInstabilityChart,
-        // "koss-sf-demands": kosssfDemandsChart,
-        // "koss-sf-culture": kosssfCultureChart,
-        // "koss-sf-autonomy": kosssfAutonomyChart,
-        // "koss-sf-system": kosssfSystemChart,
-        // "koss-sf-conflict": kosssfConflictChart,
+        "koss-sf-changes-by-year": kosssfChangesByYearChart,
+        "phq-9-changes-by-year": phq9ChangesByYearChart,
+        "gad-7-changes-by-year": gad7ChangesByYearChart,
+        "adnm-4-changes-by-year": adnm4ChangesByYearChart,
+        "pc-ptsd-5-changes-by-year": pcptsd5ChangesByYearChart,
+        "isi-changes-by-year": isiChangesByYearChart,
+        "css-changes-by-year": cssChangesByYearChart,
+
+        "koss-sf-surroundings": kosssfSurroundingsChart,
+        "koss-sf-instability": kosssfInstabilityChart,
+        "koss-sf-demands": kosssfDemandsChart,
+        "koss-sf-culture": kosssfCultureChart,
+        "koss-sf-autonomy": kosssfAutonomyChart,
+        "koss-sf-system": kosssfSystemChart,
+        "koss-sf-conflict": kosssfConflictChart,
     }
     return charts
 };

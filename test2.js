@@ -1,3 +1,3 @@
 import { getData } from "./DB.js"
 
-console.log(getData("koss-sf")["points"].toString())
+console.log(typeof getData("koss-sf")["surroundings"][0])
