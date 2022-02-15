@@ -18,24 +18,24 @@ const dataList =
             "test-adequacy": "적합",
         },
         "koss-sf" : {
-            "signals": [1],
+            "signals": [66], // 24, 45, 66, 87. 더 나은 비율을 찾아볼까, 그냥 갈까?
             "points" : [39.5],
-            "rates" : [25],
+            "rates" : ["상위 25"], // ["상위" + 25]
             "means" : [54.8],
-            "surroundings": [37.5, 25],
-            "instability": [11, 50],
-            "demands": [4, 25],
-            "culture": [15, 25],
-            "autonomy": [2, 50],
-            "system": [8, 50],
-            "conflict": [19, 25],
+            "surroundings": [0, 1, 2, 3], // 37.5, 25
+            "instability": [11, "하위 50"],
+            "demands": [4, "하위 25"],
+            "culture": [15, "하위 25"],
+            "autonomy": [2, "하위 50"],
+            "system": [8, "하위 50"],
+            "conflict": [19, "하위 25"],
             "changes-by-year": [25, 50, 75, 100, 25],
             "comment-details": "스트레스 측정 점수는 39.5점으로, 참고치 하위 25%에 해당합니다.",
         },
         "phq-9" : {
-            "signals": [3],
-            "points" : [27],
-            "rates": [75], // 72
+            "signals": [45],
+            "points" : [27.1], // .0도 읽혀야 최적으로 읽히도록 되어있음
+            "rates": [75.1], // 72
             "signal-texts": "약간 심함",
             "comments": "약간 심한 수준의 우울감을 자주 느낌",
             "requirements": "추가 평가 또는 전문가의 도움이 필요함",
@@ -43,7 +43,7 @@ const dataList =
             "comment-details": "검사 결과는 약간 심한 수준의 우울감을 자주 느끼고 있습니다. 우울증 진단은 병력 및 여러 검사 결과와 전문의의 종합적인 판단에 의해 이루어지므로, 추가 평가 또는 전문가의 도움이 필요합니다.",
         },
         "gad-7" : {
-            "signals": [4],
+            "signals": [87],
             "points" : [21],
             "rates": [65],
             "signal-texts": "중간",
@@ -53,7 +53,7 @@ const dataList =
             "comment-details": "검사 결과는 중간 수준의 불안감을 자주 느끼고 있습니다. 불안장애 진단은 병력 및 여러 검사 결과와 전문의의 종합적인 판단에 의해 이루어지므로, 추가 평가 또는 전문가의 도움이 필요합니다.",
         },
         "adnm-4" : {
-            "signals": [4],
+            "signals": [66],
             "points" : [9],
             "rates": [81.2],
             "signal-texts": "심각함",
@@ -63,7 +63,7 @@ const dataList =
             "comment-details": "검사 결과는 심각한 수준의 적응 스트레스를 자주 느끼고 있습니다. 적응장애 진단은 병력 및 여러 검사 결과와 전문의의 종합적인 판단에 의해 이루어지므로, 추가 평가 또는 전문가의 도움이 필요합니다.",
         },
         "pc-ptsd-5" : {
-            "signals": [2],
+            "signals": [45],
             "points" : [4],
             "rates": [40],
             "signal-texts": "중간",
@@ -73,7 +73,7 @@ const dataList =
             "comment-details": "검사 결과는 심각한 수준의 적응 스트레스를 자주 느끼고 있습니다. PTSD 진단은 병력 및 여러 검사 결과와 전문의의 종합적인 판단에 의해 이루어지므로, 추가 평가 또는 전문가의 도움이 필요합니다.",
         },
         "isi" : {
-            "signals": [1],
+            "signals": [24],
             "points" : [14],
             "rates": [28.5],
             "signal-texts": "경미함",
@@ -83,8 +83,8 @@ const dataList =
             "comment-details": "검사 결과는 경미한 수준의 불면증을 자주 느끼고 있습니다. 2주 이상 지속 시 전문가의 도움이 필요합니다. 불면증 진단은 병력 및 여러 검사 결과와 전문의의 종합적인 판단에 의해 이루어지므로, 추가 평가 또는 전문가의 도움이 필요합니다.",
         },
         "css" : {
-            "signals": [1],
-            "points" : [0],
+            "signals": [87],
+            "points" : [99.9],
             "rates": [0],
             "signal-texts": "자살위험아님",
             "comments": "위험한 수준의 자살 사고가 보이지 않음",
@@ -101,4 +101,5 @@ function getData(key) {
 };
 
 export { getData };
+
 

@@ -4,6 +4,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels'
 import fs from "fs";
 import { getData } from "./DB.js";
 
+
 // 1. <input data>
 //  1) 신호등 == 원소 1개짜리 list
 const kosssfSignalsData = getData("koss-sf")["signals"]
@@ -46,6 +47,28 @@ const kosssfCanvas = new ChartJSNodeCanvas({ width: 240, height: 36 });
 
 // 3. <defaults>
 //  1) 신호등
+const signalsScales =  {
+    x: {
+        grid: {
+            drawBorder: false,
+            display: false
+        },
+        ticks: {
+            display: false,
+        },
+        min: 0,
+        max: 100,
+    },
+    y: {
+        grid: {
+            drawBorder: false,
+            display: false,
+        },
+        ticks: {
+            display: false,
+        }
+    }
+}
 
 //  2) 가로바(채움)
 const rateBarScales =  {
@@ -141,39 +164,372 @@ const kosssfScales =  {
 async function generateChart() {
     // 4. <configurations>
     //  1) 신호등
-    // 이거 신호등에 활용합시다 => 1이면 배경 그 색. 등등.
-    // input data의 value에 따라 bar+value의 배경색으로 정상/경계/위험/심각 표현
-    // for( let i = 0; i < generalMentalIllnessMean5yrsData.length; i++) {
-    //     if (generalMentalIllnessMean5yrsData[i] < 25) {
-    //         generalMentalIllnessMean5yrsConfig.data.datasets[0].backgroundColor[i] = 'rgba(239, 239, 239, 0.5)'
-    //         // generalMentalIllnessMean5yrsData[0].data[i] = generalMentalIllnessMean5yrsData[0].data[i].toString().concat('                    ') // 이건 잡히는거 보니, 알파벳 문제인가본데.
-    //         // generalMentalIllnessMean5yrsData[0].data[i] = "한글" // 이거 안잡히네. 한글처리 문제다. 음........
-    //         // generalMentalIllnessMean5yrsData[0].data[i] = "abc" // 이거 안잡히네. 그냥 문자열 처리 문제구나.
-    //         generalMentalIllnessMean5yrsConfig.options.plugins.datalabels.backgroundColor[i] = 'rgba(239, 239, 239, 0.5)'
-    //     } else if (generalMentalIllnessMean5yrsData[i] < 50) {
-    //         generalMentalIllnessMean5yrsConfig.data.datasets[0].backgroundColor[i] = 'rgba(251, 240, 220, 0.5)'
-    //         generalMentalIllnessMean5yrsConfig.options.plugins.datalabels.backgroundColor[i] = 'rgba(251, 240, 220, 0.5)'
-    //     } else if (generalMentalIllnessMean5yrsData[i] < 75) {
-    //         generalMentalIllnessMean5yrsConfig.data.datasets[0].backgroundColor[i] = 'rgba(244, 209, 212, 0.5)'
-    //         generalMentalIllnessMean5yrsConfig.options.plugins.datalabels.backgroundColor[i] = 'rgba(244, 209, 212, 0.5)'
-    //     } else {
-    //         generalMentalIllnessMean5yrsConfig.data.datasets[0].backgroundColor[i] = 'rgba(223, 207, 209, 0.5)'
-    //         generalMentalIllnessMean5yrsConfig.options.plugins.datalabels.backgroundColor[i] = 'rgba(223, 207, 209, 0.5)'
-    //     }
-    // }
-    // 차트 위 point를 정상/경계/위험/심각 색상으로 표현하려 한 시도. 근데 색이 너무 연해서..
-    // if (generalMentalIllnessEachPHQ9Data[0] < 25) {
-    //     generalMentalIllnessEachPHQ9Config.options.plugins.datalabels.color[0] = 'rgba(239, 239, 239)'
-    //     generalMentalIllnessEachPHQ9Config.options.plugins.datalabels.backgroundColor[0] = 'rgba(239, 239, 239)'
+    const kosssfSignalsConfig = {
+        type: 'bar',
+        data: {
+            labels: ['a'],
+            datasets: [
+                {
+                    data: kosssfSignalsData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    barPercentage: 0.0,
+                }
+            ]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            indexAxis: 'y',
+            scales: signalsScales,
+            plugins: {
+                datalabels: {
+                    color: [''],
+                    anchor: 'end',
+                    align: 'center',
+                    // offset:
+                    backgroundColor: [''],
+                    borderWidth: 37, // 47
+                    borderRadius: 50,
+                    font: {
+                        size: 2,
+                        weight: 'bold'
+                    },
+                },
+                legend: {
+                    display: false
+                }
+            }
+        },
+    };
+    const phq9SignalsConfig = {
+        type: 'bar',
+        data: {
+            labels: ['a'],
+            datasets: [
+                {
+                    data: phq9SignalsData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    barPercentage: 0.0,
+                }
+            ]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            indexAxis: 'y',
+            scales: signalsScales,
+            plugins: {
+                datalabels: {
+                    color: [''],
+                    anchor: 'end',
+                    align: 'center',
+                    // offset:
+                    backgroundColor: [''],
+                    borderWidth: 37, // 47
+                    borderRadius: 50,
+                    font: {
+                        size: 2,
+                        weight: 'bold'
+                    },
+                },
+                legend: {
+                    display: false
+                }
+            }
+        },
+    };
+    const adnm4SignalsConfig = {
+        type: 'bar',
+        data: {
+            labels: ['a'],
+            datasets: [
+                {
+                    data: adnm4SignalsData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    barPercentage: 0.0,
+                }
+            ]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            indexAxis: 'y',
+            scales: signalsScales,
+            plugins: {
+                datalabels: {
+                    color: [''],
+                    anchor: 'end',
+                    align: 'center',
+                    // offset:
+                    backgroundColor: [''],
+                    borderWidth: 37, // 47
+                    borderRadius: 50,
+                    font: {
+                        size: 2,
+                        weight: 'bold'
+                    },
+                },
+                legend: {
+                    display: false
+                }
+            }
+        },
+    };
+    const isiSignalsConfig = {
+        type: 'bar',
+        data: {
+            labels: ['a'],
+            datasets: [
+                {
+                    data: isiSignalsData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    barPercentage: 0.0,
+                }
+            ]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            indexAxis: 'y',
+            scales: signalsScales,
+            plugins: {
+                datalabels: {
+                    color: [''],
+                    anchor: 'end',
+                    align: 'center',
+                    // offset:
+                    backgroundColor: [''],
+                    borderWidth: 37, // 47
+                    borderRadius: 50,
+                    font: {
+                        size: 2,
+                        weight: 'bold'
+                    },
+                },
+                legend: {
+                    display: false
+                }
+            }
+        },
+    };
+    const gad7SignalsConfig = {
+        type: 'bar',
+        data: {
+            labels: ['a'],
+            datasets: [
+                {
+                    data: gad7SignalsData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    barPercentage: 0.0,
+                }
+            ]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            indexAxis: 'y',
+            scales: signalsScales,
+            plugins: {
+                datalabels: {
+                    color: [''],
+                    anchor: 'end',
+                    align: 'center',
+                    // offset:
+                    backgroundColor: [''],
+                    borderWidth: 37, // 47
+                    borderRadius: 50,
+                    font: {
+                        size: 2,
+                        weight: 'bold'
+                    },
+                },
+                legend: {
+                    display: false
+                }
+            }
+        },
+    };
+    const pcptsd5SignalsConfig = {
+        type: 'bar',
+        data: {
+            labels: ['a'],
+            datasets: [
+                {
+                    data: pcptsd5SignalsData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    barPercentage: 0.0,
+                }
+            ]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            indexAxis: 'y',
+            scales: signalsScales,
+            plugins: {
+                datalabels: {
+                    color: [''],
+                    anchor: 'end',
+                    align: 'center',
+                    // offset:
+                    backgroundColor: [''],
+                    borderWidth: 37, // 47
+                    borderRadius: 50,
+                    font: {
+                        size: 2,
+                        weight: 'bold'
+                    },
+                },
+                legend: {
+                    display: false
+                }
+            }
+        },
+    };
+    const cssSignalsConfig = {
+        type: 'bar',
+        data: {
+            labels: ['a'],
+            datasets: [
+                {
+                    data: cssSignalsData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    barPercentage: 0.0,
+                }
+            ]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            indexAxis: 'y',
+            scales: signalsScales,
+            plugins: {
+                datalabels: {
+                    color: [''],
+                    anchor: 'end',
+                    align: 'center',
+                    // offset:
+                    backgroundColor: [''],
+                    borderWidth: 37, // 47
+                    borderRadius: 50,
+                    font: {
+                        size: 2,
+                        weight: 'bold'
+                    },
+                },
+                legend: {
+                    display: false
+                }
+            }
+        },
+    };
+
+    // 왜 안돼? (switch, 함수)
+    // function pickColor(config) {
+    //     const data = config.data.datasets[0].data
+    //     const color = config.options.plugins.datalabels.color[0]
+    //     const backgroundColor = config.options.plugins.datalabels.backgroundColor[0]
     //
-    // } else if (generalMentalIllnessEachPHQ9Data[0] < 50) {
-    //     generalMentalIllnessEachPHQ9Config.options.plugins.datalabels.backgroundColor[0] = 'rgba(251, 240, 220)'
-    // } else if (generalMentalIllnessEachPHQ9Data[0] < 75) {
-    //     generalMentalIllnessEachPHQ9Config.options.plugins.datalabels.backgroundColor[0] = 'rgba(244, 209, 212)'
-    // } else {
-    //     generalMentalIllnessEachPHQ9Config.options.plugins.datalabels.backgroundColor[0] = 'rgba(223, 207, 209)'
+    //     if (data == 24) {
+    //         color = '#00cccc' // 왜 안돼?
+    //         backgroundColor = '#00cccc'
+    //     }
+    // 왜 안돼?
+    // switch (kosssfSignalsConfig.data.datasets[0].data) {
+    //     case 24:
+    //         kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
+    //         kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
+    //     case 45:
+    //         kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#ffb266'
+    //         kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#ffb266'
+    //     case 66:
+    //         kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#Ff0000'
+    //         kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#Ff0000'
+    //     case 87:
+    //         kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
+    //         kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
     // }
 
+    // 입력값에 따른 색상+위치 변경 구현
+    // switch + 함수 적용해보기
+    if (kosssfSignalsConfig.data.datasets[0].data == 24) {
+        kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
+        kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
+    } else if (kosssfSignalsConfig.data.datasets[0].data == 45) {
+        kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#ffb266'
+        kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#ffb266'
+    } else if (kosssfSignalsConfig.data.datasets[0].data == 66) {
+        kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#Ff0000'
+        kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#Ff0000'
+    } else if (kosssfSignalsConfig.data.datasets[0].data == 87) {
+        kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
+        kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
+    }
+
+    if (phq9SignalsConfig.data.datasets[0].data == 24) {
+        phq9SignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
+        phq9SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
+    } else if (phq9SignalsConfig.data.datasets[0].data == 45) {
+        phq9SignalsConfig.options.plugins.datalabels.color[0] = '#ffb266'
+        phq9SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#ffb266'
+    } else if (phq9SignalsConfig.data.datasets[0].data == 66) {
+        phq9SignalsConfig.options.plugins.datalabels.color[0] = '#Ff0000'
+        phq9SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#Ff0000'
+    } else if (phq9SignalsConfig.data.datasets[0].data == 87) {
+        phq9SignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
+        phq9SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
+    }
+    if (adnm4SignalsConfig.data.datasets[0].data == 24) {
+        adnm4SignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
+        adnm4SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
+    } else if (adnm4SignalsConfig.data.datasets[0].data == 45) {
+        adnm4SignalsConfig.options.plugins.datalabels.color[0] = '#ffb266'
+        adnm4SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#ffb266'
+    } else if (adnm4SignalsConfig.data.datasets[0].data == 66) {
+        adnm4SignalsConfig.options.plugins.datalabels.color[0] = '#Ff0000'
+        adnm4SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#Ff0000'
+    } else if (adnm4SignalsConfig.data.datasets[0].data == 87) {
+        adnm4SignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
+        adnm4SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
+    }
+    if (isiSignalsConfig.data.datasets[0].data == 24) {
+        isiSignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
+        isiSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
+    } else if (isiSignalsConfig.data.datasets[0].data == 45) {
+        isiSignalsConfig.options.plugins.datalabels.color[0] = '#ffb266'
+        isiSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#ffb266'
+    } else if (isiSignalsConfig.data.datasets[0].data == 66) {
+        isiSignalsConfig.options.plugins.datalabels.color[0] = '#Ff0000'
+        isiSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#Ff0000'
+    } else if (isiSignalsConfig.data.datasets[0].data == 87) {
+        isiSignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
+        isiSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
+    }
+    if (gad7SignalsConfig.data.datasets[0].data == 24) {
+        gad7SignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
+        gad7SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
+    } else if (gad7SignalsConfig.data.datasets[0].data == 45) {
+        gad7SignalsConfig.options.plugins.datalabels.color[0] = '#ffb266'
+        gad7SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#ffb266'
+    } else if (gad7SignalsConfig.data.datasets[0].data == 66) {
+        gad7SignalsConfig.options.plugins.datalabels.color[0] = '#Ff0000'
+        gad7SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#Ff0000'
+    } else if (gad7SignalsConfig.data.datasets[0].data == 87) {
+        gad7SignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
+        gad7SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
+    }
+    if (pcptsd5SignalsConfig.data.datasets[0].data == 24) {
+        pcptsd5SignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
+        pcptsd5SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
+    } else if (pcptsd5SignalsConfig.data.datasets[0].data == 45) {
+        pcptsd5SignalsConfig.options.plugins.datalabels.color[0] = '#ffb266'
+        pcptsd5SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#ffb266'
+    } else if (pcptsd5SignalsConfig.data.datasets[0].data == 66) {
+        pcptsd5SignalsConfig.options.plugins.datalabels.color[0] = '#Ff0000'
+        pcptsd5SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#Ff0000'
+    } else if (pcptsd5SignalsConfig.data.datasets[0].data == 87) {
+        pcptsd5SignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
+        pcptsd5SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
+    }
+    if (cssSignalsConfig.data.datasets[0].data == 24) {
+        cssSignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
+        cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
+    } else if (cssSignalsConfig.data.datasets[0].data == 45) {
+        cssSignalsConfig.options.plugins.datalabels.color[0] = '#ffb266'
+        cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#ffb266'
+    } else if (cssSignalsConfig.data.datasets[0].data == 66) {
+        cssSignalsConfig.options.plugins.datalabels.color[0] = '#Ff0000'
+        cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#Ff0000'
+    } else if (cssSignalsConfig.data.datasets[0].data == 87) {
+        cssSignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
+        cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
+    }
 
     //  2) 가로바(채움)
     const phq9RateBarConfig = { // radius 아쉽다
@@ -326,7 +682,6 @@ async function generateChart() {
             }
         }
     }
-
 
     //  3) 연도별
     const kosssfChangeByYearConfig = {
@@ -518,7 +873,6 @@ async function generateChart() {
             }
         },
     };
-
 
     //  4) 가로바(점)
     const kosssfSurroundingsConfig = {
@@ -767,16 +1121,15 @@ async function generateChart() {
         },
     };
 
-
     // 5. <generate base64 types img through renderToDataURL>
     //  1) 신호등
-    // const kosssfSignalsChart = await signalsCanvas.renderToDataURL(<configuration>)
-    // const phq9SignalsChart = await signalsCanvas.renderToDataURL(<configuration>)
-    // const gad7SignalsChart = await signalsCanvas.renderToDataURL(<configuration>)
-    // const adnm4SignalsChart = await signalsCanvas.renderToDataURL(<configuration>)
-    // const pcptsd5SignalsChart = await signalsCanvas.renderToDataURL(<configuration>)
-    // const isiSignalsChart = await signalsCanvas.renderToDataURL(<configuration>)
-    // const cssSignalsChart = await signalsCanvas.renderToDataURL(<configuration>)
+    const kosssfSignalsChart = await signalsCanvas.renderToDataURL(kosssfSignalsConfig)
+    const phq9SignalsChart = await signalsCanvas.renderToDataURL(phq9SignalsConfig)
+    const gad7SignalsChart = await signalsCanvas.renderToDataURL(gad7SignalsConfig)
+    const adnm4SignalsChart = await signalsCanvas.renderToDataURL(adnm4SignalsConfig)
+    const pcptsd5SignalsChart = await signalsCanvas.renderToDataURL(pcptsd5SignalsConfig)
+    const isiSignalsChart = await signalsCanvas.renderToDataURL(isiSignalsConfig)
+    const cssSignalsChart = await signalsCanvas.renderToDataURL(cssSignalsConfig)
 
     //  2) 가로바(채움)
     const phq9RateBarChart = await rateBarCanvas.renderToDataURL(phq9RateBarConfig)
@@ -804,24 +1157,23 @@ async function generateChart() {
     const kosssfSystemChart = await kosssfCanvas.renderToDataURL(kosssfSystemConfig)
     const kosssfConflictChart = await kosssfCanvas.renderToDataURL(kosssfConflictConfig)
 
-
     // 6. <add to charts and return>
     const charts = {
-        // "koss-sf-signals": kosssfSignalsChart,
-        // "phq-9-signals": phq9SignalsChart,
-        // "gad-7-signals": gad7SignalsChart,
-        // "adnm-4-signals": adnm4SignalsChart,
-        // "pc-ptsd-5-signals": pcptsd5SignalsChart,
-        // "isi-signals": isiSignalsChart,
-        // "css-signals": cssSignalsChart,
-        //
+        "koss-sf-signals": kosssfSignalsChart,
+        "phq-9-signals": phq9SignalsChart,
+        "gad-7-signals": gad7SignalsChart,
+        "adnm-4-signals": adnm4SignalsChart,
+        "pc-ptsd-5-signals": pcptsd5SignalsChart,
+        "isi-signals": isiSignalsChart,
+        "css-signals": cssSignalsChart,
+
         "phq-9-rate-bar": phq9RateBarChart,
         "gad-7-rate-bar": gad7RateBarChart,
         "adnm-4-rate-bar": adnm4RateBarChart,
         "pc-ptsd-5-rate-bar": pcptsd5RateBarChart,
         "isi-rate-bar": isiRateBarChart,
         "css-rate-bar": cssRateBarChart,
-        //
+
         "koss-sf-changes-by-year": kosssfChangesByYearChart,
         "phq-9-changes-by-year": phq9ChangesByYearChart,
         "gad-7-changes-by-year": gad7ChangesByYearChart,
@@ -842,3 +1194,4 @@ async function generateChart() {
 };
 
 export { generateChart };
+

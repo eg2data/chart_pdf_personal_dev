@@ -13,6 +13,7 @@ const font = {
     }
 };
 
+
 generateChart()
     .then(( charts ) => {
         const inputs = [
@@ -30,43 +31,45 @@ generateChart()
                 "company-info-address": getData("basic-info")["company-info"]["address"],
                 "company-info-via": getData("basic-info")["company-info"]["via"],
                 "company-info-contact": getData("basic-info")["company-info"]["contact"],
-                "check-list-number": getData("basic-info")["check-list-number"],
+                "check-list-number": getData("basic-info")["check-list-number"] + " 개",
                 "test-type": getData("basic-info")["test-type"],
                 "test-method": getData("basic-info")["test-method"],
                 "test-adequacy": getData("basic-info")["test-adequacy"],
 
                 "overall-user-name": getData("basic-info")["user-name"],
                 "overall-classification-code": getData("basic-info")["classification-code"],
-                // "overall-koss-sf-signals": charts['koss-sf-signals'],
-                "overall-koss-sf-points": getData("koss-sf")["points"].toString(),
-                "overall-koss-sf-rates": getData("koss-sf")["rates"].toString(),
-                "overall-koss-sf-means": getData("koss-sf")["means"].toString(),
-                // "overall-phq-9-signals": charts['phq-9-signals'],
-                "overall-phq-9-points": getData("phq-9")["points"].toString(),
-                "overall-phq-9-rates": getData("phq-9")["rates"].toString(),
+                "overall-koss-sf-signals": charts['koss-sf-signals'],
+                "overall-koss-sf-points": getData("koss-sf")["points"].toString() + "점  /",
+                "overall-koss-sf-rates": getData("koss-sf")["rates"].toString() + "%",
+                "overall-koss-sf-means": getData("koss-sf")["means"].toString() + "점",
+
+                "overall-phq-9-signals": charts['phq-9-signals'],
+                "overall-phq-9-points": getData("phq-9")["points"].toString() + "점  /",
+                "overall-phq-9-rates": getData("phq-9")["rates"].toString() + "%",
                 "overall-phq-9-comments": getData("phq-9")["comments"],
-                // "overall-gad-7-signals": charts['gad-7-signals'],
-                "overall-gad-7-points": getData("gad-7")["points"].toString(),
-                "overall-gad-7-rates": getData("gad-7")["rates"].toString(),
+                "overall-gad-7-signals": charts['gad-7-signals'],
+                "overall-gad-7-points": getData("gad-7")["points"].toString() + "점  /",
+                "overall-gad-7-rates": getData("gad-7")["rates"].toString() + "%",
                 "overall-gad-7-comments": getData("gad-7")["comments"],
-                // "overall-adnm-4-signals": charts['adnm-4-signals'],
-                "overall-adnm-4-points": getData("adnm-4")["points"].toString(),
-                "overall-adnm-4-rates": getData("adnm-4")["rates"].toString(),
+                "overall-adnm-4-signals": charts['adnm-4-signals'],
+                "overall-adnm-4-points": getData("adnm-4")["points"].toString() + "점  /",
+                "overall-adnm-4-rates": getData("adnm-4")["rates"].toString() + "%",
                 "overall-adnm-4-comments": getData("adnm-4")["comments"],
-                // "overall-pc-ptsd-5-signals": charts['pc-ptsd-5-signals'],
-                "overall-pc-ptsd-5-points": getData("pc-ptsd-5")["points"].toString(),
-                "overall-pc-ptsd-5-rates": getData("pc-ptsd-5")["rates"].toString(),
+                "overall-pc-ptsd-5-signals": charts['pc-ptsd-5-signals'],
+                "overall-pc-ptsd-5-points": getData("pc-ptsd-5")["points"].toString() + "점  /",
+                "overall-pc-ptsd-5-rates": getData("pc-ptsd-5")["rates"].toString() + "%",
                 "overall-pc-ptsd-5-comments": getData("pc-ptsd-5")["comments"],
-                // "overall-isi-signals": charts['isi-signals'],
-                "overall-isi-points": getData("isi")["points"].toString(),
-                "overall-isi-rates": getData("isi")["rates"].toString(),
+                "overall-isi-signals": charts['isi-signals'],
+                "overall-isi-points": getData("isi")["points"].toString() + "점  /",
+                "overall-isi-rates": getData("isi")["rates"].toString() + "%",
                 "overall-isi-comments": getData("isi")["comments"],
-                // "overall-css-signals": charts['css-signals'],
-                "overall-css-points": getData("css")["points"].toString(),
-                "overall-css-rates": getData("css")["rates"].toString(),
+                "overall-css-signals": charts['css-signals'],
+                "overall-css-points": getData("css")["points"].toString() + "점  /",
+                "overall-css-rates": getData("css")["rates"].toString() + "%",
                 "overall-css-comments": getData("css")["comments"],
 
-                // "koss-sf-signals": charts['koss-sf-signals'],
+
+                "koss-sf-signals": charts['koss-sf-signals'],
                 "koss-sf-surroundings": charts['koss-sf-surroundings'],
                 "koss-sf-instability": charts['koss-sf-instability'],
                 "koss-sf-demands": charts['koss-sf-demands'],
@@ -77,8 +80,16 @@ generateChart()
                 "koss-sf-changes-by-year": charts['koss-sf-changes-by-year'],
                 "koss-sf-comment-details": getData("koss-sf")["comment-details"],
 
-                // "phq-9-signals": charts['phq-9-signals'],
-                "phq-9-rates": getData("phq-9")["rates"].toString(),
+                // "koss-sf-surroundings-points": getData("koss-sf")["surroundings"][0].toString() + "점  /",
+                // "koss-sf-surroundings-rates": getData("koss-sf")["surroundings"][1] + "%",
+                "koss-sf-surroundings-points": getData("koss-sf")["surroundings"][2].toString(),
+                "koss-sf-surroundings-rates": "3",
+
+
+
+
+                "phq-9-signals": charts['phq-9-signals'],
+                "phq-9-rates": getData("phq-9")["rates"].toString() + "%",
                 "phq-9-signal-texts": getData("phq-9")["signal-texts"],
                 "phq-9-rate-bar": charts['phq-9-rate-bar'],
                 "phq-9-comments": getData("phq-9")["comments"],
@@ -86,8 +97,8 @@ generateChart()
                 "phq-9-changes-by-year": charts['phq-9-changes-by-year'],
                 "phq-9-comment-details": getData("phq-9")["comment-details"],
 
-                // "gad-7-signals": charts['gad-7-signals'],
-                "gad-7-rates": getData("gad-7")["rates"].toString(),
+                "gad-7-signals": charts['gad-7-signals'],
+                "gad-7-rates": getData("gad-7")["rates"].toString() + "%",
                 "gad-7-signal-texts": getData("gad-7")["signal-texts"],
                 "gad-7-rate-bar": charts['gad-7-rate-bar'],
                 "gad-7-comments": getData("gad-7")["comments"],
@@ -95,8 +106,8 @@ generateChart()
                 "gad-7-changes-by-year": charts['gad-7-changes-by-year'],
                 "gad-7-comment-details": getData("gad-7")["comment-details"],
 
-                // "adnm-4-signals": charts['adnm-4-signals'],
-                "adnm-4-rates": getData("adnm-4")["rates"].toString(),
+                "adnm-4-signals": charts['adnm-4-signals'],
+                "adnm-4-rates": getData("adnm-4")["rates"].toString() + "%",
                 "adnm-4-signal-texts": getData("adnm-4")["signal-texts"],
                 "adnm-4-rate-bar": charts['adnm-4-rate-bar'],
                 "adnm-4-comments": getData("adnm-4")["comments"],
@@ -104,8 +115,8 @@ generateChart()
                 "adnm-4-changes-by-year": charts['adnm-4-changes-by-year'],
                 "adnm-4-comment-details": getData("adnm-4")["comment-details"],
 
-                // "pc-ptsd-5-signals": charts['pc-ptsd-5-signals'],
-                "pc-ptsd-5-rates": getData("pc-ptsd-5")["rates"].toString(),
+                "pc-ptsd-5-signals": charts['pc-ptsd-5-signals'],
+                "pc-ptsd-5-rates": getData("pc-ptsd-5")["rates"].toString() + "%",
                 "pc-ptsd-5-signal-texts": getData("pc-ptsd-5")["signal-texts"],
                 "pc-ptsd-5-rate-bar": charts['pc-ptsd-5-rate-bar'],
                 "pc-ptsd-5-comments": getData("pc-ptsd-5")["comments"],
@@ -113,8 +124,8 @@ generateChart()
                 "pc-ptsd-5-changes-by-year": charts['pc-ptsd-5-changes-by-year'],
                 "pc-ptsd-5-comment-details": getData("pc-ptsd-5")["comment-details"],
 
-                // "isi-signals": charts['isi-signals'],
-                "isi-rates": getData("isi")["rates"].toString(),
+                "isi-signals": charts['isi-signals'],
+                "isi-rates": getData("isi")["rates"].toString() + "%",
                 "isi-signal-texts": getData("isi")["signal-texts"],
                 "isi-rate-bar": charts['isi-rate-bar'],
                 "isi-comments": getData("isi")["comments"],
@@ -122,8 +133,8 @@ generateChart()
                 "isi-changes-by-year": charts['isi-changes-by-year'],
                 "isi-comment-details": getData("isi")["comment-details"],
 
-                // "css-signals": charts['css-signals'],
-                "css-rates": getData("css")["rates"].toString(),
+                "css-signals": charts['css-signals'],
+                "css-rates": getData("css")["rates"].toString() + "%",
                 "css-signal-texts": getData("css")["signal-texts"],
                 "css-rate-bar": charts['css-rate-bar'],
                 "css-comments": getData("css")["comments"],
@@ -139,4 +150,5 @@ generateChart()
                 fs.writeFileSync(__dirname + "/personal_report_test_1.pdf", pdf, "utf-8"); // jpg 출력 방법은?
             });
     })
+
 
