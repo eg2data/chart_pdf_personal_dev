@@ -1,5 +1,9 @@
 import fs from "fs";
 import labelmake from "labelmake";
+import { fromPath } from "pdf2pic";
+
+
+
 import template from "./labelmake-template.json"
 // labelmake-template.json > "fontName":"NanumGothic" ---- 직접 추가 말고 다른 방법이 있을까.
 import { getData } from "./DB.js"
@@ -172,8 +176,27 @@ generateChart()
 
         labelmake({ inputs, template, font })
             .then((pdf) => {
-                fs.writeFileSync(__dirname + "/personal_report_test_220216.pdf", pdf, "utf-8"); // jpg 출력 방법은?
+                fs.writeFileSync("./pdf/personal_report_test_220216.pdf", pdf, "utf-8");
             });
     })
+
+// pdf => jpg 변환
+const options = {
+    density: 100,
+    saveFilename: "personal_report_test_220216",
+    savePath: "./jpg",
+    format: "jpg",
+    width: 2100,
+    height: 2970
+};
+const storeAsImage = fromPath("./pdf/personal_report_test_220216.pdf", options);
+
+for (let i = 1; i < 11; i++) {
+    const pageToConvertAsImage = i;
+    storeAsImage(pageToConvertAsImage).then((resolve) => {
+        console.log(`Page ${pageToConvertAsImage} is now converted as image`);
+        return resolve;
+    });
+}
 
 
