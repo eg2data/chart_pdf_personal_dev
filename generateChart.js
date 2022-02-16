@@ -881,7 +881,7 @@ async function generateChart() {
             labels: ['a'],
             datasets: [
                 {
-                    data: kosssfSurroundingsData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    data: kosssfSurroundingsData.slice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참 => splice 사용 시 그 상태 그대로 데이터가 저장됨.. => slice 대체
                     barPercentage: 0.0,
                 }
             ]
@@ -916,7 +916,7 @@ async function generateChart() {
             labels: ['a'],
             datasets: [
                 {
-                    data: kosssfInstabilityData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    data: kosssfInstabilityData.slice(0,1),
                     barPercentage: 0.0,
                 }
             ]
@@ -951,7 +951,7 @@ async function generateChart() {
             labels: ['a'],
             datasets: [
                 {
-                    data: kosssfDemandsData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    data: kosssfDemandsData.slice(0,1),
                     barPercentage: 0.0,
                 }
             ]
@@ -986,7 +986,7 @@ async function generateChart() {
             labels: ['a'],
             datasets: [
                 {
-                    data: kosssfCultureData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    data: kosssfCultureData.slice(0,1),
                     barPercentage: 0.0,
                 }
             ]
@@ -1021,7 +1021,7 @@ async function generateChart() {
             labels: ['a'],
             datasets: [
                 {
-                    data: kosssfAutonomyData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    data: kosssfAutonomyData.slice(0,1),
                     barPercentage: 0.0,
                 }
             ]
@@ -1056,7 +1056,7 @@ async function generateChart() {
             labels: ['a'],
             datasets: [
                 {
-                    data: kosssfSystemData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    data: kosssfSystemData.slice(0,1),
                     barPercentage: 0.0,
                 }
             ]
@@ -1091,7 +1091,7 @@ async function generateChart() {
             labels: ['a'],
             datasets: [
                 {
-                    data: kosssfConflictData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    data: kosssfConflictData.slice(0,1),
                     barPercentage: 0.0,
                 }
             ]
