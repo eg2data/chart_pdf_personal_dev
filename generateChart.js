@@ -2,48 +2,13 @@ import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 import ChartJS from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import fs from "fs";
-import { getData } from "./DB.js";
 
 
 // 1. <input data>
-//  1) 신호등 == 원소 1개짜리 list
-const kosssfSignalsData = getData("koss-sf")["signals"]
-const phq9SignalsData = getData("phq-9")["signals"]
-const gad7SignalsData = getData("gad-7")["signals"]
-const adnm4SignalsData = getData("adnm-4")["signals"]
-const pcptsd5SignalsData = getData("pc-ptsd-5")["signals"]
-const isiSignalsData = getData("isi")["signals"]
-const cssSignalsData = getData("css")["signals"]
-//  2) 가로바(채움) == 원소 1개짜리 list
-const phq9RateBarData = getData("phq-9")["rates"]
-const gad7RateBarData = getData("gad-7")["rates"]
-const adnm4RateBarData = getData("adnm-4")["rates"]
-const pcptsd5RateBarData = getData("pc-ptsd-5")["rates"]
-const isiRateBarData = getData("isi")["rates"]
-const cssRateBarData = getData("css")["rates"]
-//  3) 연도별 == 원소 5개짜리 list
-const kosssfChangesByYearData = getData("koss-sf")["changes-by-year"]
-const phq9ChangesByYearData = getData("phq-9")["changes-by-year"]
-const gad7ChangesByYearData = getData("gad-7")["changes-by-year"]
-const adnm4ChangesByYearData = getData("adnm-4")["changes-by-year"]
-const pcptsd5ChangesByYearData = getData("pc-ptsd-5")["changes-by-year"]
-const isiChangesByYearData = getData("isi")["changes-by-year"]
-const cssChangesByYearData = getData("css")["changes-by-year"]
-//  4) 가로바(점) == 원소 2개짜리 list
-const kosssfSurroundingsData = getData("koss-sf")["surroundings"]
-const kosssfInstabilityData = getData("koss-sf")["instability"]
-const kosssfDemandsData = getData("koss-sf")["demands"]
-const kosssfCultureData = getData("koss-sf")["culture"]
-const kosssfAutonomyData = getData("koss-sf")["autonomy"]
-const kosssfSystemData = getData("koss-sf")["system"]
-const kosssfConflictData = getData("koss-sf")["conflict"]
+//  1) 신호등
+
 
 // 2. <4 types of canvas>
-const signalsCanvas = new ChartJSNodeCanvas({ width: 240, height: 60 });
-const rateBarCanvas = new ChartJSNodeCanvas({ width: 480, height: 36 });
-const changesByYearCanvas = new ChartJSNodeCanvas({ width: 240, height: 120 });
-const kosssfCanvas = new ChartJSNodeCanvas({ width: 240, height: 36 });
-
 
 // 3. <defaults>
 //  1) 신호등
@@ -95,15 +60,6 @@ const rateBarScales =  {
 }
 
 //  3) 연도별
-const now = new Date();
-const year = now.getFullYear();
-const changesByYearLabels = [
-    year-4,
-    year-3,
-    year-2,
-    year-1,
-    year,
-]
 const changesByYearScales = {
     x: {
         grid: {
@@ -161,7 +117,72 @@ const kosssfScales =  {
 }
 
 
-async function generateChart() {
+async function generateChart(dataList) {
+
+    if (dataList[key]["signals"] == 24) {
+        dataList[key]["signal-texts"] = "정상"
+        dataList[key]["requirement-texts"] = "전문도움필요" // 공백처리 시 안보임
+    } else if (dataList[key]["signas"] == 45) {
+        dataList[key]["signal-texts"] = "중간"
+        dataList[key]["requirement-texts"] = "전문도움필요"
+
+    } else if (dataList[key]["signals"] == 66) {
+        dataList[key]["signal-texts"] = "약간 심함"
+        dataList[key]["requirement-texts"] = "전문도움필요"
+
+    } else if (dataList[key]["signals"] == 87) {
+        dataList[key]["signal-texts"] = "심각함"
+        dataList[key]["requirement-texts"] = "전문도움필요"
+
+    }
+
+    const kosssfSignalsData = dataList["koss-sf"]["signals"]
+    const phq9SignalsData = data("phq-9")["signals"]
+    const gad7SignalsData = data("gad-7")["signals"]
+    const adnm4SignalsData = data("adnm-4")["signals"]
+    const pcptsd5SignalsData = data("pc-ptsd-5")["signals"]
+    const isiSignalsData = data("isi")["signals"]
+    const cssSignalsData = data("css")["signals"]
+//  2) 가로바(채움) == 원소 1개짜리 list
+    const phq9RateBarData = data("phq-9")["rates"]
+    const gad7RateBarData = data("gad-7")["rates"]
+    const adnm4RateBarData = data("adnm-4")["rates"]
+    const pcptsd5RateBarData = data("pc-ptsd-5")["rates"]
+    const isiRateBarData = data("isi")["rates"]
+    const cssRateBarData = data("css")["rates"]
+//  3) 연도별 == 원소 5개짜리 list
+    const kosssfChangesByYearData = data("koss-sf")["changes-by-year"]
+    const phq9ChangesByYearData = data("phq-9")["changes-by-year"]
+    const gad7ChangesByYearData = data("gad-7")["changes-by-year"]
+    const adnm4ChangesByYearData = data("adnm-4")["changes-by-year"]
+    const pcptsd5ChangesByYearData = data("pc-ptsd-5")["changes-by-year"]
+    const isiChangesByYearData = data("isi")["changes-by-year"]
+    const cssChangesByYearData = data("css")["changes-by-year"]
+//  4) 가로바(점) == 원소 2개짜리 list
+    const kosssfSurroundingsData = data("koss-sf")["surroundings"]
+    const kosssfInstabilityData = data("koss-sf")["instability"]
+    const kosssfDemandsData = data("koss-sf")["demands"]
+    const kosssfCultureData = data("koss-sf")["culture"]
+    const kosssfAutonomyData = data("koss-sf")["autonomy"]
+    const kosssfSystemData = data("koss-sf")["system"]
+    const kosssfConflictData = data("koss-sf")["conflict"]
+
+    const signalsCanvas = new ChartJSNodeCanvas({ width: 240, height: 60 });
+    const rateBarCanvas = new ChartJSNodeCanvas({ width: 480, height: 36 });
+    const changesByYearCanvas = new ChartJSNodeCanvas({ width: 240, height: 120 });
+    const kosssfCanvas = new ChartJSNodeCanvas({ width: 240, height: 36 });
+
+    const now = new Date();
+    const year = now.getFullYear();
+    const changesByYearLabels = [
+        year-4,
+        year-3,
+        year-2,
+        year-1,
+        year,
+    ]
+
+
     // 4. <configurations>
     //  1) 신호등
     const kosssfSignalsConfig = {

@@ -2,8 +2,6 @@ import fs from "fs";
 import labelmake from "labelmake";
 import { fromPath } from "pdf2pic";
 
-
-
 import template from "./labelmake-template.json"
 // labelmake-template.json > "fontName":"NanumGothic" ---- 직접 추가 말고 다른 방법이 있을까.
 import { getData } from "./DB.js"
@@ -22,10 +20,6 @@ generateChart()
     .then(( charts ) => {
         const inputs = [
             {
-                // getData를 통해 string을 그대로 가져오는 것만 여기서 필요하고
-                // 차트는 차트만 가져오면 ok -> 차트 그리는 곳에서 getData를 통해 int를 가져오는 것이고
-                // "template에 지정한 field이름": getData("DB.js에서 가져오는 방식")
-                // "template에 지정한 field이름": charts['생성한 차트 이름']
                 "user-name": getData("basic-info")["user-name"],
                 "distinct-number": getData("basic-info")["distinct-number"],
                 "classification-code": getData("basic-info")["classification-code"],
@@ -180,17 +174,17 @@ generateChart()
             });
     })
 
+
 // pdf => jpg 변환
 const options = {
     density: 100,
-    saveFilename: "personal_report_test_220216",
+    saveFilename: "personal_report_test_220216", // 생성된 pdf 이름이 들어오게 할 방법은?
     savePath: "./jpg",
     format: "jpg",
     width: 2100,
     height: 2970
 };
 const storeAsImage = fromPath("./pdf/personal_report_test_220216.pdf", options);
-
 for (let i = 1; i < 11; i++) {
     const pageToConvertAsImage = i;
     storeAsImage(pageToConvertAsImage).then((resolve) => {
