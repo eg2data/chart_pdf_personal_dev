@@ -1,6 +1,5 @@
 import amqp from 'amqplib/callback_api.js';
 
-// 여기서 그냥 데이터가 들어오는거지. 이 상태로 그냥 보내는거야. 서버에서.
 const data =
     {
         "basic-info": {
@@ -23,6 +22,7 @@ const data =
         },
         "koss-sf" : {
             "signals": [66], // 24, 45, 66, 87
+            "signal-texts": "약간 심함",
             "points" : [39.5],
             "rates" : ["상위 25"],
             "means" : [54.8],
@@ -38,60 +38,71 @@ const data =
         },
         "phq-9" : {
             "signals": [66],
+            "signal-texts": "약간 심함",
             "points" : [27.1],
             "rates": [75.1],
             "comments": "약간 심한 수준의 우울감을 자주 느낌",
             "requirements": "추가 평가 또는 전문가의 도움이 필요함",
+            "requirement-texts": "전문도움필요",
             "changes-by-year": [25, 100, 75, 0, 50],
             "comment-details": "검사 결과는 약간 심한 수준의 우울감을 자주 느끼고 있습니다. 우울증 진단은 병력 및 여러 검사 결과와 전문의의 종합적인 판단에 의해 이루어지므로, 추가 평가 또는 전문가의 도움이 필요합니다.",
         },
         "gad-7" : {
             "signals": [87],
+            "signal-texts": "심각함",
             "points" : [21.1],
             "rates": [65.1],
             "comments": "주의가 필요한 과도한 걱정, 불안을 느낌",
             "requirements": "추가 평가 또는 전문가의 도움이 필요함",
+            "requirement-texts": "전문도움필요",
             "changes-by-year": [100, 50, 0, 75, 25],
             "comment-details": "검사 결과는 중간 수준의 불안감을 자주 느끼고 있습니다. 불안장애 진단은 병력 및 여러 검사 결과와 전문의의 종합적인 판단에 의해 이루어지므로, 추가 평가 또는 전문가의 도움이 필요합니다.",
         },
         "adnm-4" : {
             "signals": [87],
+            "signal-texts": "심각함",
             "points" : [10.1],
             "rates": [81.2],
             "comments": "일상 생활 적응에 어려움이 있을 수 있음",
             "requirements": "추가 평가 또는 전문가의 도움이 필요함",
+            "requirement-texts": "전문도움필요",
             "changes-by-year": [0, 25, 75, 50, 100],
             "comment-details": "검사 결과는 심각한 수준의 적응 스트레스를 자주 느끼고 있습니다. 적응장애 진단은 병력 및 여러 검사 결과와 전문의의 종합적인 판단에 의해 이루어지므로, 추가 평가 또는 전문가의 도움이 필요합니다.",
         },
         "pc-ptsd-5" : {
             "signals": [45],
+            "signal-texts": "중간",
             "points" : [14.3],
             "rates": [40.2],
             "comments": "일상 생활 적응에 어려움이 있을 수 있음",
             "requirements": "추가 평가 또는 전문가의 도움이 필요함",
+            "requirement-texts": "전문도움필요",
             "changes-by-year": [75, 0, 50, 100, 100],
             "comment-details": "검사 결과는 심각한 수준의 적응 스트레스를 자주 느끼고 있습니다. PTSD 진단은 병력 및 여러 검사 결과와 전문의의 종합적인 판단에 의해 이루어지므로, 추가 평가 또는 전문가의 도움이 필요합니다.",
         },
         "isi" : {
             "signals": [24],
+            "signal-texts": "정상",
             "points" : [14.3],
             "rates": [28.5],
             "comments": "경미한 불면증이 있는 것으로 보임",
             "requirements": "2주 이상 지속 시 전문가의 도움이 필요함",
+            "requirement-texts": "전문도움필요",
             "changes-by-year": [50, 100, 75, 50, 75],
             "comment-details": "검사 결과는 경미한 수준의 불면증을 자주 느끼고 있습니다. 2주 이상 지속 시 전문가의 도움이 필요합니다. 불면증 진단은 병력 및 여러 검사 결과와 전문의의 종합적인 판단에 의해 이루어지므로, 추가 평가 또는 전문가의 도움이 필요합니다.",
         },
         "css" : {
             "signals": [24],
+            "signal-texts": "정상",
             "points" : [0],
             "rates": [0],
             "comments": "위험한 수준의 자살 사고가 보이지 않음",
             "requirements": "",
+            "requirement-texts": "전문도움필요",
             "changes-by-year": [100, 75, 50, 0, 25],
             "comment-details": "검사 결과는 자살사고 위험이 없습니다",
         },
     }
-
 
 // Step 1: create connection
 amqp.connect('amqp://localhost', (connectionError, connection) => {
@@ -108,7 +119,6 @@ amqp.connect('amqp://localhost', (connectionError, connection) => {
         channel.assertQueue(queueName, {
             durable: false
         });
-
         // Step 4: send message to queue
         const message = JSON.stringify(data)
         channel.sendToQueue(queueName, Buffer.from(message), {

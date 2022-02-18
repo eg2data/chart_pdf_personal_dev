@@ -1,18 +1,21 @@
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
-import ChartJS from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import fs from "fs";
+import labelmake from "labelmake";
+import template from "./labelmake-template.json";
+import {fromPath} from "pdf2pic";
 
+// 한글처리
+const NanumGothic = fs.readFileSync("./NanumGothic-Regular.ttf")
+const font = {
+    NanumGothic : {
+        data: NanumGothic,
+        subset: false
+    }
+};
 
-// 1. <input data>
-//  1) 신호등
-
-
-// 2. <4 types of canvas>
-
-// 3. <defaults>
-//  1) 신호등
-const signalsScales =  {
+// <defaults>
+const signalsScales =  { // 1) 신호등
     x: {
         grid: {
             drawBorder: false,
@@ -34,9 +37,8 @@ const signalsScales =  {
         }
     }
 }
+const rateBarScales =  { // 2) 가로바(채움)
 
-//  2) 가로바(채움)
-const rateBarScales =  {
     x: {
         grid: {
             drawBorder: false,
@@ -58,9 +60,8 @@ const rateBarScales =  {
         }
     }
 }
+const changesByYearScales = { // 3) 연도별
 
-//  3) 연도별
-const changesByYearScales = {
     x: {
         grid: {
             display: false,
@@ -91,9 +92,8 @@ const changesByYearScales = {
         max: 100,
     }
 }
+const kosssfScales =  { // 4) 가로바(점)
 
-//  4) 가로바(점)
-const kosssfScales =  {
     x: {
         grid: {
             drawBorder: false,
@@ -116,62 +116,48 @@ const kosssfScales =  {
     }
 }
 
+async function generateChart(data) {
 
-async function generateChart(dataList) {
+// <data>
+    // 1) 신호등
+    const kosssfSignalsData = data["koss-sf"]["signals"]
+    const phq9SignalsData = data["phq-9"]["signals"]
+    const gad7SignalsData = data["gad-7"]["signals"]
+    const adnm4SignalsData = data["adnm-4"]["signals"]
+    const pcptsd5SignalsData = data["pc-ptsd-5"]["signals"]
+    const isiSignalsData = data["isi"]["signals"]
+    const cssSignalsData = data["css"]["signals"]
+    // 2) 가로바(채움)
+    const phq9RateBarData = data["phq-9"]["rates"]
+    const gad7RateBarData = data["gad-7"]["rates"]
+    const adnm4RateBarData = data["adnm-4"]["rates"]
+    const pcptsd5RateBarData = data["pc-ptsd-5"]["rates"]
+    const isiRateBarData = data["isi"]["rates"]
+    const cssRateBarData = data["css"]["rates"]
+    // 3) 연도별
+    const kosssfChangesByYearData = data["koss-sf"]["changes-by-year"]
+    const phq9ChangesByYearData = data["phq-9"]["changes-by-year"]
+    const gad7ChangesByYearData = data["gad-7"]["changes-by-year"]
+    const adnm4ChangesByYearData = data["adnm-4"]["changes-by-year"]
+    const pcptsd5ChangesByYearData = data["pc-ptsd-5"]["changes-by-year"]
+    const isiChangesByYearData = data["isi"]["changes-by-year"]
+    const cssChangesByYearData = data["css"]["changes-by-year"]
+    // 4) 가로바(점)
+    const kosssfSurroundingsData = data["koss-sf"]["surroundings"]
+    const kosssfInstabilityData = data["koss-sf"]["instability"]
+    const kosssfDemandsData = data["koss-sf"]["demands"]
+    const kosssfCultureData = data["koss-sf"]["culture"]
+    const kosssfAutonomyData = data["koss-sf"]["autonomy"]
+    const kosssfSystemData = data["koss-sf"]["system"]
+    const kosssfConflictData = data["koss-sf"]["conflict"]
 
-    if (dataList[key]["signals"] == 24) {
-        dataList[key]["signal-texts"] = "정상"
-        dataList[key]["requirement-texts"] = "전문도움필요" // 공백처리 시 안보임
-    } else if (dataList[key]["signas"] == 45) {
-        dataList[key]["signal-texts"] = "중간"
-        dataList[key]["requirement-texts"] = "전문도움필요"
+// <canvas>
+    const signalsCanvas = new ChartJSNodeCanvas({ width: 240, height: 60 }); // 1) 신호등
+    const rateBarCanvas = new ChartJSNodeCanvas({ width: 480, height: 36 }); // 2) 가로바(채움)
+    const changesByYearCanvas = new ChartJSNodeCanvas({ width: 240, height: 120 }); // 3) 연도별
+    const kosssfCanvas = new ChartJSNodeCanvas({ width: 240, height: 36 }); // 4) 가로바(점)
 
-    } else if (dataList[key]["signals"] == 66) {
-        dataList[key]["signal-texts"] = "약간 심함"
-        dataList[key]["requirement-texts"] = "전문도움필요"
-
-    } else if (dataList[key]["signals"] == 87) {
-        dataList[key]["signal-texts"] = "심각함"
-        dataList[key]["requirement-texts"] = "전문도움필요"
-
-    }
-
-    const kosssfSignalsData = dataList["koss-sf"]["signals"]
-    const phq9SignalsData = data("phq-9")["signals"]
-    const gad7SignalsData = data("gad-7")["signals"]
-    const adnm4SignalsData = data("adnm-4")["signals"]
-    const pcptsd5SignalsData = data("pc-ptsd-5")["signals"]
-    const isiSignalsData = data("isi")["signals"]
-    const cssSignalsData = data("css")["signals"]
-//  2) 가로바(채움) == 원소 1개짜리 list
-    const phq9RateBarData = data("phq-9")["rates"]
-    const gad7RateBarData = data("gad-7")["rates"]
-    const adnm4RateBarData = data("adnm-4")["rates"]
-    const pcptsd5RateBarData = data("pc-ptsd-5")["rates"]
-    const isiRateBarData = data("isi")["rates"]
-    const cssRateBarData = data("css")["rates"]
-//  3) 연도별 == 원소 5개짜리 list
-    const kosssfChangesByYearData = data("koss-sf")["changes-by-year"]
-    const phq9ChangesByYearData = data("phq-9")["changes-by-year"]
-    const gad7ChangesByYearData = data("gad-7")["changes-by-year"]
-    const adnm4ChangesByYearData = data("adnm-4")["changes-by-year"]
-    const pcptsd5ChangesByYearData = data("pc-ptsd-5")["changes-by-year"]
-    const isiChangesByYearData = data("isi")["changes-by-year"]
-    const cssChangesByYearData = data("css")["changes-by-year"]
-//  4) 가로바(점) == 원소 2개짜리 list
-    const kosssfSurroundingsData = data("koss-sf")["surroundings"]
-    const kosssfInstabilityData = data("koss-sf")["instability"]
-    const kosssfDemandsData = data("koss-sf")["demands"]
-    const kosssfCultureData = data("koss-sf")["culture"]
-    const kosssfAutonomyData = data("koss-sf")["autonomy"]
-    const kosssfSystemData = data("koss-sf")["system"]
-    const kosssfConflictData = data("koss-sf")["conflict"]
-
-    const signalsCanvas = new ChartJSNodeCanvas({ width: 240, height: 60 });
-    const rateBarCanvas = new ChartJSNodeCanvas({ width: 480, height: 36 });
-    const changesByYearCanvas = new ChartJSNodeCanvas({ width: 240, height: 120 });
-    const kosssfCanvas = new ChartJSNodeCanvas({ width: 240, height: 36 });
-
+// <label 중 일부>
     const now = new Date();
     const year = now.getFullYear();
     const changesByYearLabels = [
@@ -182,8 +168,7 @@ async function generateChart(dataList) {
         year,
     ]
 
-
-    // 4. <configurations>
+// <configurations>
     //  1) 신호등
     const kosssfSignalsConfig = {
         type: 'bar',
@@ -431,34 +416,7 @@ async function generateChart(dataList) {
         },
     };
 
-    // 왜 안돼? (switch, 함수)
-    // function pickColor(config) {
-    //     const data = config.data.datasets[0].data
-    //     const color = config.options.plugins.datalabels.color[0]
-    //     const backgroundColor = config.options.plugins.datalabels.backgroundColor[0]
-    //
-    //     if (data == 24) {
-    //         color = '#00cccc' // 왜 안돼?
-    //         backgroundColor = '#00cccc'
-    //     }
-    // 왜 안돼?
-    // switch (kosssfSignalsConfig.data.datasets[0].data) {
-    //     case 24:
-    //         kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
-    //         kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
-    //     case 45:
-    //         kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#ffb266'
-    //         kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#ffb266'
-    //     case 66:
-    //         kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#Ff0000'
-    //         kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#Ff0000'
-    //     case 87:
-    //         kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
-    //         kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
-    // }
-
-    // 입력값에 따른 색상+위치 변경 구현
-    // switch + 함수 적용해보기
+    // 입력값에 따른 색상+위치 변경
     if (kosssfSignalsConfig.data.datasets[0].data == 24) {
         kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
         kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
@@ -472,7 +430,6 @@ async function generateChart(dataList) {
         kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
         kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
     }
-
     if (phq9SignalsConfig.data.datasets[0].data == 24) {
         phq9SignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
         phq9SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
@@ -551,8 +508,27 @@ async function generateChart(dataList) {
         cssSignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
         cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
     }
+    // 왜 안돼? (if+else => case)
+    // switch (kosssfSignalsConfig.data.datasets[0].data) {
+    //     case 24:
+    //         kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
+    //         kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
+    //         break
+    //     case 45:
+    //         kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#ffb266'
+    //         kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#ffb266'
+    //         break
+    //     case 66:
+    //         kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#Ff0000'
+    //         kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#Ff0000'
+    //         break
+    //     case 87:
+    //         kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
+    //         kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
+    //         break
+    // }
 
-    //  2) 가로바(채움)
+    // 2) 가로바(채움)
     const phq9RateBarConfig = { // radius 아쉽다
         type: 'bar',
         data: {
@@ -703,8 +679,7 @@ async function generateChart(dataList) {
             }
         }
     }
-
-    //  3) 연도별
+    // 3) 연도별
     const kosssfChangeByYearConfig = {
         type: 'bar',
         data: {
@@ -894,8 +869,7 @@ async function generateChart(dataList) {
             }
         },
     };
-
-    //  4) 가로바(점)
+    // 4) 가로바(점)
     const kosssfSurroundingsConfig = {
         type: 'bar',
         data: {
@@ -1143,7 +1117,7 @@ async function generateChart(dataList) {
     };
 
     // 5. <generate base64 types img through renderToDataURL>
-    //  1) 신호등
+    // 1) 신호등
     const kosssfSignalsChart = await signalsCanvas.renderToDataURL(kosssfSignalsConfig)
     const phq9SignalsChart = await signalsCanvas.renderToDataURL(phq9SignalsConfig)
     const gad7SignalsChart = await signalsCanvas.renderToDataURL(gad7SignalsConfig)
@@ -1151,16 +1125,14 @@ async function generateChart(dataList) {
     const pcptsd5SignalsChart = await signalsCanvas.renderToDataURL(pcptsd5SignalsConfig)
     const isiSignalsChart = await signalsCanvas.renderToDataURL(isiSignalsConfig)
     const cssSignalsChart = await signalsCanvas.renderToDataURL(cssSignalsConfig)
-
-    //  2) 가로바(채움)
+    // 2) 가로바(채움)
     const phq9RateBarChart = await rateBarCanvas.renderToDataURL(phq9RateBarConfig)
     const gad7RateBarChart = await rateBarCanvas.renderToDataURL(gad7RateBarConfig)
     const adnm4RateBarChart = await rateBarCanvas.renderToDataURL(adnm4RateBarConfig)
     const pcptsd5RateBarChart = await rateBarCanvas.renderToDataURL(pcptsd5RateBarConfig)
     const isiRateBarChart = await rateBarCanvas.renderToDataURL(isiRateBarConfig)
     const cssRateBarChart = await rateBarCanvas.renderToDataURL(cssRateBarConfig)
-
-    //  3) 연도별
+    // 3) 연도별
     const kosssfChangesByYearChart = await changesByYearCanvas.renderToDataURL(kosssfChangeByYearConfig)
     const phq9ChangesByYearChart = await changesByYearCanvas.renderToDataURL(phq9ChangeByYearConfig)
     const gad7ChangesByYearChart = await changesByYearCanvas.renderToDataURL(gad7ChangeByYearConfig)
@@ -1168,8 +1140,7 @@ async function generateChart(dataList) {
     const pcptsd5ChangesByYearChart = await changesByYearCanvas.renderToDataURL(pcptsd5ChangeByYearConfig)
     const isiChangesByYearChart = await changesByYearCanvas.renderToDataURL(isiChangeByYearConfig)
     const cssChangesByYearChart = await changesByYearCanvas.renderToDataURL(cssChangeByYearConfig)
-
-    //  4) 가로바(점)
+    // 4) 가로바(점)
     const kosssfSurroundingsChart = await kosssfCanvas.renderToDataURL(kosssfSurroundingsConfig)
     const kosssfInstabilityChart = await kosssfCanvas.renderToDataURL(kosssfInstabilityConfig)
     const kosssfDemandsChart = await kosssfCanvas.renderToDataURL(kosssfDemandsConfig)
@@ -1214,5 +1185,182 @@ async function generateChart(dataList) {
     return charts
 };
 
-export { generateChart };
+async function generateFile(data, charts) {
+    // 7. <generate PDF file>
+    const inputs = [
+        {
+            "user-name": data["basic-info"]["user-name"],
+            "distinct-number": data["basic-info"]["distinct-number"],
+            "classification-code": data["basic-info"]["classification-code"],
+            "submit-date": data["basic-info"]["submit-date"],
+            "report-date": data["basic-info"]["report-date"],
+            "company-info-name": data["basic-info"]["company-info"]["name"],
+            "company-info-address": data["basic-info"]["company-info"]["address"],
+            "company-info-via": data["basic-info"]["company-info"]["via"],
+            "company-info-contact": data["basic-info"]["company-info"]["contact"],
+            "check-list-number": data["basic-info"]["check-list-number"] + " 종",
+            "test-type": data["basic-info"]["test-type"],
+            "test-method": data["basic-info"]["test-method"],
+            "test-adequacy": data["basic-info"]["test-adequacy"],
+
+            "overall-user-name": data["basic-info"]["user-name"],
+            "overall-classification-code": data["basic-info"]["classification-code-details"],
+            "overall-koss-sf-signal-texts": data["koss-sf"]["signal-texts"],
+            "overall-koss-sf-signals": charts['koss-sf-signals'],
+            "overall-koss-sf-points": data["koss-sf"]["points"].toString() + "점  /",
+            "overall-koss-sf-rates": data["koss-sf"]["rates"].toString() + "%",
+            "overall-koss-sf-means": data["koss-sf"]["means"].toString() + "점",
+
+            "overall-phq-9-signal-texts": data["phq-9"]["signal-texts"],
+            "overall-phq-9-signals": charts['phq-9-signals'],
+            "overall-phq-9-points": data["phq-9"]["points"].toString() + "점  /",
+            "overall-phq-9-rates": data["phq-9"]["rates"].toString() + "%",
+            "overall-phq-9-comments": data["phq-9"]["comments"],
+
+            "overall-gad-7-signal-texts": data["gad-7"]["signal-texts"],
+            "overall-gad-7-signals": charts['gad-7-signals'],
+            "overall-gad-7-points": data["gad-7"]["points"].toString() + "점  /",
+            "overall-gad-7-rates": data["gad-7"]["rates"].toString() + "%",
+            "overall-gad-7-comments": data["gad-7"]["comments"],
+
+            "overall-adnm-4-signal-texts": data["adnm-4"]["signal-texts"],
+            "overall-adnm-4-signals": charts['adnm-4-signals'],
+            "overall-adnm-4-points": data["adnm-4"]["points"].toString() + "점  /",
+            "overall-adnm-4-rates": data["adnm-4"]["rates"].toString() + "%",
+            "overall-adnm-4-comments": data["adnm-4"]["comments"],
+
+            "overall-pc-ptsd-5-signal-texts": data["pc-ptsd-5"]["signal-texts"],
+            "overall-pc-ptsd-5-signals": charts['pc-ptsd-5-signals'],
+            "overall-pc-ptsd-5-points": data["pc-ptsd-5"]["points"].toString() + "점  /",
+            "overall-pc-ptsd-5-rates": data["pc-ptsd-5"]["rates"].toString() + "%",
+            "overall-pc-ptsd-5-comments": data["pc-ptsd-5"]["comments"],
+
+            "overall-isi-signal-texts": data["isi"]["signal-texts"],
+            "overall-isi-signals": charts['isi-signals'],
+            "overall-isi-points": data["isi"]["points"].toString() + "점  /",
+            "overall-isi-rates": data["isi"]["rates"].toString() + "%",
+            "overall-isi-comments": data["isi"]["comments"],
+
+            "overall-css-signal-texts": data["css"]["signal-texts"],
+            "overall-css-signals": charts['css-signals'],
+            "overall-css-points": data["css"]["points"].toString() + "점  /",
+            "overall-css-rates": data["css"]["rates"].toString() + "%",
+            "overall-css-comments": data["css"]["comments"],
+
+            "koss-sf-signals": charts['koss-sf-signals'],
+            "koss-sf-surroundings": charts['koss-sf-surroundings'],
+            "koss-sf-instability": charts['koss-sf-instability'],
+            "koss-sf-demands": charts['koss-sf-demands'],
+            "koss-sf-culture": charts['koss-sf-culture'],
+            "koss-sf-autonomy": charts['koss-sf-autonomy'],
+            "koss-sf-system": charts['koss-sf-system'],
+            "koss-sf-conflict": charts['koss-sf-conflict'],
+            "koss-sf-changes-by-year": charts['koss-sf-changes-by-year'],
+            "koss-sf-comment-details": data["koss-sf"]["comment-details"],
+
+            "koss-sf-surroundings-points": data["koss-sf"]["surroundings"][0].toString() + "점  /",
+            "koss-sf-surroundings-rates": data["koss-sf"]["surroundings"][1] + "%",
+            "koss-sf-instability-points": data["koss-sf"]["instability"][0].toString() + "점  /",
+            "koss-sf-instability-rates": data["koss-sf"]["instability"][1] + "%",
+            "koss-sf-demands-points": data["koss-sf"]["demands"][0].toString() + "점  /",
+            "koss-sf-demands-rates": data["koss-sf"]["demands"][1] + "%",
+            "koss-sf-culture-points": data["koss-sf"]["culture"][0].toString() + "점  /",
+            "koss-sf-culture-rates": data["koss-sf"]["culture"][1] + "%",
+            "koss-sf-autonomy-points": data["koss-sf"]["autonomy"][0].toString() + "점  /",
+            "koss-sf-autonomy-rates": data["koss-sf"]["autonomy"][1] + "%",
+            "koss-sf-system-points": data["koss-sf"]["system"][0].toString() + "점  /",
+            "koss-sf-system-rates": data["koss-sf"]["system"][1] + "%",
+            "koss-sf-conflict-points": data["koss-sf"]["conflict"][0].toString() + "점  /",
+            "koss-sf-conflict-rates": data["koss-sf"]["conflict"][1] + "%",
+
+            "phq-9-signals": charts['phq-9-signals'],
+            "phq-9-rates": data["phq-9"]["rates"].toString() + "%",
+            "phq-9-signal-texts": data["phq-9"]["signal-texts"],
+            "phq-9-rate-bar": charts['phq-9-rate-bar'],
+            "phq-9-comments": data["phq-9"]["comments"],
+            "phq-9-requirements": data["phq-9"]["requirements"],
+            "phq-9-requirements-texts": data["phq-9"]["requirement-texts"],
+            "phq-9-changes-by-year": charts['phq-9-changes-by-year'],
+            "phq-9-comment-details": data["phq-9"]["comment-details"],
+
+            "gad-7-signals": charts['gad-7-signals'],
+            "gad-7-rates": data["gad-7"]["rates"].toString() + "%",
+            "gad-7-signal-texts": data["gad-7"]["signal-texts"],
+            "gad-7-rate-bar": charts['gad-7-rate-bar'],
+            "gad-7-comments": data["gad-7"]["comments"],
+            "gad-7-requirements": data["gad-7"]["requirements"],
+            "gad-7-requirements-texts": data["gad-7"]["requirement-texts"],
+            "gad-7-changes-by-year": charts['gad-7-changes-by-year'],
+            "gad-7-comment-details": data["gad-7"]["comment-details"],
+
+            "adnm-4-signals": charts['adnm-4-signals'],
+            "adnm-4-rates": data["adnm-4"]["rates"].toString() + "%",
+            "adnm-4-signal-texts": data["adnm-4"]["signal-texts"],
+            "adnm-4-rate-bar": charts['adnm-4-rate-bar'],
+            "adnm-4-comments": data["adnm-4"]["comments"],
+            "adnm-4-requirements": data["adnm-4"]["requirements"],
+            "adnm-4-requirements-texts": data["adnm-4"]["requirement-texts"],
+            "adnm-4-changes-by-year": charts['adnm-4-changes-by-year'],
+            "adnm-4-comment-details": data["adnm-4"]["comment-details"],
+
+            "pc-ptsd-5-signals": charts['pc-ptsd-5-signals'],
+            "pc-ptsd-5-rates": data["pc-ptsd-5"]["rates"].toString() + "%",
+            "pc-ptsd-5-signal-texts": data["pc-ptsd-5"]["signal-texts"],
+            "pc-ptsd-5-rate-bar": charts['pc-ptsd-5-rate-bar'],
+            "pc-ptsd-5-comments": data["pc-ptsd-5"]["comments"],
+            "pc-ptsd-5-requirements": data["pc-ptsd-5"]["requirements"],
+            "pc-ptsd-5-requirements-texts": data["pc-ptsd-5"]["requirement-texts"],
+            "pc-ptsd-5-changes-by-year": charts['pc-ptsd-5-changes-by-year'],
+            "pc-ptsd-5-comment-details": data["pc-ptsd-5"]["comment-details"],
+
+            "isi-signals": charts['isi-signals'],
+            "isi-rates": data["isi"]["rates"].toString() + "%",
+            "isi-signal-texts": data["isi"]["signal-texts"],
+            "isi-rate-bar": charts['isi-rate-bar'],
+            "isi-comments": data["isi"]["comments"],
+            "isi-requirements": data["isi"]["requirements"],
+            "isi-requirements-texts": data["isi"]["requirement-texts"],
+            "isi-changes-by-year": charts['isi-changes-by-year'],
+            "isi-comment-details": data["isi"]["comment-details"],
+
+            "css-signals": charts['css-signals'],
+            "css-rates": data["css"]["rates"].toString() + "%",
+            "css-signal-texts": data["css"]["signal-texts"],
+            "css-rate-bar": charts['css-rate-bar'],
+            "css-comments": data["css"]["comments"],
+            "css-requirements": data["css"]["requirements"],
+            "css-requirements-texts": data["css"]["requirement-texts"],
+            "css-changes-by-year": charts['css-changes-by-year'],
+            "css-comment-details": data["css"]["comment-details"],
+        }
+    ];
+    const path = "./pdf/personal_report_test_220218_11.pdf"
+    labelmake({ inputs, template, font })
+        .then((pdf) => {
+            fs.writeFileSync(path, pdf, "utf-8");
+        })
+        // 8. <generate JPG file>
+        .then(() => {
+            const options = {
+                density: 100,
+                saveFilename: "personal_report_test_220218_11", // 생성된 pdf 이름이 들어오게 할 방법은?
+                savePath: "./jpg",
+                format: "jpg",
+                width: 2100,
+                height: 2970
+            };
+            const storeAsImage = fromPath(path, options);
+            for (let i = 1; i < 11; i++) {
+                const pageToConvertAsImage = i;
+                storeAsImage(pageToConvertAsImage).then((resolve) => {
+                    console.log(`Page ${pageToConvertAsImage} is now converted as image`);
+                    return resolve;
+                });
+            }
+        })
+}
+
+export {
+    generateChart, generateFile
+}
 
