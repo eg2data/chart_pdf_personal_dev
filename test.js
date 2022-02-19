@@ -1,7 +1,9 @@
 import { subscribe } from './subscriber.js';
 
-subscribe()
+// subscribe()
 
+const i = 1
+console.log(`data_${i}`)
 
 
 

@@ -4,6 +4,7 @@ import fs from "fs";
 import labelmake from "labelmake";
 import template from "./labelmake-template.json";
 import {fromPath} from "pdf2pic";
+import makeDir from "make-dir";
 
 // 한글처리
 const NanumGothic = fs.readFileSync("./NanumGothic-Regular.ttf")
@@ -1150,7 +1151,7 @@ async function generateChart(data) {
     const kosssfConflictChart = await kosssfCanvas.renderToDataURL(kosssfConflictConfig)
 
     // 6. <add to charts and return>
-    const charts = {
+    return {
         "koss-sf-signals": kosssfSignalsChart,
         "phq-9-signals": phq9SignalsChart,
         "gad-7-signals": gad7SignalsChart,
@@ -1181,8 +1182,7 @@ async function generateChart(data) {
         "koss-sf-autonomy": kosssfAutonomyChart,
         "koss-sf-system": kosssfSystemChart,
         "koss-sf-conflict": kosssfConflictChart,
-    }
-    return charts
+    };
 };
 
 async function generateFile(data, charts) {
@@ -1334,30 +1334,67 @@ async function generateFile(data, charts) {
             "css-comment-details": data["css"]["comment-details"],
         }
     ];
-    const path = "./pdf/personal_report_test_220218_11.pdf"
-    labelmake({ inputs, template, font })
-        .then((pdf) => {
-            fs.writeFileSync(path, pdf, "utf-8");
-        })
-        // 8. <generate JPG file>
-        .then(() => {
-            const options = {
-                density: 100,
-                saveFilename: "personal_report_test_220218_11", // 생성된 pdf 이름이 들어오게 할 방법은?
-                savePath: "./jpg",
-                format: "jpg",
-                width: 2100,
-                height: 2970
-            };
-            const storeAsImage = fromPath(path, options);
-            for (let i = 1; i < 11; i++) {
-                const pageToConvertAsImage = i;
-                storeAsImage(pageToConvertAsImage).then((resolve) => {
-                    console.log(`Page ${pageToConvertAsImage} is now converted as image`);
-                    return resolve;
-                });
-            }
-        })
+
+    // jpg 경로 생성 준비
+    // 센터코드 => 센터명 변경
+    const centerCode = data["path-info"]["center-code"]
+    let centerName;
+    switch (centerCode) { // 임의지정
+        case 112:
+            centerName = "his_ino"
+            break;
+        case 113:
+            centerName = "his_ydp"
+            break;
+        case 114:
+            centerName = "his_gnm"
+            break;
+        case 115:
+            centerName = "his_swn"
+            break;
+        case 116:
+            centerName = "his_tae"
+            break;
+        case 117:
+            centerName = "his_pus"
+            break;
+        case 118:
+            centerName = "his_kwj"
+            break;
+    }
+
+    const submitDate = data["basic-info"]["submit-date"].replace(/-/g, "") // 기존 데이터 활용 위해. '-' 제거
+    const reservationNumber = data["path-info"]["reservation-number"]
+
+    // pdf 생성 경로에 따른 디렉토리 생성 + pdf 파일명 설정
+    const pdfPath = await makeDir('pdf')
+    const pdfName = `${pdfPath}/${centerCode}_${submitDate}_${reservationNumber}.pdf`;
+
+    try {
+        const pdf = await labelmake({ inputs, template, font })
+        fs.writeFileSync(pdfName, pdf, "utf-8");
+
+        // jpg 생성 경로에 따른 디렉토리 생성 + jpg 파일명 설정
+        const jpgPath = await makeDir(`jpg/${centerName}/${submitDate}`)
+        const options = {
+            density: 100,
+            savePath: jpgPath,
+            saveFilename: `${reservationNumber}`,
+            format: "jpg",
+            width: 2100,
+            height: 2970
+        };
+        const storeAsImage = fromPath(pdfName, options);
+        let pages = 0;
+        for (let i = 1; i < 11; i++) {
+            await storeAsImage(i);
+            pages++;
+        }
+        console.log(`Convert complete.`);
+        return pages;
+    } catch(exception) {
+        console.log(exception)
+    }
 }
 
 export {
