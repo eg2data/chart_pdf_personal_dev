@@ -6,6 +6,7 @@ import template from "./labelmake-template.json";
 import {fromPath} from "pdf2pic";
 import makeDir from "make-dir";
 
+
 // 한글처리
 const NanumGothic = fs.readFileSync("./NanumGothic-Regular.ttf")
 const font = {
@@ -1397,7 +1398,42 @@ async function generateFile(data, charts) {
     }
 }
 
+// import { spawn, exec, execSync } from 'child_process';
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
+
+async function rsyncFile() {
+    // return new Promise(function(resolve, reject) {
+    //     // 2. spawn을 이용하여 새 프로세스를 만듭니다.
+    //     let process = spawn('bash');
+    //     // 3. 실행할 명령을 작성합니다.
+    //     // '\n' 은 엔터입니다. terminal 이기 때문에 엔터로 명령어를 입력해야 실행되겠죠?
+    //     const command = 'ls -al \n'; // a: 숨긴 파일까지 , l: 자세한 내용까지 검색
+    //     try {
+    //         // 4. 부모 프로세서에서 자식프로세서로 명령을 보냅니다.
+    //         process.stdin.write(command);
+    //
+    //         // stdin을 이용할때는 end()로 반드시 입력을 끝내야합니다.
+    //         process.stdin.end();
+    //         // 5. 명령이 모두 실행됐다면 'close' 이벤트가 발생합니다.
+    //         process.on('close', function (code) {
+    //             console.log('end')
+    //             resolve(code);
+    //         });
+    //     } catch (err) {
+    //         console.log('error')
+    //         reject(err);
+    //     }
+    // })
+    try {
+        // const { stdout, stderr } = await exec('rsync --remove-source-files -ar jpg/ ~/'); // 수신지가 바뀌면 되지 않을까 싶음.
+        const { stdout, stderr } = await exec('rsync --remove-source-files -ar jpg/ tess@35.216.3.88:/'); // 수신지가 바뀌면 되지 않을까 싶음.
+
+    } catch(exception) {
+        console.log(exception)
+    }
+}
 export {
-    generateChart, generateFile
+    generateChart, generateFile, rsyncFile
 }
 

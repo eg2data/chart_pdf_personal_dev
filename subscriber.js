@@ -1,5 +1,5 @@
 import amqp from 'amqplib/callback_api.js';
-import { generateChart, generateFile } from "./generateChart.js";
+import {generateChart, generateFile, rsyncFile } from "./generateChart.js";
 
 amqp.connect('amqp://localhost', (connectionError, connection) => {
     if(connectionError) {
@@ -28,13 +28,16 @@ amqp.connect('amqp://localhost', (connectionError, connection) => {
                     console.log('chart generated')
                     const pages = await generateFile(data, charts)
                     console.log(pages + ' files written')
+                    // 여기서, rsync 명령어까지 순차적으로 사용될 수 있도록 할 생각.
+                    await rsyncFile()
                 } catch(ex) {
                     console.log(ex);
                 } finally {
                     channel.ack(message);
                 }
 
-            }, {
+
+        }, {
                 noAck: false
             });
     });

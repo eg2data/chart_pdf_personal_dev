@@ -1102,8 +1102,6 @@ amqp.connect('amqp://localhost', (connectionError, connection) => {
             durable: false
         });
         // Step 4: send message to queue
-
-        // 이 아랫부분을 for문으로 감싸면 될 것 같은데. 음.
         for (let i = 0; i < 10; i++) {
             const message = JSON.stringify(data[i])
             channel.sendToQueue(queueName, Buffer.from(message), {
@@ -1111,19 +1109,6 @@ amqp.connect('amqp://localhost', (connectionError, connection) => {
             });
             console.log(`[x] Sent data_${i} successfully.`)
         }
-
-        // const i = 1
-        // const message = JSON.stringify(data_+ i)
-        // channel.sendToQueue(queueName, Buffer.from(message), {
-        //     persistent: true
-        // });
-        // console.log(`[x] Sent successfully.`)
-
-        // const message = JSON.stringify(data_1)
-        // channel.sendToQueue(queueName, Buffer.from(message), {
-        //     persistent: true
-        // });
-        // console.log(`[x] Sent successfully.`)
     })
     setTimeout(() => {
         connection.close();
