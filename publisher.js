@@ -1102,7 +1102,7 @@ amqp.connect('amqp://localhost', (connectionError, connection) => {
             durable: false
         });
         // Step 4: send message to queue
-        for (let i = 0; i < 10; i++) {
+        for (let i = 9; i < 10; i++) {
             const message = JSON.stringify(data[i])
             channel.sendToQueue(queueName, Buffer.from(message), {
                 persistent: true
