@@ -5,6 +5,8 @@ import labelmake from "labelmake";
 import template from "./labelmake-template.json";
 import {fromPath} from "pdf2pic";
 import makeDir from "make-dir";
+import util from 'util';
+import { exec } from 'child_process';
 
 
 
@@ -146,13 +148,13 @@ async function generateChart(data) {
     const isiChangesByYearData = data["isi"]["changes-by-year"]
     const cssChangesByYearData = data["css"]["changes-by-year"]
     // 4) 가로바(점)
-    const kosssfSurroundingsData = data["koss-sf"]["surroundings"]
-    const kosssfInstabilityData = data["koss-sf"]["instability"]
-    const kosssfDemandsData = data["koss-sf"]["demands"]
+    const kosssfCompensationData = data["koss-sf"]["compensation"]
+    const kosssfJobInstabilityData = data["koss-sf"]["jobInstability"]
+    const kosssfRequirementsData = data["koss-sf"]["requirements"]
     const kosssfCultureData = data["koss-sf"]["culture"]
     const kosssfAutonomyData = data["koss-sf"]["autonomy"]
     const kosssfSystemData = data["koss-sf"]["system"]
-    const kosssfConflictData = data["koss-sf"]["conflict"]
+    const kosssfRelationshipData = data["koss-sf"]["relationship"]
 
 // <canvas>
     const signalsCanvas = new ChartJSNodeCanvas({ width: 240, height: 60 }); // 1) 신호등
@@ -164,10 +166,10 @@ async function generateChart(data) {
     const now = new Date();
     const year = now.getFullYear();
     const changesByYearLabels = [
-        year-4,
-        year-3,
-        year-2,
-        year-1,
+        // year-4,
+        // year-3,
+        // year-2,
+        // year-1,
         year,
     ]
 
@@ -690,7 +692,7 @@ async function generateChart(data) {
             datasets: [
                 {
                     data: kosssfChangesByYearData,
-                    barPercentage: 0.3,
+                    barPercentage: 0.1,
                     backgroundColor: [
                         "black",
                         "black",
@@ -717,7 +719,7 @@ async function generateChart(data) {
             datasets: [
                 {
                     data: phq9ChangesByYearData,
-                    barPercentage: 0.3,
+                    barPercentage: 0.1,
                     backgroundColor: [
                         "black",
                         "black",
@@ -744,7 +746,7 @@ async function generateChart(data) {
             datasets: [
                 {
                     data: gad7ChangesByYearData,
-                    barPercentage: 0.3,
+                    barPercentage: 0.1,
                     backgroundColor: [
                         "black",
                         "black",
@@ -771,7 +773,7 @@ async function generateChart(data) {
             datasets: [
                 {
                     data: adnm4ChangesByYearData,
-                    barPercentage: 0.3,
+                    barPercentage: 0.1,
                     backgroundColor: [
                         "black",
                         "black",
@@ -798,7 +800,7 @@ async function generateChart(data) {
             datasets: [
                 {
                     data: pcptsd5ChangesByYearData,
-                    barPercentage: 0.3,
+                    barPercentage: 0.1,
                     backgroundColor: [
                         "black",
                         "black",
@@ -825,7 +827,7 @@ async function generateChart(data) {
             datasets: [
                 {
                     data: isiChangesByYearData,
-                    barPercentage: 0.3,
+                    barPercentage: 0.1,
                     backgroundColor: [
                         "black",
                         "black",
@@ -852,7 +854,7 @@ async function generateChart(data) {
             datasets: [
                 {
                     data: cssChangesByYearData,
-                    barPercentage: 0.3,
+                    barPercentage: 0.1,
                     backgroundColor: [
                         "black",
                         "black",
@@ -873,13 +875,13 @@ async function generateChart(data) {
         },
     };
     // 4) 가로바(점)
-    const kosssfSurroundingsConfig = {
+    const kosssfCompensationConfig = {
         type: 'bar',
         data: {
             labels: ['a'],
             datasets: [
                 {
-                    data: kosssfSurroundingsData.slice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참 => splice 사용 시 그 상태 그대로 데이터가 저장됨.. => slice 대체
+                    data: kosssfCompensationData.slice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참 => splice 사용 시 그 상태 그대로 데이터가 저장됨.. => slice 대체
                     barPercentage: 0.0,
                 }
             ]
@@ -908,13 +910,13 @@ async function generateChart(data) {
             }
         },
     };
-    const kosssfInstabilityConfig = {
+    const kosssfJobInstabilityConfig = {
         type: 'bar',
         data: {
             labels: ['a'],
             datasets: [
                 {
-                    data: kosssfInstabilityData.slice(0,1),
+                    data: kosssfJobInstabilityData.slice(0,1),
                     barPercentage: 0.0,
                 }
             ]
@@ -943,13 +945,13 @@ async function generateChart(data) {
             }
         },
     };
-    const kosssfDemandsConfig = {
+    const kosssfRequirementsConfig = {
         type: 'bar',
         data: {
             labels: ['a'],
             datasets: [
                 {
-                    data: kosssfDemandsData.slice(0,1),
+                    data: kosssfRequirementsData.slice(0,1),
                     barPercentage: 0.0,
                 }
             ]
@@ -1083,13 +1085,13 @@ async function generateChart(data) {
             }
         },
     };
-    const kosssfConflictConfig = {
+    const kosssfRelationshipConfig = {
         type: 'bar',
         data: {
             labels: ['a'],
             datasets: [
                 {
-                    data: kosssfConflictData.slice(0,1),
+                    data: kosssfRelationshipData.slice(0,1),
                     barPercentage: 0.0,
                 }
             ]
@@ -1144,13 +1146,13 @@ async function generateChart(data) {
     const isiChangesByYearChart = await changesByYearCanvas.renderToDataURL(isiChangeByYearConfig)
     const cssChangesByYearChart = await changesByYearCanvas.renderToDataURL(cssChangeByYearConfig)
     // 4) 가로바(점)
-    const kosssfSurroundingsChart = await kosssfCanvas.renderToDataURL(kosssfSurroundingsConfig)
-    const kosssfInstabilityChart = await kosssfCanvas.renderToDataURL(kosssfInstabilityConfig)
-    const kosssfDemandsChart = await kosssfCanvas.renderToDataURL(kosssfDemandsConfig)
+    const kosssfCompensationChart = await kosssfCanvas.renderToDataURL(kosssfCompensationConfig)
+    const kosssfJobInstabilityChart = await kosssfCanvas.renderToDataURL(kosssfJobInstabilityConfig)
+    const kosssfRequirementsChart = await kosssfCanvas.renderToDataURL(kosssfRequirementsConfig)
     const kosssfCultureChart = await kosssfCanvas.renderToDataURL(kosssfCultureConfig)
     const kosssfAutonomyChart = await kosssfCanvas.renderToDataURL(kosssfAutonomyConfig)
     const kosssfSystemChart = await kosssfCanvas.renderToDataURL(kosssfSystemConfig)
-    const kosssfConflictChart = await kosssfCanvas.renderToDataURL(kosssfConflictConfig)
+    const kosssfRelationshipChart = await kosssfCanvas.renderToDataURL(kosssfRelationshipConfig)
 
     // 6. <add to charts and return>
     return {
@@ -1177,13 +1179,13 @@ async function generateChart(data) {
         "isi-changes-by-year": isiChangesByYearChart,
         "css-changes-by-year": cssChangesByYearChart,
 
-        "koss-sf-surroundings": kosssfSurroundingsChart,
-        "koss-sf-instability": kosssfInstabilityChart,
-        "koss-sf-demands": kosssfDemandsChart,
+        "koss-sf-surroundings": kosssfCompensationChart, // 받는 부분은 수정 안함. 그래서, template 내 변수명은 수정 안함.
+        "koss-sf-instability": kosssfJobInstabilityChart, // 받는 부분은 수정 안함. 그래서, template 내 변수명은 수정 안함.
+        "koss-sf-demands": kosssfRequirementsChart, // 받는 부분은 수정 안함. 그래서, template 내 변수명은 수정 안함.
         "koss-sf-culture": kosssfCultureChart,
         "koss-sf-autonomy": kosssfAutonomyChart,
         "koss-sf-system": kosssfSystemChart,
-        "koss-sf-conflict": kosssfConflictChart,
+        "koss-sf-conflict": kosssfRelationshipChart, // 받는 부분은 수정 안함. 그래서, template 내 변수명은 수정 안함.
     };
 };
 
@@ -1192,21 +1194,21 @@ async function generateFile(data, charts) {
     const inputs = [
         {
             "user-name": data["basic-info"]["user-name"],
-            "distinct-number": data["basic-info"]["distinct-number"],
-            "classification-code": data["basic-info"]["classification-code"],
+            // "distinct-number": data["basic-info"]["distinct-number"],
+            // "classification-code": data["basic-info"]["classification-code"],
             "submit-date": data["basic-info"]["submit-date"],
             "report-date": data["basic-info"]["report-date"],
             "company-info-name": data["basic-info"]["company-info"]["name"],
             "company-info-address": data["basic-info"]["company-info"]["address"],
             "company-info-via": data["basic-info"]["company-info"]["via"],
             "company-info-contact": data["basic-info"]["company-info"]["contact"],
-            "check-list-number": data["basic-info"]["check-list-number"] + " 종",
+            // "check-list-number": data["basic-info"]["check-list-number"] + " 종",
             "test-type": data["basic-info"]["test-type"],
             "test-method": data["basic-info"]["test-method"],
             "test-adequacy": data["basic-info"]["test-adequacy"],
 
             "overall-user-name": data["basic-info"]["user-name"],
-            "overall-classification-code": data["basic-info"]["classification-code-details"],
+            // "overall-classification-code": data["basic-info"]["classification-code-details"],
             "overall-koss-sf-signal-texts": data["koss-sf"]["signal-texts"],
             "overall-koss-sf-signals": charts['koss-sf-signals'],
             "overall-koss-sf-points": data["koss-sf"]["points"].toString() + "점  /",
@@ -1260,20 +1262,20 @@ async function generateFile(data, charts) {
             "koss-sf-changes-by-year": charts['koss-sf-changes-by-year'],
             "koss-sf-comment-details": data["koss-sf"]["comment-details"],
 
-            "koss-sf-surroundings-points": data["koss-sf"]["surroundings"][0].toString() + "점  /",
-            "koss-sf-surroundings-rates": data["koss-sf"]["surroundings"][1] + "%",
-            "koss-sf-instability-points": data["koss-sf"]["instability"][0].toString() + "점  /",
-            "koss-sf-instability-rates": data["koss-sf"]["instability"][1] + "%",
-            "koss-sf-demands-points": data["koss-sf"]["demands"][0].toString() + "점  /",
-            "koss-sf-demands-rates": data["koss-sf"]["demands"][1] + "%",
+            "koss-sf-surroundings-points": data["koss-sf"]["compensation"][0].toString() + "점  /",
+            "koss-sf-surroundings-rates": data["koss-sf"]["compensation"][1] + "%",
+            "koss-sf-instability-points": data["koss-sf"]["jobInstability"][0].toString() + "점  /",
+            "koss-sf-instability-rates": data["koss-sf"]["jobInstability"][1] + "%",
+            "koss-sf-demands-points": data["koss-sf"]["requirements"][0].toString() + "점  /",
+            "koss-sf-demands-rates": data["koss-sf"]["requirements"][1] + "%",
             "koss-sf-culture-points": data["koss-sf"]["culture"][0].toString() + "점  /",
             "koss-sf-culture-rates": data["koss-sf"]["culture"][1] + "%",
             "koss-sf-autonomy-points": data["koss-sf"]["autonomy"][0].toString() + "점  /",
             "koss-sf-autonomy-rates": data["koss-sf"]["autonomy"][1] + "%",
             "koss-sf-system-points": data["koss-sf"]["system"][0].toString() + "점  /",
             "koss-sf-system-rates": data["koss-sf"]["system"][1] + "%",
-            "koss-sf-conflict-points": data["koss-sf"]["conflict"][0].toString() + "점  /",
-            "koss-sf-conflict-rates": data["koss-sf"]["conflict"][1] + "%",
+            "koss-sf-conflict-points": data["koss-sf"]["relationship"][0].toString() + "점  /",
+            "koss-sf-conflict-rates": data["koss-sf"]["relationship"][1] + "%",
 
             "phq-9-signals": charts['phq-9-signals'],
             "phq-9-rates": data["phq-9"]["rates"].toString() + "%",
@@ -1400,15 +1402,11 @@ async function generateFile(data, charts) {
 }
 
 
-
-
-import util from 'util';
-import { exec } from 'child_process';
-
 async function rsyncFile() {
     try {
         const command = util.promisify(exec)
-        await command('rsync --remove-source-files -ar jpg/ ~/'); // 수신지가 바뀌면 되지 않을까 싶음.
+        // await command('rsync --remove-source-files -ar jpg/ ~/'); // 수신지가 바뀌면 되지 않을까 싶음.
+        await command('touch test.js'); // 접속이 되려나?
         // await exec('rsync --remove-source-files -ar jpg/ eg2data@34.64.201.251:/');
         // await exec('rsync --remove-source-files -ar -e jpg/ ssh -i ~/.ssh/report_rsa_4096 eg2data@34.64.201.251:/');
     } catch(exception) {
