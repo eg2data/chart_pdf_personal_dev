@@ -1,10 +1,11 @@
-import amqp from 'amqplib/callback_api.js';
+// import amqp from 'amqplib/callback_api.js';
+const amqp = require('amqplib/callback_api.js')
 
 const data_0 =
     {
         "path-info": {
-            "reservation-number": 2200803557, // 예약번호
-            "center-code": 114, // 센터코드
+            "reservation-number": 611611611, // 예약번호
+            "center-code": 611, // 센터코드
             // 검진일자 => ["basic-info"]["submit-date"]에서 '-' 제거하여 사용.
         },
         "basic-info": {
@@ -93,14 +94,14 @@ const data_0 =
             "comment-details": "검사 결과는 경미한 수준의 불면증을 자주 느끼고 있습니다. 2주 이상 지속 시 전문가의 도움이 필요합니다. 불면증 진단은 병력 및 여러 검사 결과와 전문의의 종합적인 판단에 의해 이루어지므로, 추가 평가 또는 전문가의 도움이 필요합니다.",
         },
         "css" : {
-            "signals": [24],
+            "signals": null,
             "signal-texts": "정상",
-            "points" : [0],
-            "rates": [0],
+            "points" : null,
+            "rates": null,
             "comments": "위험한 수준의 자살 사고가 보이지 않음",
             "requirements": "",
             "requirement-texts": "전문도움필요",
-            "changes-by-year": [25],
+            "changes-by-year": null,
             "comment-details": "검사 결과는 자살사고 위험이 없습니다",
         },
     }

@@ -131,14 +131,28 @@ async function generateChart(data) {
     const adnm4SignalsData = data["adnm-4"]["signals"]
     const pcptsd5SignalsData = data["pc-ptsd-5"]["signals"]
     const isiSignalsData = data["isi"]["signals"]
-    const cssSignalsData = data["css"]["signals"]
+    // const cssSignalsData = data["css"]["signals"]
+    let cssSignalsData;
+    if (data["css"]["signals"] == null) {
+        cssSignalsData = [23.9];
+    } else {
+        cssSignalsData = data["css"]["signals"]
+    }
+
     // 2) 가로바(채움)
     const phq9RateBarData = data["phq-9"]["rates"]
     const gad7RateBarData = data["gad-7"]["rates"]
     const adnm4RateBarData = data["adnm-4"]["rates"]
     const pcptsd5RateBarData = data["pc-ptsd-5"]["rates"]
     const isiRateBarData = data["isi"]["rates"]
-    const cssRateBarData = data["css"]["rates"]
+//    const cssRateBarData = data["css"]["rates"]
+    let cssRateBarData;
+    if (data["css"]["rates"] == null) {
+        cssRateBarData = [0];
+    } else {
+        cssRateBarData = data["css"]["rates"]
+    }
+
     // 3) 연도별
     const kosssfChangesByYearData = data["koss-sf"]["changes-by-year"]
     const phq9ChangesByYearData = data["phq-9"]["changes-by-year"]
@@ -146,7 +160,13 @@ async function generateChart(data) {
     const adnm4ChangesByYearData = data["adnm-4"]["changes-by-year"]
     const pcptsd5ChangesByYearData = data["pc-ptsd-5"]["changes-by-year"]
     const isiChangesByYearData = data["isi"]["changes-by-year"]
-    const cssChangesByYearData = data["css"]["changes-by-year"]
+    // const cssChangesByYearData = data["css"]["changes-by-year"]
+    let cssChangesByYearData;
+    if (data["css"]["changes-by-year"] == null) {
+        cssChangesByYearData = [0];
+    } else {
+        cssChangesByYearData = data["css"]["changes-by-year"]
+    }
     // 4) 가로바(점)
     const kosssfCompensationData = data["koss-sf"]["compensation"]
     const kosssfJobInstabilityData = data["koss-sf"]["jobInstability"]
@@ -385,6 +405,7 @@ async function generateChart(data) {
             }
         },
     };
+
     const cssSignalsConfig = {
         type: 'bar',
         data: {
@@ -420,6 +441,7 @@ async function generateChart(data) {
             }
         },
     };
+
 
     // 입력값에 따른 색상+위치 변경
     if (kosssfSignalsConfig.data.datasets[0].data == 24) {
@@ -512,6 +534,11 @@ async function generateChart(data) {
     } else if (cssSignalsConfig.data.datasets[0].data == 87) {
         cssSignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
         cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
+    } else if (cssSignalsConfig.data.datasets[0].data == 23.9) {
+
+        cssSignalsConfig.options.plugins.datalabels.boderWidth = {}
+
+
     }
     // 왜 안돼? (if+else => case)
     // switch (kosssfSignalsConfig.data.datasets[0].data) {
@@ -1190,6 +1217,19 @@ async function generateChart(data) {
 };
 
 async function generateFile(data, charts) {
+    let cssRatesData;
+    if (data["css"]["rates"] == null) {
+        cssRatesData = [0];
+    } else {
+        cssRatesData = data["css"]["rates"]
+    }
+    let cssPointsData;
+    if (data["css"]["points"] == null) {
+        cssPointsData = [0];
+    } else {
+        cssPointsData = data["css"]["points"]
+    }
+
     // 7. <generate PDF file>
     const inputs = [
         {
@@ -1247,8 +1287,8 @@ async function generateFile(data, charts) {
 
             "overall-css-signal-texts": data["css"]["signal-texts"],
             "overall-css-signals": charts['css-signals'],
-            "overall-css-points": data["css"]["points"].toString() + "점  /",
-            "overall-css-rates": data["css"]["rates"].toString() + "%",
+            "overall-css-points": cssPointsData.toString() + "점  /",
+            "overall-css-rates": cssRatesData.toString() + "%",
             "overall-css-comments": data["css"]["comments"],
 
             "koss-sf-signals": charts['koss-sf-signals'],
@@ -1328,7 +1368,7 @@ async function generateFile(data, charts) {
             "isi-comment-details": data["isi"]["comment-details"],
 
             "css-signals": charts['css-signals'],
-            "css-rates": data["css"]["rates"].toString() + "%",
+            "css-rates": cssRatesData.toString() + "%",
             "css-signal-texts": data["css"]["signal-texts"],
             "css-rate-bar": charts['css-rate-bar'],
             "css-comments": data["css"]["comments"],
@@ -1343,29 +1383,46 @@ async function generateFile(data, charts) {
     // 센터코드 => 센터명 변경
     const centerCode = data["path-info"]["center-code"]
     let centerName;
-    switch (centerCode) { // 임의지정
-        case 112:
-            centerName = "his_ino"
-            break;
-        case 113:
-            centerName = "his_ydp"
-            break;
-        case 114:
-            centerName = "his_gnm"
-            break;
-        case 115:
-            centerName = "his_swn"
-            break;
-        case 116:
-            centerName = "his_tae"
-            break;
-        case 117:
-            centerName = "his_pus"
-            break;
-        case 118:
-            centerName = "his_kwj"
-            break;
+    // switch (centerCode) { // 임의지정
+    //     case 111:
+    //         centerName = "his_jno"
+    //         break;
+    //     case 112:
+    //         centerName = "his_ydp"
+    //         break;
+    //     case 113:
+    //         centerName = "his_gnm"
+    //         break;
+    //     case 211:
+    //         centerName = "his_swn"
+    //         break;
+    //     case 611:
+    //         centerName = "his_tae"
+    //         break;
+    //     case 612:
+    //         centerName = "his_pus"
+    //         break;
+    //     case 711:
+    //         centerName = "his_kwj"
+    //         break;
+    // }
+
+    if (centerCode == 111) {
+        centerName = "his_jno"
+    } else if (centerCode == 112) {
+        centerName = "his_ydp"
+    } else if (centerCode == 113) {
+        centerName = "his_gnm"
+    } else if (centerCode == 211) {
+        centerName = "his_swn"
+    } else if (centerCode == 611) {
+        centerName = "his_tae"
+    } else if (centerCode == 612) {
+        centerName = "his_pus"
+    } else if (centerCode == 711) {
+        centerName = "his_kwj"
     }
+
 
     const submitDate = data["basic-info"]["submit-date"].replace(/-/g, "") // 기존 데이터 활용 위해. '-' 제거
     const reservationNumber = data["path-info"]["reservation-number"]
