@@ -1,5 +1,5 @@
 import amqp from 'amqplib/callback_api.js';
-import {generateChart, generateFile, rsyncFile } from "./generateChart.js";
+import {generateChart, generateFile } from "./generateChart.js";
 
 amqp.connect('amqp://localhost', (connectionError, connection) => {
     if(connectionError) {
@@ -28,8 +28,8 @@ amqp.connect('amqp://localhost', (connectionError, connection) => {
                     console.log('chart generated')
                     const pages = await generateFile(data, charts)
                     console.log(pages + ' files written')
-                    // rsync
-                    await rsyncFile()
+                    // rsync - 사용안함
+                    // await rsyncFile()
                 } catch(ex) {
                     console.log(ex);
                 } finally {

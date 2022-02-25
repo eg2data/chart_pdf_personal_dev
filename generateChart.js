@@ -5,10 +5,6 @@ import labelmake from "labelmake";
 import template from "./labelmake-template.json";
 import {fromPath} from "pdf2pic";
 import makeDir from "make-dir";
-import util from 'util';
-import { exec } from 'child_process';
-
-
 
 // 한글처리
 const NanumGothic = fs.readFileSync("./NanumGothic-Regular.ttf")
@@ -19,169 +15,113 @@ const font = {
     }
 };
 
+async function generateChart(data) {
 // <defaults>
-const signalsScales =  { // 1) 신호등
-    x: {
-        grid: {
-            drawBorder: false,
-            display: false
+    const signalsScales =  { // 1) 신호등
+        x: {
+            grid: {
+                drawBorder: false,
+                display: false
+            },
+            ticks: {
+                display: false,
+            },
+            min: 0,
+            max: 100,
         },
-        ticks: {
-            display: false,
-        },
-        min: 0,
-        max: 100,
-    },
-    y: {
-        grid: {
-            drawBorder: false,
-            display: false,
-        },
-        ticks: {
-            display: false,
+        y: {
+            grid: {
+                drawBorder: false,
+                display: false,
+            },
+            ticks: {
+                display: false,
+            }
         }
     }
-}
-const rateBarScales =  { // 2) 가로바(채움)
+    const rateBarScales =  { // 2) 가로바(채움)
 
-    x: {
-        grid: {
-            drawBorder: false,
-            display: false
+        x: {
+            grid: {
+                drawBorder: false,
+                display: false
+            },
+            ticks: {
+                display: false,
+            },
+            min: 0,
+            max: 100,
         },
-        ticks: {
-            display: false,
-        },
-        min: 0,
-        max: 100,
-    },
-    y: {
-        grid: {
-            drawBorder: false,
-            display: false,
-        },
-        ticks: {
-            display: false,
+        y: {
+            grid: {
+                drawBorder: false,
+                display: false,
+            },
+            ticks: {
+                display: false,
+            }
         }
     }
-}
-const changesByYearScales = { // 3) 연도별
+    const changesByYearScales = { // 3) 연도별
 
-    x: {
-        grid: {
-            display: false,
-            drawBorder: false,
-        },
-        ticks: {
-            font: {
-                size: 10,
-                lineHeight: 0.1,
-                weight: "bold",
+        x: {
+            grid: {
+                display: false,
+                drawBorder: false,
+            },
+            ticks: {
+                font: {
+                    size: 10,
+                    lineHeight: 0.1,
+                    weight: "bold",
+                },
             },
         },
-    },
-    y: {
-        beginAtZero: true,
-        grid: {
-            drawBorder: false,
-            color: [
-                'white',
-            ],
-        },
-        ticks: {
-            display: false,
+        y: {
             beginAtZero: true,
-            stepSize: 25,
-        },
-        min: 0,
-        max: 100,
-    }
-}
-const kosssfScales =  { // 4) 가로바(점)
-
-    x: {
-        grid: {
-            drawBorder: false,
-            display: false
-        },
-        ticks: {
-            display: false,
-        },
-        min: 0,
-        max: 50,
-    },
-    y: {
-        grid: {
-            drawBorder: false,
-            display: false,
-        },
-        ticks: {
-            display: false,
+            grid: {
+                drawBorder: false,
+                color: [
+                    'white',
+                ],
+            },
+            ticks: {
+                display: false,
+                beginAtZero: true,
+                stepSize: 25,
+            },
+            min: 0,
+            max: 100,
         }
     }
-}
+    const kosssfScales =  { // 4) 가로바(점)
 
-async function generateChart(data) {
-
-// <data>
-    // 1) 신호등
-    const kosssfSignalsData = data["koss-sf"]["signals"]
-    const phq9SignalsData = data["phq-9"]["signals"]
-    const gad7SignalsData = data["gad-7"]["signals"]
-    const adnm4SignalsData = data["adnm-4"]["signals"]
-    const pcptsd5SignalsData = data["pc-ptsd-5"]["signals"]
-    const isiSignalsData = data["isi"]["signals"]
-    // const cssSignalsData = data["css"]["signals"]
-    let cssSignalsData;
-    if (data["css"]["signals"] == null) {
-        cssSignalsData = [23.9];
-    } else {
-        cssSignalsData = data["css"]["signals"]
+        x: {
+            grid: {
+                drawBorder: false,
+                display: false
+            },
+            ticks: {
+                display: false,
+            },
+            min: 0,
+            max: 50,
+        },
+        y: {
+            grid: {
+                drawBorder: false,
+                display: false,
+            },
+            ticks: {
+                display: false,
+            }
+        }
     }
-
-    // 2) 가로바(채움)
-    const phq9RateBarData = data["phq-9"]["rates"]
-    const gad7RateBarData = data["gad-7"]["rates"]
-    const adnm4RateBarData = data["adnm-4"]["rates"]
-    const pcptsd5RateBarData = data["pc-ptsd-5"]["rates"]
-    const isiRateBarData = data["isi"]["rates"]
-//    const cssRateBarData = data["css"]["rates"]
-    let cssRateBarData;
-    if (data["css"]["rates"] == null) {
-        cssRateBarData = [0];
-    } else {
-        cssRateBarData = data["css"]["rates"]
-    }
-
-    // 3) 연도별
-    const kosssfChangesByYearData = data["koss-sf"]["changes-by-year"]
-    const phq9ChangesByYearData = data["phq-9"]["changes-by-year"]
-    const gad7ChangesByYearData = data["gad-7"]["changes-by-year"]
-    const adnm4ChangesByYearData = data["adnm-4"]["changes-by-year"]
-    const pcptsd5ChangesByYearData = data["pc-ptsd-5"]["changes-by-year"]
-    const isiChangesByYearData = data["isi"]["changes-by-year"]
-    // const cssChangesByYearData = data["css"]["changes-by-year"]
-    let cssChangesByYearData;
-    if (data["css"]["changes-by-year"] == null) {
-        cssChangesByYearData = [0];
-    } else {
-        cssChangesByYearData = data["css"]["changes-by-year"]
-    }
-    // 4) 가로바(점)
-    const kosssfCompensationData = data["koss-sf"]["compensation"]
-    const kosssfJobInstabilityData = data["koss-sf"]["jobInstability"]
-    const kosssfRequirementsData = data["koss-sf"]["requirements"]
-    const kosssfCultureData = data["koss-sf"]["culture"]
-    const kosssfAutonomyData = data["koss-sf"]["autonomy"]
-    const kosssfSystemData = data["koss-sf"]["system"]
-    const kosssfRelationshipData = data["koss-sf"]["relationship"]
-
 // <canvas>
     const signalsCanvas = new ChartJSNodeCanvas({ width: 240, height: 60 }); // 1) 신호등
     const rateBarCanvas = new ChartJSNodeCanvas({ width: 480, height: 36 }); // 2) 가로바(채움)
     const changesByYearCanvas = new ChartJSNodeCanvas({ width: 240, height: 120 }); // 3) 연도별
     const kosssfCanvas = new ChartJSNodeCanvas({ width: 240, height: 36 }); // 4) 가로바(점)
-
 // <label 중 일부>
     const now = new Date();
     const year = now.getFullYear();
@@ -193,8 +133,51 @@ async function generateChart(data) {
         year,
     ]
 
-// <configurations>
-    //  1) 신호등
+// <신호등>
+    // 1) data
+    let kosssfSignalsData;
+    if (data["koss-sf"]["signals"] == null) {
+        kosssfSignalsData = [-1];
+    } else {
+        kosssfSignalsData = data["koss-sf"]["signals"]
+    }
+    let phq9SignalsData;
+    if (data["phq-9"]["signals"] == null) {
+        phq9SignalsData = [-1];
+    } else {
+        phq9SignalsData = data["phq-9"]["signals"]
+    }
+    let gad7SignalsData;
+    if (data["gad-7"]["signals"] == null) {
+        gad7SignalsData = [-1];
+    } else {
+        gad7SignalsData = data["gad-7"]["signals"]
+    }
+    let adnm4SignalsData;
+    if (data["adnm-4"]["signals"] == null) {
+        adnm4SignalsData = [-1];
+    } else {
+        adnm4SignalsData = data["adnm-4"]["signals"]
+    }
+    let pcptsd5SignalsData;
+    if (data["pc-ptsd-5"]["signals"] == null) {
+        pcptsd5SignalsData = [-1];
+    } else {
+        pcptsd5SignalsData = data["pc-ptsd-5"]["signals"]
+    }
+    let isiSignalsData;
+    if (data["isi"]["signals"] == null) {
+        isiSignalsData = [-1];
+    } else {
+        isiSignalsData = data["isi"]["signals"]
+    }
+    let cssSignalsData;
+    if (data["css"]["signals"] == null) {
+        cssSignalsData = [-1];
+    } else {
+        cssSignalsData = data["css"]["signals"]
+    }
+    // 2) config
     const kosssfSignalsConfig = {
         type: 'bar',
         data: {
@@ -405,7 +388,6 @@ async function generateChart(data) {
             }
         },
     };
-
     const cssSignalsConfig = {
         type: 'bar',
         data: {
@@ -442,8 +424,7 @@ async function generateChart(data) {
         },
     };
 
-
-    // 입력값에 따른 색상+위치 변경
+    // 3) 입력값에 따른 색상+위치 변경
     if (kosssfSignalsConfig.data.datasets[0].data == 24) {
         kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
         kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
@@ -456,6 +437,8 @@ async function generateChart(data) {
     } else if (kosssfSignalsConfig.data.datasets[0].data == 87) {
         kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
         kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
+    } else if (kosssfSignalsConfig.data.datasets[0].data == -1) {
+        kosssfSignalsConfig.options.plugins.datalabels.borderWidth = ""
     }
     if (phq9SignalsConfig.data.datasets[0].data == 24) {
         phq9SignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
@@ -469,32 +452,8 @@ async function generateChart(data) {
     } else if (phq9SignalsConfig.data.datasets[0].data == 87) {
         phq9SignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
         phq9SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
-    }
-    if (adnm4SignalsConfig.data.datasets[0].data == 24) {
-        adnm4SignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
-        adnm4SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
-    } else if (adnm4SignalsConfig.data.datasets[0].data == 45) {
-        adnm4SignalsConfig.options.plugins.datalabels.color[0] = '#ffb266'
-        adnm4SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#ffb266'
-    } else if (adnm4SignalsConfig.data.datasets[0].data == 66) {
-        adnm4SignalsConfig.options.plugins.datalabels.color[0] = '#Ff0000'
-        adnm4SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#Ff0000'
-    } else if (adnm4SignalsConfig.data.datasets[0].data == 87) {
-        adnm4SignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
-        adnm4SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
-    }
-    if (isiSignalsConfig.data.datasets[0].data == 24) {
-        isiSignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
-        isiSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
-    } else if (isiSignalsConfig.data.datasets[0].data == 45) {
-        isiSignalsConfig.options.plugins.datalabels.color[0] = '#ffb266'
-        isiSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#ffb266'
-    } else if (isiSignalsConfig.data.datasets[0].data == 66) {
-        isiSignalsConfig.options.plugins.datalabels.color[0] = '#Ff0000'
-        isiSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#Ff0000'
-    } else if (isiSignalsConfig.data.datasets[0].data == 87) {
-        isiSignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
-        isiSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
+    } else if (phq9SignalsConfig.data.datasets[0].data == -1) {
+        phq9SignalsConfig.options.plugins.datalabels.borderWidth = ""
     }
     if (gad7SignalsConfig.data.datasets[0].data == 24) {
         gad7SignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
@@ -508,6 +467,23 @@ async function generateChart(data) {
     } else if (gad7SignalsConfig.data.datasets[0].data == 87) {
         gad7SignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
         gad7SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
+    } else if (gad7SignalsConfig.data.datasets[0].data == -1) {
+        gad7SignalsConfig.options.plugins.datalabels.borderWidth = ""
+    }
+    if (adnm4SignalsConfig.data.datasets[0].data == 24) {
+        adnm4SignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
+        adnm4SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
+    } else if (adnm4SignalsConfig.data.datasets[0].data == 45) {
+        adnm4SignalsConfig.options.plugins.datalabels.color[0] = '#ffb266'
+        adnm4SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#ffb266'
+    } else if (adnm4SignalsConfig.data.datasets[0].data == 66) {
+        adnm4SignalsConfig.options.plugins.datalabels.color[0] = '#Ff0000'
+        adnm4SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#Ff0000'
+    } else if (adnm4SignalsConfig.data.datasets[0].data == 87) {
+        adnm4SignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
+        adnm4SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
+    } else if (adnm4SignalsConfig.data.datasets[0].data == -1) {
+        adnm4SignalsConfig.options.plugins.datalabels.borderWidth = ""
     }
     if (pcptsd5SignalsConfig.data.datasets[0].data == 24) {
         pcptsd5SignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
@@ -521,6 +497,23 @@ async function generateChart(data) {
     } else if (pcptsd5SignalsConfig.data.datasets[0].data == 87) {
         pcptsd5SignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
         pcptsd5SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
+    } else if (pcptsd5SignalsConfig.data.datasets[0].data == -1) {
+        pcptsd5SignalsConfig.options.plugins.datalabels.borderWidth = ""
+    }
+    if (isiSignalsConfig.data.datasets[0].data == 24) {
+        isiSignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
+        isiSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
+    } else if (isiSignalsConfig.data.datasets[0].data == 45) {
+        isiSignalsConfig.options.plugins.datalabels.color[0] = '#ffb266'
+        isiSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#ffb266'
+    } else if (isiSignalsConfig.data.datasets[0].data == 66) {
+        isiSignalsConfig.options.plugins.datalabels.color[0] = '#Ff0000'
+        isiSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#Ff0000'
+    } else if (isiSignalsConfig.data.datasets[0].data == 87) {
+        isiSignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
+        isiSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
+    } else if (isiSignalsConfig.data.datasets[0].data == -1) {
+        isiSignalsConfig.options.plugins.datalabels.borderWidth = ""
     }
     if (cssSignalsConfig.data.datasets[0].data == 24) {
         cssSignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
@@ -534,33 +527,49 @@ async function generateChart(data) {
     } else if (cssSignalsConfig.data.datasets[0].data == 87) {
         cssSignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
         cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
-    } else if (cssSignalsConfig.data.datasets[0].data == 23.9) {
-
-        cssSignalsConfig.options.plugins.datalabels.boderWidth = {}
-
-
+    } else if (cssSignalsConfig.data.datasets[0].data == -1) {
+        cssSignalsConfig.options.plugins.datalabels.borderWidth = ""
     }
-    // 왜 안돼? (if+else => case)
-    // switch (kosssfSignalsConfig.data.datasets[0].data) {
-    //     case 24:
-    //         kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
-    //         kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
-    //         break
-    //     case 45:
-    //         kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#ffb266'
-    //         kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#ffb266'
-    //         break
-    //     case 66:
-    //         kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#Ff0000'
-    //         kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#Ff0000'
-    //         break
-    //     case 87:
-    //         kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
-    //         kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
-    //         break
-    // }
 
-    // 2) 가로바(채움)
+// <가로바(채움)>
+    // 1) data
+    let phq9RateBarData;
+    if (data["phq-9"]["rates"] == null) {
+        phq9RateBarData = [-1];
+    } else {
+        phq9RateBarData = data["phq-9"]["rates"]
+    }
+    let gad7RateBarData;
+    if (data["gad-7"]["rates"] == null) {
+        gad7RateBarData = [-1];
+    } else {
+        gad7RateBarData = data["gad-7"]["rates"]
+    }
+    let adnm4RateBarData;
+    if (data["adnm-4"]["rates"] == null) {
+        adnm4RateBarData = [-1];
+    } else {
+        adnm4RateBarData = data["adnm-4"]["rates"]
+    }
+    let pcptsd5RateBarData;
+    if (data["pc-ptsd-5"]["rates"] == null) {
+        pcptsd5RateBarData = [-1];
+    } else {
+        pcptsd5RateBarData = data["pc-ptsd-5"]["rates"]
+    }
+    let isiRateBarData;
+    if (data["isi"]["rates"] == null) {
+        isiRateBarData = [-1];
+    } else {
+        isiRateBarData = data["isi"]["rates"]
+    }
+    let cssRateBarData;
+    if (data["css"]["rates"] == null) {
+        cssRateBarData = [-1];
+    } else {
+        cssRateBarData = data["css"]["rates"]
+    }
+    // 2) config
     const phq9RateBarConfig = { // radius 아쉽다
         type: 'bar',
         data: {
@@ -711,7 +720,77 @@ async function generateChart(data) {
             }
         }
     }
-    // 3) 연도별
+    // 3) 입력값이 null일 경우 차트 비우기
+    if (phq9RateBarConfig.data.datasets[0].data == -1) {
+        phq9RateBarConfig.data.datasets[0].barPercentage = ""
+        phq9RateBarConfig.data.datasets[0].backgroundColor = ""
+    }
+    if (gad7RateBarConfig.data.datasets[0].data == -1) {
+        gad7RateBarConfig.data.datasets[0].barPercentage = ""
+        gad7RateBarConfig.data.datasets[0].backgroundColor = ""
+    }
+    if (adnm4RateBarConfig.data.datasets[0].data == -1) {
+        adnm4RateBarConfig.data.datasets[0].barPercentage = ""
+        adnm4RateBarConfig.data.datasets[0].backgroundColor = ""
+    }
+    if (pcptsd5RateBarConfig.data.datasets[0].data == -1) {
+        pcptsd5RateBarConfig.data.datasets[0].barPercentage = ""
+        pcptsd5RateBarConfig.data.datasets[0].backgroundColor = ""
+    }
+    if (isiRateBarConfig.data.datasets[0].data == -1) {
+        isiRateBarConfig.data.datasets[0].barPercentage = ""
+        isiRateBarConfig.data.datasets[0].backgroundColor = ""
+    }
+    if (cssRateBarConfig.data.datasets[0].data == -1) {
+        cssRateBarConfig.data.datasets[0].barPercentage = ""
+        cssRateBarConfig.data.datasets[0].backgroundColor = ""
+    }
+
+// <연도별>
+    // 1) data
+    let kosssfChangesByYearData;
+    if (data["koss-sf"]["changes-by-year"] == null) {
+        kosssfChangesByYearData = [0];
+    } else {
+        kosssfChangesByYearData = data["koss-sf"]["changes-by-year"]
+    }
+    let phq9ChangesByYearData;
+    if (data["phq-9"]["changes-by-year"] == null) {
+        phq9ChangesByYearData = [0];
+    } else {
+        phq9ChangesByYearData = data["phq-9"]["changes-by-year"]
+    }
+    let gad7ChangesByYearData;
+    if (data["gad-7"]["changes-by-year"] == null) {
+        gad7ChangesByYearData = [0];
+    } else {
+        gad7ChangesByYearData = data["gad-7"]["changes-by-year"]
+    }
+    let adnm4ChangesByYearData;
+    if (data["adnm-4"]["changes-by-year"] == null) {
+        adnm4ChangesByYearData = [0];
+    } else {
+        adnm4ChangesByYearData = data["adnm-4"]["changes-by-year"]
+    }
+    let pcptsd5ChangesByYearData;
+    if (data["pc-ptsd-5"]["changes-by-year"] == null) {
+        pcptsd5ChangesByYearData = [0];
+    } else {
+        pcptsd5ChangesByYearData = data["pc-ptsd-5"]["changes-by-year"]
+    }
+    let isiChangesByYearData;
+    if (data["isi"]["changes-by-year"] == null) {
+        isiChangesByYearData = [0];
+    } else {
+        isiChangesByYearData = data["isi"]["changes-by-year"]
+    }
+    let cssChangesByYearData;
+    if (data["css"]["changes-by-year"] == null) {
+        cssChangesByYearData = [0];
+    } else {
+        cssChangesByYearData = data["css"]["changes-by-year"]
+    }
+    // 2) config
     const kosssfChangeByYearConfig = {
         type: 'bar',
         data: {
@@ -901,7 +980,53 @@ async function generateChart(data) {
             }
         },
     };
-    // 4) 가로바(점)
+
+// <가로바(점)>
+    // 1) data
+    // generateChart / generateFile 함수 모두에서 동일하게 사용되나, 각 함수에 각각 선언함.
+    let kosssfCompensationData;
+    if (data["koss-sf"]["compensation"] == null) {
+        kosssfCompensationData = [0, '0'];
+    } else {
+        kosssfCompensationData = data["koss-sf"]["compensation"]
+    }
+    let kosssfJobInstabilityData;
+    if (data["koss-sf"]["jobInstability"] == null) {
+        kosssfJobInstabilityData = [0, '0'];
+    } else {
+        kosssfJobInstabilityData = data["koss-sf"]["jobInstability"]
+    }
+    let kosssfRequirementsData;
+    if (data["koss-sf"]["requirements"] == null) {
+        kosssfRequirementsData = [0, '0'];
+    } else {
+        kosssfRequirementsData = data["koss-sf"]["requirements"]
+    }
+    let kosssfCultureData;
+    if (data["koss-sf"]["culture"] == null) {
+        kosssfCultureData = [0, '0'];
+    } else {
+        kosssfCultureData = data["koss-sf"]["culture"]
+    }
+    let kosssfAutonomyData;
+    if (data["koss-sf"]["autonomy"] == null) {
+        kosssfAutonomyData = [0, '0'];
+    } else {
+        kosssfAutonomyData = data["koss-sf"]["autonomy"]
+    }
+    let kosssfSystemData;
+    if (data["koss-sf"]["system"] == null) {
+        kosssfSystemData = [0, '0'];
+    } else {
+        kosssfSystemData = data["koss-sf"]["system"]
+    }
+    let kosssfRelationshipData;
+    if (data["koss-sf"]["relationship"] == null) {
+        kosssfRelationshipData = [0, '0'];
+    } else {
+        kosssfRelationshipData = data["koss-sf"]["relationship"]
+    }
+    // 2) config
     const kosssfCompensationConfig = {
         type: 'bar',
         data: {
@@ -1147,8 +1272,30 @@ async function generateChart(data) {
             }
         },
     };
+    // 3) 입력값이 null일 경우 차트 비우기
+    if (kosssfCompensationConfig.data.datasets[0].data == 0) {
+        kosssfCompensationConfig.options.plugins.datalabels.borderWidth = ""
+    }
+    if (kosssfJobInstabilityConfig.data.datasets[0].data == 0) {
+        kosssfJobInstabilityConfig.options.plugins.datalabels.borderWidth = ""
+    }
+    if (kosssfRequirementsConfig.data.datasets[0].data == 0) {
+        kosssfRequirementsConfig.options.plugins.datalabels.borderWidth = ""
+    }
+    if (kosssfCultureConfig.data.datasets[0].data == 0) {
+        kosssfCultureConfig.options.plugins.datalabels.borderWidth = ""
+    }
+    if (kosssfAutonomyConfig.data.datasets[0].data == 0) {
+        kosssfAutonomyConfig.options.plugins.datalabels.borderWidth = ""
+    }
+    if (kosssfSystemConfig.data.datasets[0].data == 0) {
+        kosssfSystemConfig.options.plugins.datalabels.borderWidth = ""
+    }
+    if (kosssfRelationshipConfig.data.datasets[0].data == 0) {
+        kosssfRelationshipConfig.options.plugins.datalabels.borderWidth = ""
+    }
 
-    // 5. <generate base64 types img through renderToDataURL>
+// <generate base64 types img through renderToDataURL>
     // 1) 신호등
     const kosssfSignalsChart = await signalsCanvas.renderToDataURL(kosssfSignalsConfig)
     const phq9SignalsChart = await signalsCanvas.renderToDataURL(phq9SignalsConfig)
@@ -1181,7 +1328,7 @@ async function generateChart(data) {
     const kosssfSystemChart = await kosssfCanvas.renderToDataURL(kosssfSystemConfig)
     const kosssfRelationshipChart = await kosssfCanvas.renderToDataURL(kosssfRelationshipConfig)
 
-    // 6. <add to charts and return>
+// <add to charts and return>
     return {
         "koss-sf-signals": kosssfSignalsChart,
         "phq-9-signals": phq9SignalsChart,
@@ -1216,7 +1363,87 @@ async function generateChart(data) {
     };
 };
 
+
+
 async function generateFile(data, charts) {
+    let kosssfRatesData;
+    if (data["koss-sf"]["rates"] == null) {
+        kosssfRatesData = [0];
+    } else {
+        kosssfRatesData = data["koss-sf"]["rates"]
+    }
+    let kosssfPointsData;
+    if (data["koss-sf"]["points"] == null) {
+        kosssfPointsData = [0];
+    } else {
+        kosssfPointsData = data["koss-sf"]["points"]
+    }
+    let kosssfMeansData;
+    if (data["koss-sf"]["means"] == null) {
+        kosssfMeansData = [0];
+    } else {
+        kosssfMeansData = data["koss-sf"]["means"]
+    }
+    let phq9RatesData;
+    if (data["phq-9"]["rates"] == null) {
+        phq9RatesData = [0];
+    } else {
+        phq9RatesData = data["phq-9"]["rates"]
+    }
+    let phq9PointsData;
+    if (data["phq-9"]["points"] == null) {
+        phq9PointsData = [0];
+    } else {
+        phq9PointsData = data["phq-9"]["points"]
+    }
+    let gad7RatesData;
+    if (data["gad-7"]["rates"] == null) {
+        gad7RatesData = [0];
+    } else {
+        gad7RatesData = data["gad-7"]["rates"]
+    }
+    let gad7PointsData;
+    if (data["gad-7"]["points"] == null) {
+        gad7PointsData = [0];
+    } else {
+        gad7PointsData = data["gad-7"]["points"]
+    }
+    let adnm4RatesData;
+    if (data["adnm-4"]["rates"] == null) {
+        adnm4RatesData = [0];
+    } else {
+        adnm4RatesData = data["adnm-4"]["rates"]
+    }
+    let adnm4PointsData;
+    if (data["adnm-4"]["points"] == null) {
+        adnm4PointsData = [0];
+    } else {
+        adnm4PointsData = data["adnm-4"]["points"]
+    }
+    let pcptsd5RatesData;
+    if (data["pc-ptsd-5"]["rates"] == null) {
+        pcptsd5RatesData = [0];
+    } else {
+        pcptsd5RatesData = data["pc-ptsd-5"]["rates"]
+    }
+    let pcptsd5PointsData;
+    if (data["pc-ptsd-5"]["points"] == null) {
+        pcptsd5PointsData = [0];
+    } else {
+        pcptsd5PointsData = data["pc-ptsd-5"]["points"]
+    }
+    let isiRatesData;
+    if (data["isi"]["rates"] == null) {
+        isiRatesData = [0];
+    } else {
+        isiRatesData = data["isi"]["rates"]
+    }
+    let isiPointsData;
+    if (data["isi"]["points"] == null) {
+        isiPointsData = [0];
+    } else {
+        isiPointsData = data["isi"]["points"]
+    }
     let cssRatesData;
     if (data["css"]["rates"] == null) {
         cssRatesData = [0];
@@ -1228,6 +1455,49 @@ async function generateFile(data, charts) {
         cssPointsData = [0];
     } else {
         cssPointsData = data["css"]["points"]
+    }
+    // generateChart / generateFile 함수 모두에서 동일하게 사용되나, 각 함수에 각각 선언함.
+    let kosssfCompensationData;
+    if (data["koss-sf"]["compensation"] == null) {
+        kosssfCompensationData = [0, '0'];
+    } else {
+        kosssfCompensationData = data["koss-sf"]["compensation"]
+    }
+    let kosssfJobInstabilityData;
+    if (data["koss-sf"]["jobInstability"] == null) {
+        kosssfJobInstabilityData = [0, '0'];
+    } else {
+        kosssfJobInstabilityData = data["koss-sf"]["jobInstability"]
+    }
+    let kosssfRequirementsData;
+    if (data["koss-sf"]["requirements"] == null) {
+        kosssfRequirementsData = [0, '0'];
+    } else {
+        kosssfRequirementsData = data["koss-sf"]["requirements"]
+    }
+    let kosssfCultureData;
+    if (data["koss-sf"]["culture"] == null) {
+        kosssfCultureData = [0, '0'];
+    } else {
+        kosssfCultureData = data["koss-sf"]["culture"]
+    }
+    let kosssfAutonomyData;
+    if (data["koss-sf"]["autonomy"] == null) {
+        kosssfAutonomyData = [0, '0'];
+    } else {
+        kosssfAutonomyData = data["koss-sf"]["autonomy"]
+    }
+    let kosssfSystemData;
+    if (data["koss-sf"]["system"] == null) {
+        kosssfSystemData = [0, '0'];
+    } else {
+        kosssfSystemData = data["koss-sf"]["system"]
+    }
+    let kosssfRelationshipData;
+    if (data["koss-sf"]["relationship"] == null) {
+        kosssfRelationshipData = [0, '0'];
+    } else {
+        kosssfRelationshipData = data["koss-sf"]["relationship"]
     }
 
     // 7. <generate PDF file>
@@ -1251,38 +1521,38 @@ async function generateFile(data, charts) {
             // "overall-classification-code": data["basic-info"]["classification-code-details"],
             "overall-koss-sf-signal-texts": data["koss-sf"]["signal-texts"],
             "overall-koss-sf-signals": charts['koss-sf-signals'],
-            "overall-koss-sf-points": data["koss-sf"]["points"].toString() + "점  /",
-            "overall-koss-sf-rates": data["koss-sf"]["rates"].toString() + "%",
-            "overall-koss-sf-means": data["koss-sf"]["means"].toString() + "점",
+            "overall-koss-sf-points": kosssfPointsData.toString() + "점  /",
+            "overall-koss-sf-rates": kosssfRatesData.toString() + "%",
+            "overall-koss-sf-means": kosssfMeansData.toString() + "점",
 
             "overall-phq-9-signal-texts": data["phq-9"]["signal-texts"],
             "overall-phq-9-signals": charts['phq-9-signals'],
-            "overall-phq-9-points": data["phq-9"]["points"].toString() + "점  /",
-            "overall-phq-9-rates": data["phq-9"]["rates"].toString() + "%",
+            "overall-phq-9-points": phq9PointsData.toString() + "점  /",
+            "overall-phq-9-rates": phq9RatesData.toString() + "%",
             "overall-phq-9-comments": data["phq-9"]["comments"],
 
             "overall-gad-7-signal-texts": data["gad-7"]["signal-texts"],
             "overall-gad-7-signals": charts['gad-7-signals'],
-            "overall-gad-7-points": data["gad-7"]["points"].toString() + "점  /",
-            "overall-gad-7-rates": data["gad-7"]["rates"].toString() + "%",
+            "overall-gad-7-points": gad7PointsData.toString() + "점  /",
+            "overall-gad-7-rates": gad7RatesData.toString() + "%",
             "overall-gad-7-comments": data["gad-7"]["comments"],
 
             "overall-adnm-4-signal-texts": data["adnm-4"]["signal-texts"],
             "overall-adnm-4-signals": charts['adnm-4-signals'],
-            "overall-adnm-4-points": data["adnm-4"]["points"].toString() + "점  /",
-            "overall-adnm-4-rates": data["adnm-4"]["rates"].toString() + "%",
+            "overall-adnm-4-points": adnm4PointsData.toString() + "점  /",
+            "overall-adnm-4-rates": adnm4RatesData.toString() + "%",
             "overall-adnm-4-comments": data["adnm-4"]["comments"],
 
             "overall-pc-ptsd-5-signal-texts": data["pc-ptsd-5"]["signal-texts"],
             "overall-pc-ptsd-5-signals": charts['pc-ptsd-5-signals'],
-            "overall-pc-ptsd-5-points": data["pc-ptsd-5"]["points"].toString() + "점  /",
-            "overall-pc-ptsd-5-rates": data["pc-ptsd-5"]["rates"].toString() + "%",
+            "overall-pc-ptsd-5-points": pcptsd5PointsData.toString() + "점  /",
+            "overall-pc-ptsd-5-rates": pcptsd5RatesData.toString() + "%",
             "overall-pc-ptsd-5-comments": data["pc-ptsd-5"]["comments"],
 
             "overall-isi-signal-texts": data["isi"]["signal-texts"],
             "overall-isi-signals": charts['isi-signals'],
-            "overall-isi-points": data["isi"]["points"].toString() + "점  /",
-            "overall-isi-rates": data["isi"]["rates"].toString() + "%",
+            "overall-isi-points": isiPointsData.toString() + "점  /",
+            "overall-isi-rates": isiRatesData.toString() + "%",
             "overall-isi-comments": data["isi"]["comments"],
 
             "overall-css-signal-texts": data["css"]["signal-texts"],
@@ -1302,23 +1572,23 @@ async function generateFile(data, charts) {
             "koss-sf-changes-by-year": charts['koss-sf-changes-by-year'],
             "koss-sf-comment-details": data["koss-sf"]["comment-details"],
 
-            "koss-sf-surroundings-points": data["koss-sf"]["compensation"][0].toString() + "점  /",
-            "koss-sf-surroundings-rates": data["koss-sf"]["compensation"][1] + "%",
-            "koss-sf-instability-points": data["koss-sf"]["jobInstability"][0].toString() + "점  /",
-            "koss-sf-instability-rates": data["koss-sf"]["jobInstability"][1] + "%",
-            "koss-sf-demands-points": data["koss-sf"]["requirements"][0].toString() + "점  /",
-            "koss-sf-demands-rates": data["koss-sf"]["requirements"][1] + "%",
-            "koss-sf-culture-points": data["koss-sf"]["culture"][0].toString() + "점  /",
-            "koss-sf-culture-rates": data["koss-sf"]["culture"][1] + "%",
-            "koss-sf-autonomy-points": data["koss-sf"]["autonomy"][0].toString() + "점  /",
-            "koss-sf-autonomy-rates": data["koss-sf"]["autonomy"][1] + "%",
-            "koss-sf-system-points": data["koss-sf"]["system"][0].toString() + "점  /",
-            "koss-sf-system-rates": data["koss-sf"]["system"][1] + "%",
-            "koss-sf-conflict-points": data["koss-sf"]["relationship"][0].toString() + "점  /",
-            "koss-sf-conflict-rates": data["koss-sf"]["relationship"][1] + "%",
+            "koss-sf-surroundings-points": kosssfCompensationData[0].toString() + "점  /",
+            "koss-sf-surroundings-rates": kosssfCompensationData[1] + "%",
+            "koss-sf-instability-points": kosssfCompensationData[0].toString() + "점  /",
+            "koss-sf-instability-rates": kosssfJobInstabilityData[1] + "%",
+            "koss-sf-demands-points": kosssfCompensationData[0].toString() + "점  /",
+            "koss-sf-demands-rates": kosssfRequirementsData[1] + "%",
+            "koss-sf-culture-points": kosssfCompensationData.toString() + "점  /",
+            "koss-sf-culture-rates": kosssfCultureData[1] + "%",
+            "koss-sf-autonomy-points": kosssfCompensationData[0].toString() + "점  /",
+            "koss-sf-autonomy-rates": kosssfAutonomyData[1] + "%",
+            "koss-sf-system-points": kosssfCompensationData[0].toString() + "점  /",
+            "koss-sf-system-rates": kosssfSystemData[1] + "%",
+            "koss-sf-conflict-points": kosssfCompensationData.toString() + "점  /",
+            "koss-sf-conflict-rates": kosssfRelationshipData[1] + "%",
 
             "phq-9-signals": charts['phq-9-signals'],
-            "phq-9-rates": data["phq-9"]["rates"].toString() + "%",
+            "phq-9-rates": phq9RatesData.toString() + "%",
             "phq-9-signal-texts": data["phq-9"]["signal-texts"],
             "phq-9-rate-bar": charts['phq-9-rate-bar'],
             "phq-9-comments": data["phq-9"]["comments"],
@@ -1328,7 +1598,7 @@ async function generateFile(data, charts) {
             "phq-9-comment-details": data["phq-9"]["comment-details"],
 
             "gad-7-signals": charts['gad-7-signals'],
-            "gad-7-rates": data["gad-7"]["rates"].toString() + "%",
+            "gad-7-rates": gad7RatesData.toString() + "%",
             "gad-7-signal-texts": data["gad-7"]["signal-texts"],
             "gad-7-rate-bar": charts['gad-7-rate-bar'],
             "gad-7-comments": data["gad-7"]["comments"],
@@ -1338,7 +1608,7 @@ async function generateFile(data, charts) {
             "gad-7-comment-details": data["gad-7"]["comment-details"],
 
             "adnm-4-signals": charts['adnm-4-signals'],
-            "adnm-4-rates": data["adnm-4"]["rates"].toString() + "%",
+            "adnm-4-rates": adnm4RatesData.toString() + "%",
             "adnm-4-signal-texts": data["adnm-4"]["signal-texts"],
             "adnm-4-rate-bar": charts['adnm-4-rate-bar'],
             "adnm-4-comments": data["adnm-4"]["comments"],
@@ -1348,7 +1618,7 @@ async function generateFile(data, charts) {
             "adnm-4-comment-details": data["adnm-4"]["comment-details"],
 
             "pc-ptsd-5-signals": charts['pc-ptsd-5-signals'],
-            "pc-ptsd-5-rates": data["pc-ptsd-5"]["rates"].toString() + "%",
+            "pc-ptsd-5-rates": pcptsd5RatesData.toString() + "%",
             "pc-ptsd-5-signal-texts": data["pc-ptsd-5"]["signal-texts"],
             "pc-ptsd-5-rate-bar": charts['pc-ptsd-5-rate-bar'],
             "pc-ptsd-5-comments": data["pc-ptsd-5"]["comments"],
@@ -1358,7 +1628,7 @@ async function generateFile(data, charts) {
             "pc-ptsd-5-comment-details": data["pc-ptsd-5"]["comment-details"],
 
             "isi-signals": charts['isi-signals'],
-            "isi-rates": data["isi"]["rates"].toString() + "%",
+            "isi-rates": isiRatesData.toString() + "%",
             "isi-signal-texts": data["isi"]["signal-texts"],
             "isi-rate-bar": charts['isi-rate-bar'],
             "isi-comments": data["isi"]["comments"],
@@ -1383,7 +1653,8 @@ async function generateFile(data, charts) {
     // 센터코드 => 센터명 변경
     const centerCode = data["path-info"]["center-code"]
     let centerName;
-    // switch (centerCode) { // 임의지정
+    // if문으로 대체
+    // switch (centerCode) {
     //     case 111:
     //         centerName = "his_jno"
     //         break;
@@ -1406,7 +1677,6 @@ async function generateFile(data, charts) {
     //         centerName = "his_kwj"
     //         break;
     // }
-
     if (centerCode == 111) {
         centerName = "his_jno"
     } else if (centerCode == 112) {
@@ -1458,19 +1728,20 @@ async function generateFile(data, charts) {
     }
 }
 
+// 사용안함
+// async function rsyncFile() {
+//     try {
+//         const command = util.promisify(exec)
+//         // await command('rsync --remove-source-files -ar jpg/ ~/'); // 수신지가 바뀌면 되지 않을까 싶음.
+//         await command('touch test.js'); // 접속이 되려나?
+//         // await exec('rsync --remove-source-files -ar jpg/ eg2data@34.64.201.251:/');
+//         // await exec('rsync --remove-source-files -ar -e jpg/ ssh -i ~/.ssh/report_rsa_4096 eg2data@34.64.201.251:/');
+//     } catch(exception) {
+//         console.log(exception)
+//     }
+// }
 
-async function rsyncFile() {
-    try {
-        const command = util.promisify(exec)
-        // await command('rsync --remove-source-files -ar jpg/ ~/'); // 수신지가 바뀌면 되지 않을까 싶음.
-        await command('touch test.js'); // 접속이 되려나?
-        // await exec('rsync --remove-source-files -ar jpg/ eg2data@34.64.201.251:/');
-        // await exec('rsync --remove-source-files -ar -e jpg/ ssh -i ~/.ssh/report_rsa_4096 eg2data@34.64.201.251:/');
-    } catch(exception) {
-        console.log(exception)
-    }
-}
 export {
-    generateChart, generateFile, rsyncFile
+    generateChart, generateFile
 }
 
