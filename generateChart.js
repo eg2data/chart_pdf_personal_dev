@@ -1503,62 +1503,62 @@ async function generateFile(data, charts) {
     // 7. <generate PDF file>
     const inputs = [
         {
-            "user-name": data["basic-info"]["user-name"],
+            // "user-name": data["basic-info"]["user-name"],
             // "distinct-number": data["basic-info"]["distinct-number"],
             // "classification-code": data["basic-info"]["classification-code"],
-            "submit-date": data["basic-info"]["submit-date"],
-            "report-date": data["basic-info"]["report-date"],
-            "company-info-name": data["basic-info"]["company-info"]["name"],
-            "company-info-address": data["basic-info"]["company-info"]["address"],
-            "company-info-via": data["basic-info"]["company-info"]["via"],
-            "company-info-contact": data["basic-info"]["company-info"]["contact"],
+            // "submit-date": data["basic-info"]["submit-date"],
+            // "report-date": data["basic-info"]["report-date"],
+            // "company-info-name": data["basic-info"]["company-info"]["name"],
+            // "company-info-address": data["basic-info"]["company-info"]["address"],
+            // "company-info-via": data["basic-info"]["company-info"]["via"],
+            // "company-info-contact": data["basic-info"]["company-info"]["contact"],
             // "check-list-number": data["basic-info"]["check-list-number"] + " 종",
-            "test-type": data["basic-info"]["test-type"],
-            "test-method": data["basic-info"]["test-method"],
-            "test-adequacy": data["basic-info"]["test-adequacy"],
+            // "test-type": data["basic-info"]["test-type"],
+            // "test-method": data["basic-info"]["test-method"],
+            // "test-adequacy": data["basic-info"]["test-adequacy"],
 
             "overall-user-name": data["basic-info"]["user-name"],
             // "overall-classification-code": data["basic-info"]["classification-code-details"],
-            "overall-koss-sf-signal-texts": data["koss-sf"]["signal-texts"],
+            "overall-koss-sf-signal-texts": ": " + data["koss-sf"]["signal-texts"],
             "overall-koss-sf-signals": charts['koss-sf-signals'],
             "overall-koss-sf-points": kosssfPointsData.toString() + "점  /",
             "overall-koss-sf-rates": kosssfRatesData.toString() + "%",
             "overall-koss-sf-means": kosssfMeansData.toString() + "점",
 
-            "overall-phq-9-signal-texts": data["phq-9"]["signal-texts"],
+            "overall-phq-9-signal-texts": ": " + data["phq-9"]["signal-texts"],
             "overall-phq-9-signals": charts['phq-9-signals'],
             "overall-phq-9-points": phq9PointsData.toString() + "점  /",
             "overall-phq-9-rates": phq9RatesData.toString() + "%",
             "overall-phq-9-comments": data["phq-9"]["comments"],
 
-            "overall-gad-7-signal-texts": data["gad-7"]["signal-texts"],
+            "overall-gad-7-signal-texts": ": " + data["gad-7"]["signal-texts"],
             "overall-gad-7-signals": charts['gad-7-signals'],
             "overall-gad-7-points": gad7PointsData.toString() + "점  /",
             "overall-gad-7-rates": gad7RatesData.toString() + "%",
             "overall-gad-7-comments": data["gad-7"]["comments"],
 
-            "overall-adnm-4-signal-texts": data["adnm-4"]["signal-texts"],
+            "overall-adnm-4-signal-texts": ": " + data["adnm-4"]["signal-texts"],
             "overall-adnm-4-signals": charts['adnm-4-signals'],
             "overall-adnm-4-points": adnm4PointsData.toString() + "점  /",
             "overall-adnm-4-rates": adnm4RatesData.toString() + "%",
             "overall-adnm-4-comments": data["adnm-4"]["comments"],
 
-            "overall-pc-ptsd-5-signal-texts": data["pc-ptsd-5"]["signal-texts"],
+            "overall-pc-ptsd-5-signal-texts": ": " + data["pc-ptsd-5"]["signal-texts"],
             "overall-pc-ptsd-5-signals": charts['pc-ptsd-5-signals'],
-            "overall-pc-ptsd-5-points": pcptsd5PointsData.toString() + "점  /",
+            "overall-pc-ptsd-5-points": pcptsd5PointsData.toString() + "점 /",
             "overall-pc-ptsd-5-rates": pcptsd5RatesData.toString() + "%",
             "overall-pc-ptsd-5-comments": data["pc-ptsd-5"]["comments"],
 
-            "overall-isi-signal-texts": data["isi"]["signal-texts"],
+            "overall-isi-signal-texts": ": " + data["isi"]["signal-texts"],
             "overall-isi-signals": charts['isi-signals'],
             "overall-isi-points": isiPointsData.toString() + "점  /",
             "overall-isi-rates": isiRatesData.toString() + "%",
             "overall-isi-comments": data["isi"]["comments"],
 
-            "overall-css-signal-texts": data["css"]["signal-texts"],
+            "overall-css-signal-texts": ": " + data["css"]["signal-texts"],
             "overall-css-signals": charts['css-signals'],
-            "overall-css-points": cssPointsData.toString() + "점  /",
-            "overall-css-rates": cssRatesData.toString() + "%",
+            "overall-css-points": cssPointsData.toString() + "점 /",
+            "overall-css-rates": " " + cssRatesData.toString() + "%",
             "overall-css-comments": data["css"]["comments"],
 
             "koss-sf-signals": charts['koss-sf-signals'],
@@ -1574,17 +1574,17 @@ async function generateFile(data, charts) {
 
             "koss-sf-surroundings-points": kosssfCompensationData[0].toString() + "점  /",
             "koss-sf-surroundings-rates": kosssfCompensationData[1] + "%",
-            "koss-sf-instability-points": kosssfCompensationData[0].toString() + "점  /",
+            "koss-sf-instability-points": kosssfJobInstabilityData[0].toString() + "점  /",
             "koss-sf-instability-rates": kosssfJobInstabilityData[1] + "%",
-            "koss-sf-demands-points": kosssfCompensationData[0].toString() + "점  /",
+            "koss-sf-demands-points": kosssfRequirementsData[0].toString() + "점  /",
             "koss-sf-demands-rates": kosssfRequirementsData[1] + "%",
-            "koss-sf-culture-points": kosssfCompensationData.toString() + "점  /",
+            "koss-sf-culture-points": kosssfCultureData[0].toString() + "점  /",
             "koss-sf-culture-rates": kosssfCultureData[1] + "%",
-            "koss-sf-autonomy-points": kosssfCompensationData[0].toString() + "점  /",
+            "koss-sf-autonomy-points": kosssfAutonomyData[0].toString() + "점  /",
             "koss-sf-autonomy-rates": kosssfAutonomyData[1] + "%",
-            "koss-sf-system-points": kosssfCompensationData[0].toString() + "점  /",
+            "koss-sf-system-points": kosssfSystemData[0].toString() + "점  /",
             "koss-sf-system-rates": kosssfSystemData[1] + "%",
-            "koss-sf-conflict-points": kosssfCompensationData.toString() + "점  /",
+            "koss-sf-conflict-points": kosssfRelationshipData[0].toString() + "점  /",
             "koss-sf-conflict-rates": kosssfRelationshipData[1] + "%",
 
             "phq-9-signals": charts['phq-9-signals'],
@@ -1694,19 +1694,19 @@ async function generateFile(data, charts) {
     }
 
 
-    const submitDate = data["basic-info"]["submit-date"].replace(/-/g, "") // 기존 데이터 활용 위해. '-' 제거
+    const examDate = data["path-info"]["exam-date"].replace(/-/g, "") // 기존 데이터 활용 위해. '-' 제거
     const reservationNumber = data["path-info"]["reservation-number"]
 
     // pdf 생성 경로에 따른 디렉토리 생성 + pdf 파일명 설정
     const pdfPath = await makeDir('pdf')
-    const pdfName = `${pdfPath}/${centerCode}_${submitDate}_${reservationNumber}.pdf`;
+    const pdfName = `${pdfPath}/${centerCode}_${examDate}_${reservationNumber}.pdf`;
 
     try {
         const pdf = await labelmake({ inputs, template, font })
         fs.writeFileSync(pdfName, pdf, "utf-8");
 
         // jpg 생성 경로에 따른 디렉토리 생성 + jpg 파일명 설정
-        const jpgPath = await makeDir(`jpg/${centerName}/${submitDate}`)
+        const jpgPath = await makeDir(`jpg/${centerName}/${examDate}`)
         const options = {
             density: 100,
             savePath: jpgPath,
