@@ -11,7 +11,7 @@ amqp.connect('amqp://localhost', (connectionError, connection) => {
             throw channelError;
         }
         //Step 3: assert queue
-        const queueName = "task_queue_4";
+        const queueName = process.env.QUEUE_NAME; // .env
         channel.assertQueue(queueName, {
             durable: false
         });

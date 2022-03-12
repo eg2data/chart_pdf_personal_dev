@@ -1,9 +1,8 @@
-import { subscribe } from './subscriber.js';
+// import { subscribe } from './subscriber.js';
 
 // subscribe()
 
-const i = 1
-console.log(`data_${i} abc`)
+console.log(process.env.TEST1)
 
 
 

@@ -13,7 +13,7 @@ module.exports = {
       watch: false, // if file has changed, restart
       // max_memory_restart: "512M", // if memory over this, restart
       env: {
-        NODE_ENV: 'development',
+        NODE_ENV: 'production',
       },
     },
   ]

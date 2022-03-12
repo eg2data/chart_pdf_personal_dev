@@ -184,7 +184,7 @@ async function generateChart(data) {
             labels: ['a'],
             datasets: [
                 {
-                    data: kosssfSignalsData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    data: kosssfSignalsData.splice(0,1),
                     barPercentage: 0.0,
                 }
             ]
@@ -219,7 +219,7 @@ async function generateChart(data) {
             labels: ['a'],
             datasets: [
                 {
-                    data: phq9SignalsData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    data: phq9SignalsData.splice(0,1),
                     barPercentage: 0.0,
                 }
             ]
@@ -254,7 +254,7 @@ async function generateChart(data) {
             labels: ['a'],
             datasets: [
                 {
-                    data: adnm4SignalsData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    data: adnm4SignalsData.splice(0,1),
                     barPercentage: 0.0,
                 }
             ]
@@ -289,7 +289,7 @@ async function generateChart(data) {
             labels: ['a'],
             datasets: [
                 {
-                    data: isiSignalsData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    data: isiSignalsData.splice(0,1),
                     barPercentage: 0.0,
                 }
             ]
@@ -324,7 +324,7 @@ async function generateChart(data) {
             labels: ['a'],
             datasets: [
                 {
-                    data: gad7SignalsData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    data: gad7SignalsData.splice(0,1),
                     barPercentage: 0.0,
                 }
             ]
@@ -359,7 +359,7 @@ async function generateChart(data) {
             labels: ['a'],
             datasets: [
                 {
-                    data: pcptsd5SignalsData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    data: pcptsd5SignalsData.splice(0,1),
                     barPercentage: 0.0,
                 }
             ]
@@ -394,7 +394,7 @@ async function generateChart(data) {
             labels: ['a'],
             datasets: [
                 {
-                    data: cssSignalsData.splice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참
+                    data: cssSignalsData.splice(0,1),
                     barPercentage: 0.0,
                 }
             ]
@@ -570,7 +570,7 @@ async function generateChart(data) {
         cssRateBarData = data["css"]["rates"]
     }
     // 2) config
-    const phq9RateBarConfig = { // radius 아쉽다
+    const phq9RateBarConfig = {
         type: 'bar',
         data: {
             labels: ['a'],
@@ -595,7 +595,7 @@ async function generateChart(data) {
             }
         }
     }
-    const gad7RateBarConfig = { // radius 아쉽다
+    const gad7RateBarConfig = {
         type: 'bar',
         data: {
             labels: ['a'],
@@ -620,7 +620,7 @@ async function generateChart(data) {
             }
         }
     }
-    const adnm4RateBarConfig = { // radius 아쉽다
+    const adnm4RateBarConfig = {
         type: 'bar',
         data: {
             labels: ['a'],
@@ -645,7 +645,7 @@ async function generateChart(data) {
             }
         }
     }
-    const pcptsd5RateBarConfig = { // radius 아쉽다
+    const pcptsd5RateBarConfig = {
         type: 'bar',
         data: {
             labels: ['a'],
@@ -670,7 +670,7 @@ async function generateChart(data) {
             }
         }
     }
-    const isiRateBarConfig = { // radius 아쉽다
+    const isiRateBarConfig = {
         type: 'bar',
         data: {
             labels: ['a'],
@@ -695,7 +695,7 @@ async function generateChart(data) {
             }
         }
     }
-    const cssRateBarConfig = { // radius 아쉽다
+    const cssRateBarConfig = {
         type: 'bar',
         data: {
             labels: ['a'],
@@ -784,12 +784,7 @@ async function generateChart(data) {
     } else {
         isiChangesByYearData = data["isi"]["changes-by-year"]
     }
-    let cssChangesByYearData;
-    if (data["css"]["changes-by-year"] == null) {
-        cssChangesByYearData = [0];
-    } else {
-        cssChangesByYearData = data["css"]["changes-by-year"]
-    }
+
     // 2) config
     const kosssfChangeByYearConfig = {
         type: 'bar',
@@ -953,37 +948,10 @@ async function generateChart(data) {
             }
         },
     };
-    const cssChangeByYearConfig = {
-        type: 'bar',
-        data: {
-            labels: changesByYearLabels,
-            datasets: [
-                {
-                    data: cssChangesByYearData,
-                    barPercentage: 0.1,
-                    backgroundColor: [
-                        "black",
-                        "black",
-                        "black",
-                        "black",
-                        "red"
-                    ],
-                }
-            ]
-        },
-        options: {
-            scales: changesByYearScales,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            }
-        },
-    };
 
 // <가로바(점)>
     // 1) data
-    // generateChart / generateFile 함수 모두에서 동일하게 사용되나, 각 함수에 각각 선언함.
+    // generateChart, generateFile 함수 모두에서 동일하게 사용되나, 각 함수에 각각 선언함.
     let kosssfCompensationData;
     if (data["koss-sf"]["compensation"] == null) {
         kosssfCompensationData = [0, '0'];
@@ -1033,7 +1001,7 @@ async function generateChart(data) {
             labels: ['a'],
             datasets: [
                 {
-                    data: kosssfCompensationData.slice(0,1), // [0]은 안되고 splice(0,1)은 되네 거참 => splice 사용 시 그 상태 그대로 데이터가 저장됨.. => slice 대체
+                    data: kosssfCompensationData.slice(0,1),
                     barPercentage: 0.0,
                 }
             ]
@@ -1318,7 +1286,6 @@ async function generateChart(data) {
     const adnm4ChangesByYearChart = await changesByYearCanvas.renderToDataURL(adnm4ChangeByYearConfig)
     const pcptsd5ChangesByYearChart = await changesByYearCanvas.renderToDataURL(pcptsd5ChangeByYearConfig)
     const isiChangesByYearChart = await changesByYearCanvas.renderToDataURL(isiChangeByYearConfig)
-    const cssChangesByYearChart = await changesByYearCanvas.renderToDataURL(cssChangeByYearConfig)
     // 4) 가로바(점)
     const kosssfCompensationChart = await kosssfCanvas.renderToDataURL(kosssfCompensationConfig)
     const kosssfJobInstabilityChart = await kosssfCanvas.renderToDataURL(kosssfJobInstabilityConfig)
@@ -1351,20 +1318,16 @@ async function generateChart(data) {
         "adnm-4-changes-by-year": adnm4ChangesByYearChart,
         "pc-ptsd-5-changes-by-year": pcptsd5ChangesByYearChart,
         "isi-changes-by-year": isiChangesByYearChart,
-        "css-changes-by-year": cssChangesByYearChart,
 
-        "koss-sf-surroundings": kosssfCompensationChart, // 받는 부분은 수정 안함. 그래서, template 내 변수명은 수정 안함.
-        "koss-sf-instability": kosssfJobInstabilityChart, // 받는 부분은 수정 안함. 그래서, template 내 변수명은 수정 안함.
-        "koss-sf-demands": kosssfRequirementsChart, // 받는 부분은 수정 안함. 그래서, template 내 변수명은 수정 안함.
+        "koss-sf-surroundings": kosssfCompensationChart,
+        "koss-sf-instability": kosssfJobInstabilityChart,
+        "koss-sf-demands": kosssfRequirementsChart,
         "koss-sf-culture": kosssfCultureChart,
         "koss-sf-autonomy": kosssfAutonomyChart,
         "koss-sf-system": kosssfSystemChart,
-        "koss-sf-conflict": kosssfRelationshipChart, // 받는 부분은 수정 안함. 그래서, template 내 변수명은 수정 안함.
+        "koss-sf-conflict": kosssfRelationshipChart,
     };
 };
-
-
-
 async function generateFile(data, charts) {
     let kosssfRatesData;
     if (data["koss-sf"]["rates"] == null) {
@@ -1456,7 +1419,7 @@ async function generateFile(data, charts) {
     } else {
         cssPointsData = data["css"]["points"]
     }
-    // generateChart / generateFile 함수 모두에서 동일하게 사용되나, 각 함수에 각각 선언함.
+    // generateChart, generateFile 함수 모두에서 동일하게 사용되나, 각 함수에 각각 선언함.
     let kosssfCompensationData;
     if (data["koss-sf"]["compensation"] == null) {
         kosssfCompensationData = [0, '0'];
@@ -1503,22 +1466,7 @@ async function generateFile(data, charts) {
     // 7. <generate PDF file>
     const inputs = [
         {
-            // "user-name": data["basic-info"]["user-name"],
-            // "distinct-number": data["basic-info"]["distinct-number"],
-            // "classification-code": data["basic-info"]["classification-code"],
-            // "submit-date": data["basic-info"]["submit-date"],
-            // "report-date": data["basic-info"]["report-date"],
-            // "company-info-name": data["basic-info"]["company-info"]["name"],
-            // "company-info-address": data["basic-info"]["company-info"]["address"],
-            // "company-info-via": data["basic-info"]["company-info"]["via"],
-            // "company-info-contact": data["basic-info"]["company-info"]["contact"],
-            // "check-list-number": data["basic-info"]["check-list-number"] + " 종",
-            // "test-type": data["basic-info"]["test-type"],
-            // "test-method": data["basic-info"]["test-method"],
-            // "test-adequacy": data["basic-info"]["test-adequacy"],
-
             "overall-user-name": data["basic-info"]["user-name"],
-            // "overall-classification-code": data["basic-info"]["classification-code-details"],
             "overall-koss-sf-signal-texts": ": " + data["koss-sf"]["signal-texts"],
             "overall-koss-sf-signals": charts['koss-sf-signals'],
             "overall-koss-sf-points": kosssfPointsData.toString() + "점  /",
@@ -1545,7 +1493,7 @@ async function generateFile(data, charts) {
 
             "overall-pc-ptsd-5-signal-texts": ": " + data["pc-ptsd-5"]["signal-texts"],
             "overall-pc-ptsd-5-signals": charts['pc-ptsd-5-signals'],
-            "overall-pc-ptsd-5-points": pcptsd5PointsData.toString() + "점 /",
+            "overall-pc-ptsd-5-points": pcptsd5PointsData.toString() + "점  /",
             "overall-pc-ptsd-5-rates": pcptsd5RatesData.toString() + "%",
             "overall-pc-ptsd-5-comments": data["pc-ptsd-5"]["comments"],
 
@@ -1557,8 +1505,8 @@ async function generateFile(data, charts) {
 
             "overall-css-signal-texts": ": " + data["css"]["signal-texts"],
             "overall-css-signals": charts['css-signals'],
-            "overall-css-points": cssPointsData.toString() + "점 /",
-            "overall-css-rates": " " + cssRatesData.toString() + "%",
+            "overall-css-points": cssPointsData.toString() + "점  /",
+            "overall-css-rates": cssRatesData.toString() + "%",
             "overall-css-comments": data["css"]["comments"],
 
             "koss-sf-signals": charts['koss-sf-signals'],
@@ -1644,7 +1592,6 @@ async function generateFile(data, charts) {
             "css-comments": data["css"]["comments"],
             "css-requirements": data["css"]["requirements"],
             "css-requirements-texts": data["css"]["requirement-texts"],
-            "css-changes-by-year": charts['css-changes-by-year'],
             "css-comment-details": data["css"]["comment-details"],
         }
     ];
@@ -1653,30 +1600,6 @@ async function generateFile(data, charts) {
     // 센터코드 => 센터명 변경
     const centerCode = data["path-info"]["center-code"]
     let centerName;
-    // if문으로 대체
-    // switch (centerCode) {
-    //     case 111:
-    //         centerName = "his_jno"
-    //         break;
-    //     case 112:
-    //         centerName = "his_ydp"
-    //         break;
-    //     case 113:
-    //         centerName = "his_gnm"
-    //         break;
-    //     case 211:
-    //         centerName = "his_swn"
-    //         break;
-    //     case 611:
-    //         centerName = "his_tae"
-    //         break;
-    //     case 612:
-    //         centerName = "his_pus"
-    //         break;
-    //     case 711:
-    //         centerName = "his_kwj"
-    //         break;
-    // }
     if (centerCode == 111) {
         centerName = "his_jno"
     } else if (centerCode == 112) {
@@ -1693,12 +1616,11 @@ async function generateFile(data, charts) {
         centerName = "his_kwj"
     }
 
-
     const examDate = data["path-info"]["exam-date"].replace(/-/g, "") // 기존 데이터 활용 위해. '-' 제거
     const reservationNumber = data["path-info"]["reservation-number"]
 
     // pdf 생성 경로에 따른 디렉토리 생성 + pdf 파일명 설정
-    const pdfPath = await makeDir('pdf')
+    const pdfPath = await makeDir(process.env.PDF_PATH)
     const pdfName = `${pdfPath}/${centerCode}_${examDate}_${reservationNumber}.pdf`;
 
     try {
@@ -1706,7 +1628,7 @@ async function generateFile(data, charts) {
         fs.writeFileSync(pdfName, pdf, "utf-8");
 
         // jpg 생성 경로에 따른 디렉토리 생성 + jpg 파일명 설정
-        const jpgPath = await makeDir(`jpg/${centerName}/${examDate}`)
+        const jpgPath = await makeDir(process.env.JPG_PATH + `/${centerName}/${examDate}`)
         const options = {
             density: 100,
             savePath: jpgPath,
@@ -1727,19 +1649,6 @@ async function generateFile(data, charts) {
         console.log(exception)
     }
 }
-
-// 사용안함
-// async function rsyncFile() {
-//     try {
-//         const command = util.promisify(exec)
-//         // await command('rsync --remove-source-files -ar jpg/ ~/'); // 수신지가 바뀌면 되지 않을까 싶음.
-//         await command('touch test.js'); // 접속이 되려나?
-//         // await exec('rsync --remove-source-files -ar jpg/ eg2data@34.64.201.251:/');
-//         // await exec('rsync --remove-source-files -ar -e jpg/ ssh -i ~/.ssh/report_rsa_4096 eg2data@34.64.201.251:/');
-//     } catch(exception) {
-//         console.log(exception)
-//     }
-// }
 
 export {
     generateChart, generateFile
