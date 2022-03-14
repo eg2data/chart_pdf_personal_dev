@@ -6,6 +6,8 @@ import template from "./labelmake-template.json";
 import {fromPath} from "pdf2pic";
 import makeDir from "make-dir";
 import config from "config";
+// const gm = require('gm').subClass({imageMagick: '7+'});
+
 
 // 한글처리
 const NanumGothic = fs.readFileSync("./NanumGothic-Regular.ttf")
@@ -1647,7 +1649,7 @@ async function generateFile(data, charts) {
         };
         const storeAsImage = fromPath(pdfName, options);
         let pages = 0;
-        for (let i = 1; i < 11; i++) {
+        for (let i = 1; i < 6; i++) {
             await storeAsImage(i);
             pages++;
         }
