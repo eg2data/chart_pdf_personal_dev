@@ -1,5 +1,6 @@
 import amqp from 'amqplib/callback_api.js';
 import {generateChart, generateFile } from "./generateChart.js";
+import config from "config";
 
 amqp.connect('amqp://localhost', (connectionError, connection) => {
     if(connectionError) {
@@ -11,7 +12,7 @@ amqp.connect('amqp://localhost', (connectionError, connection) => {
             throw channelError;
         }
         //Step 3: assert queue
-        const queueName = process.env.QUEUE_NAME; // .env
+        const queueName = config.get('QUEUE_NAME')
         channel.assertQueue(queueName, {
             durable: false
         });
@@ -28,8 +29,6 @@ amqp.connect('amqp://localhost', (connectionError, connection) => {
                     console.log('chart generated')
                     const pages = await generateFile(data, charts)
                     console.log(pages + ' files written')
-                    // rsync - 사용안함
-                    // await rsyncFile()
                 } catch(ex) {
                     console.log(ex);
                 } finally {

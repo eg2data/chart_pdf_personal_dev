@@ -1,5 +1,6 @@
 // import amqp from 'amqplib/callback_api.js';
 const amqp = require('amqplib/callback_api.js')
+const config = require('config')
 
 const data_0 =
     {
@@ -1066,7 +1067,7 @@ amqp.connect('amqp://localhost', (connectionError, connection) => {
             throw channelError;
         }
         // Step 3: assert queue
-        const queueName = process.env.QUEUE_NAME;
+        const queueName = config.get('QUEUE_NAME')
         channel.assertQueue(queueName, {
             durable: false
         });

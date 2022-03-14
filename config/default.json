@@ -1,0 +1,7 @@
+{
+  "QUEUE_NAME" : "report-test",
+  "PDF_PATH" : "/home/tess/kmi/server/pdf",
+  "JPG_PATH" : "/home/tess/kmi/report",
+  "PDF_PATH_LOCAL" : "pdf",
+  "JPG_PATH_LOCAL" : "jpg"
+}

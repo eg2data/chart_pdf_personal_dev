@@ -5,6 +5,7 @@ import labelmake from "labelmake";
 import template from "./labelmake-template.json";
 import {fromPath} from "pdf2pic";
 import makeDir from "make-dir";
+import config from "config";
 
 // 한글처리
 const NanumGothic = fs.readFileSync("./NanumGothic-Regular.ttf")
@@ -62,6 +63,29 @@ async function generateChart(data) {
             }
         }
     }
+    const kosssfScales =  { // 4) 가로바(점)
+        x: {
+            grid: {
+                drawBorder: false,
+                display: false
+            },
+            ticks: {
+                display: false,
+            },
+            min: 0,
+            max: 20,
+        },
+        y: {
+            grid: {
+                drawBorder: false,
+                display: false,
+            },
+            ticks: {
+                display: false,
+            }
+        }
+    }
+    // 연도별 점수 관련 scale은 각각 가는 것으로.
     const changesByYearScales = { // 3) 연도별
 
         x: {
@@ -94,29 +118,9 @@ async function generateChart(data) {
             max: 100,
         }
     }
-    const kosssfScales =  { // 4) 가로바(점)
 
-        x: {
-            grid: {
-                drawBorder: false,
-                display: false
-            },
-            ticks: {
-                display: false,
-            },
-            min: 0,
-            max: 50,
-        },
-        y: {
-            grid: {
-                drawBorder: false,
-                display: false,
-            },
-            ticks: {
-                display: false,
-            }
-        }
-    }
+
+
 // <canvas>
     const signalsCanvas = new ChartJSNodeCanvas({ width: 240, height: 60 }); // 1) 신호등
     const rateBarCanvas = new ChartJSNodeCanvas({ width: 480, height: 36 }); // 2) 가로바(채움)
@@ -426,107 +430,107 @@ async function generateChart(data) {
 
     // 3) 입력값에 따른 색상+위치 변경
     if (kosssfSignalsConfig.data.datasets[0].data == 24) {
-        kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
-        kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
+        kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#1C99AE'
+        kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#1C99AE'
     } else if (kosssfSignalsConfig.data.datasets[0].data == 45) {
-        kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#ffb266'
-        kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#ffb266'
+        kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#E5A614'
+        kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#E5A614'
     } else if (kosssfSignalsConfig.data.datasets[0].data == 66) {
-        kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#Ff0000'
-        kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#Ff0000'
+        kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#DE301E'
+        kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#DE301E'
     } else if (kosssfSignalsConfig.data.datasets[0].data == 87) {
-        kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
-        kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
+        kosssfSignalsConfig.options.plugins.datalabels.color[0] = '#75161A'
+        kosssfSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#75161A'
     } else if (kosssfSignalsConfig.data.datasets[0].data == -1) {
         kosssfSignalsConfig.options.plugins.datalabels.borderWidth = ""
     }
     if (phq9SignalsConfig.data.datasets[0].data == 24) {
-        phq9SignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
-        phq9SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
+        phq9SignalsConfig.options.plugins.datalabels.color[0] = '#1C99AE'
+        phq9SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#1C99AE'
     } else if (phq9SignalsConfig.data.datasets[0].data == 45) {
-        phq9SignalsConfig.options.plugins.datalabels.color[0] = '#ffb266'
-        phq9SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#ffb266'
+        phq9SignalsConfig.options.plugins.datalabels.color[0] = '#E5A614'
+        phq9SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#E5A614'
     } else if (phq9SignalsConfig.data.datasets[0].data == 66) {
-        phq9SignalsConfig.options.plugins.datalabels.color[0] = '#Ff0000'
-        phq9SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#Ff0000'
+        phq9SignalsConfig.options.plugins.datalabels.color[0] = '#DE301E'
+        phq9SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#DE301E'
     } else if (phq9SignalsConfig.data.datasets[0].data == 87) {
-        phq9SignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
-        phq9SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
+        phq9SignalsConfig.options.plugins.datalabels.color[0] = '#75161A'
+        phq9SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#75161A'
     } else if (phq9SignalsConfig.data.datasets[0].data == -1) {
         phq9SignalsConfig.options.plugins.datalabels.borderWidth = ""
     }
     if (gad7SignalsConfig.data.datasets[0].data == 24) {
-        gad7SignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
-        gad7SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
+        gad7SignalsConfig.options.plugins.datalabels.color[0] = '#1C99AE'
+        gad7SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#1C99AE'
     } else if (gad7SignalsConfig.data.datasets[0].data == 45) {
-        gad7SignalsConfig.options.plugins.datalabels.color[0] = '#ffb266'
-        gad7SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#ffb266'
+        gad7SignalsConfig.options.plugins.datalabels.color[0] = '#E5A614'
+        gad7SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#E5A614'
     } else if (gad7SignalsConfig.data.datasets[0].data == 66) {
-        gad7SignalsConfig.options.plugins.datalabels.color[0] = '#Ff0000'
-        gad7SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#Ff0000'
+        gad7SignalsConfig.options.plugins.datalabels.color[0] = '#DE301E'
+        gad7SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#DE301E'
     } else if (gad7SignalsConfig.data.datasets[0].data == 87) {
-        gad7SignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
-        gad7SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
+        gad7SignalsConfig.options.plugins.datalabels.color[0] = '#75161A'
+        gad7SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#75161A'
     } else if (gad7SignalsConfig.data.datasets[0].data == -1) {
         gad7SignalsConfig.options.plugins.datalabels.borderWidth = ""
     }
     if (adnm4SignalsConfig.data.datasets[0].data == 24) {
-        adnm4SignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
-        adnm4SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
+        adnm4SignalsConfig.options.plugins.datalabels.color[0] = '#1C99AE'
+        adnm4SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#1C99AE'
     } else if (adnm4SignalsConfig.data.datasets[0].data == 45) {
-        adnm4SignalsConfig.options.plugins.datalabels.color[0] = '#ffb266'
-        adnm4SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#ffb266'
+        adnm4SignalsConfig.options.plugins.datalabels.color[0] = '#E5A614'
+        adnm4SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#E5A614'
     } else if (adnm4SignalsConfig.data.datasets[0].data == 66) {
-        adnm4SignalsConfig.options.plugins.datalabels.color[0] = '#Ff0000'
-        adnm4SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#Ff0000'
+        adnm4SignalsConfig.options.plugins.datalabels.color[0] = '#DE301E'
+        adnm4SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#DE301E'
     } else if (adnm4SignalsConfig.data.datasets[0].data == 87) {
-        adnm4SignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
-        adnm4SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
+        adnm4SignalsConfig.options.plugins.datalabels.color[0] = '#75161A'
+        adnm4SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#75161A'
     } else if (adnm4SignalsConfig.data.datasets[0].data == -1) {
         adnm4SignalsConfig.options.plugins.datalabels.borderWidth = ""
     }
     if (pcptsd5SignalsConfig.data.datasets[0].data == 24) {
-        pcptsd5SignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
-        pcptsd5SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
+        pcptsd5SignalsConfig.options.plugins.datalabels.color[0] = '#1C99AE'
+        pcptsd5SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#1C99AE'
     } else if (pcptsd5SignalsConfig.data.datasets[0].data == 45) {
-        pcptsd5SignalsConfig.options.plugins.datalabels.color[0] = '#ffb266'
-        pcptsd5SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#ffb266'
+        pcptsd5SignalsConfig.options.plugins.datalabels.color[0] = '#E5A614'
+        pcptsd5SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#E5A614'
     } else if (pcptsd5SignalsConfig.data.datasets[0].data == 66) {
-        pcptsd5SignalsConfig.options.plugins.datalabels.color[0] = '#Ff0000'
-        pcptsd5SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#Ff0000'
+        pcptsd5SignalsConfig.options.plugins.datalabels.color[0] = '#DE301E'
+        pcptsd5SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#DE301E'
     } else if (pcptsd5SignalsConfig.data.datasets[0].data == 87) {
-        pcptsd5SignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
-        pcptsd5SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
+        pcptsd5SignalsConfig.options.plugins.datalabels.color[0] = '#75161A'
+        pcptsd5SignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#75161A'
     } else if (pcptsd5SignalsConfig.data.datasets[0].data == -1) {
         pcptsd5SignalsConfig.options.plugins.datalabels.borderWidth = ""
     }
     if (isiSignalsConfig.data.datasets[0].data == 24) {
-        isiSignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
-        isiSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
+        isiSignalsConfig.options.plugins.datalabels.color[0] = '#1C99AE'
+        isiSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#1C99AE'
     } else if (isiSignalsConfig.data.datasets[0].data == 45) {
-        isiSignalsConfig.options.plugins.datalabels.color[0] = '#ffb266'
-        isiSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#ffb266'
+        isiSignalsConfig.options.plugins.datalabels.color[0] = '#E5A614'
+        isiSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#E5A614'
     } else if (isiSignalsConfig.data.datasets[0].data == 66) {
-        isiSignalsConfig.options.plugins.datalabels.color[0] = '#Ff0000'
-        isiSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#Ff0000'
+        isiSignalsConfig.options.plugins.datalabels.color[0] = '#DE301E'
+        isiSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#DE301E'
     } else if (isiSignalsConfig.data.datasets[0].data == 87) {
-        isiSignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
-        isiSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
+        isiSignalsConfig.options.plugins.datalabels.color[0] = '#75161A'
+        isiSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#75161A'
     } else if (isiSignalsConfig.data.datasets[0].data == -1) {
         isiSignalsConfig.options.plugins.datalabels.borderWidth = ""
     }
     if (cssSignalsConfig.data.datasets[0].data == 24) {
-        cssSignalsConfig.options.plugins.datalabels.color[0] = '#00cccc'
-        cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#00cccc'
+        cssSignalsConfig.options.plugins.datalabels.color[0] = '#1C99AE'
+        cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#1C99AE'
     } else if (cssSignalsConfig.data.datasets[0].data == 45) {
-        cssSignalsConfig.options.plugins.datalabels.color[0] = '#ffb266'
-        cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#ffb266'
+        cssSignalsConfig.options.plugins.datalabels.color[0] = '#E5A614'
+        cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#E5A614'
     } else if (cssSignalsConfig.data.datasets[0].data == 66) {
-        cssSignalsConfig.options.plugins.datalabels.color[0] = '#Ff0000'
-        cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#Ff0000'
+        cssSignalsConfig.options.plugins.datalabels.color[0] = '#DE301E'
+        cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#DE301E'
     } else if (cssSignalsConfig.data.datasets[0].data == 87) {
-        cssSignalsConfig.options.plugins.datalabels.color[0] = '#994c00'
-        cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#994c00'
+        cssSignalsConfig.options.plugins.datalabels.color[0] = '#75161A'
+        cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#75161A'
     } else if (cssSignalsConfig.data.datasets[0].data == -1) {
         cssSignalsConfig.options.plugins.datalabels.borderWidth = ""
     }
@@ -579,7 +583,7 @@ async function generateChart(data) {
                     data: phq9RateBarData,
                     barPercentage: 100,
                     backgroundColor: [
-                        "#339999"
+                        "#A6D7C3"
                     ]
                 }
             ]
@@ -604,7 +608,7 @@ async function generateChart(data) {
                     data: gad7RateBarData,
                     barPercentage: 100,
                     backgroundColor: [
-                        "#339999"
+                        "#A6D7C3"
                     ]
                 }
             ]
@@ -629,7 +633,7 @@ async function generateChart(data) {
                     data: adnm4RateBarData,
                     barPercentage: 100,
                     backgroundColor: [
-                        "#339999"
+                        "#A6D7C3"
                     ]
                 }
             ]
@@ -654,7 +658,7 @@ async function generateChart(data) {
                     data: pcptsd5RateBarData,
                     barPercentage: 100,
                     backgroundColor: [
-                        "#339999"
+                        "#A6D7C3"
                     ]
                 }
             ]
@@ -679,7 +683,7 @@ async function generateChart(data) {
                     data: isiRateBarData,
                     barPercentage: 100,
                     backgroundColor: [
-                        "#339999"
+                        "#A6D7C3"
                     ]
                 }
             ]
@@ -704,7 +708,7 @@ async function generateChart(data) {
                     data: cssRateBarData,
                     barPercentage: 100,
                     backgroundColor: [
-                        "#339999"
+                        "#A6D7C3"
                     ]
                 }
             ]
@@ -1620,7 +1624,9 @@ async function generateFile(data, charts) {
     const reservationNumber = data["path-info"]["reservation-number"]
 
     // pdf 생성 경로에 따른 디렉토리 생성 + pdf 파일명 설정
-    const pdfPath = await makeDir(process.env.PDF_PATH)
+    const pdfPath = await makeDir(config.get('PDF_PATH_LOCAL')) // local
+    // const pdfPath = await makeDir(config.get('PDF_PATH')) // server
+
     const pdfName = `${pdfPath}/${centerCode}_${examDate}_${reservationNumber}.pdf`;
 
     try {
@@ -1628,7 +1634,9 @@ async function generateFile(data, charts) {
         fs.writeFileSync(pdfName, pdf, "utf-8");
 
         // jpg 생성 경로에 따른 디렉토리 생성 + jpg 파일명 설정
-        const jpgPath = await makeDir(process.env.JPG_PATH + `/${centerName}/${examDate}`)
+        const jpgPath = await makeDir(config.get('JPG_PATH_LOCAL') + `/${centerName}/${examDate}`) // local
+        // const jpgPath = await makeDir(config.get('JPG_PATH') + `/${centerName}/${examDate}`) // server
+
         const options = {
             density: 100,
             savePath: jpgPath,
