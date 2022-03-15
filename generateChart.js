@@ -1785,9 +1785,8 @@ async function generateFile(data, charts) {
     const reservationNumber = data["path-info"]["reservation-number"]
 
     // pdf 생성 경로에 따른 디렉토리 생성 + pdf 파일명 설정
-    const pdfPath = await makeDir(config.get('PDF_PATH_LOCAL')) // local
-    // const pdfPath = await makeDir(config.get('PDF_PATH')) // server
-
+    // const pdfPath = await makeDir(config.get('PDF_PATH'))
+    const pdfPath = await makeDir(config.get('PDF_PATH_LOCAL'))
     const pdfName = `${pdfPath}/${centerCode}_${examDate}_${reservationNumber}.pdf`;
 
     try {
@@ -1795,8 +1794,8 @@ async function generateFile(data, charts) {
         fs.writeFileSync(pdfName, pdf, "utf-8");
 
         // jpg 생성 경로에 따른 디렉토리 생성 + jpg 파일명 설정
-        const jpgPath = await makeDir(config.get('JPG_PATH_LOCAL') + `/${centerName}/${examDate}`) // local
-        // const jpgPath = await makeDir(config.get('JPG_PATH') + `/${centerName}/${examDate}`) // server
+        // const jpgPath = await makeDir(config.get('JPG_PATH') + `/${centerName}/${examDate}`)
+        const jpgPath = await makeDir(config.get('JPG_PATH_LOCAL') + `/${centerName}/${examDate}`)
 
         const options = {
             density: 100,
