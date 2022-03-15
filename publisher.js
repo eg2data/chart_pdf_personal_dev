@@ -5,9 +5,9 @@ const config = require('config')
 const data_0 =
     {
         "path-info": {
-            "reservation-number": 711711711, // 예약번호
-            "center-code": 711, // 센터코드
-            "exam-date": "2022-03-10"
+            "reservation-number": 12341234, // 예약번호
+            "center-code": 112, // 센터코드
+            "exam-date": "2022-03-18"
         },
         "basic-info": {
             "user-name": "env-test",
@@ -25,7 +25,7 @@ const data_0 =
             "autonomy": [12.1, "하위 50"],
             "system": [18.1, "하위 50"],
             "relationship": [19.1, "하위 25"],
-            "changes-by-year": [25, 50, 75, 100, 25],
+            "changes-by-year": [72],
             "comment-details": "스트레스 측정 점수는 39.5점으로, 참고치 하위 25%에 해당합니다.",
         },
         "phq-9" : {
@@ -36,7 +36,7 @@ const data_0 =
             "comments": "약간 심한 수준의 우울감을 자주 느낌",
             "requirements": "추가 평가 또는 전문가의 도움이 필요함",
             "requirement-texts": "전문도움필요",
-            "changes-by-year": [25, 100, 75, 0, 50],
+            "changes-by-year": [12],
             "comment-details": "검사 결과는 약간 심한 수준의 우울감을 자주 느끼고 있습니다. 우울증 진단은 병력 및 여러 검사 결과와 전문의의 종합적인 판단에 의해 이루어지므로, 추가 평가 또는 전문가의 도움이 필요합니다.",
         },
         "gad-7" : {
@@ -47,7 +47,7 @@ const data_0 =
             "comments": "주의가 필요한 과도한 걱정, 불안을 느낌",
             "requirements": "추가 평가 또는 전문가의 도움이 필요함",
             "requirement-texts": "전문도움필요",
-            "changes-by-year": [100, 50, 0, 75, 25],
+            "changes-by-year": [10],
             "comment-details": "검사 결과는 중간 수준의 불안감을 자주 느끼고 있습니다. 불안장애 진단은 병력 및 여러 검사 결과와 전문의의 종합적인 판단에 의해 이루어지므로, 추가 평가 또는 전문가의 도움이 필요합니다.",
         },
         "adnm-4" : {
@@ -58,7 +58,7 @@ const data_0 =
             "comments": "일상 생활 적응에 어려움이 있을 수 있음",
             "requirements": "추가 평가 또는 전문가의 도움이 필요함",
             "requirement-texts": "전문도움필요",
-            "changes-by-year": [0, 25, 75, 50, 100],
+            "changes-by-year": [8],
             "comment-details": "검사 결과는 심각한 수준의 적응 스트레스를 자주 느끼고 있습니다. 적응장애 진단은 병력 및 여러 검사 결과와 전문의의 종합적인 판단에 의해 이루어지므로, 추가 평가 또는 전문가의 도움이 필요합니다.",
         },
         "pc-ptsd-5" : {
@@ -69,7 +69,7 @@ const data_0 =
             "comments": "일상 생활 적응에 어려움이 있을 수 있음",
             "requirements": "추가 평가 또는 전문가의 도움이 필요함",
             "requirement-texts": "전문도움필요",
-            "changes-by-year": [75, 0, 50, 100, 100],
+            "changes-by-year": [2],
             "comment-details": "검사 결과는 심각한 수준의 적응 스트레스를 자주 느끼고 있습니다. PTSD 진단은 병력 및 여러 검사 결과와 전문의의 종합적인 판단에 의해 이루어지므로, 추가 평가 또는 전문가의 도움이 필요합니다.",
         },
         "isi" : {
@@ -80,7 +80,7 @@ const data_0 =
             "comments": "경미한 불면증이 있는 것으로 보임",
             "requirements": "2주 이상 지속 시 전문가의 도움이 필요함",
             "requirement-texts": "전문도움필요",
-            "changes-by-year": [50, 100, 75, 50, 75],
+            "changes-by-year": [18],
             "comment-details": "검사 결과는 경미한 수준의 불면증을 자주 느끼고 있습니다. 2주 이상 지속 시 전문가의 도움이 필요합니다. 불면증 진단은 병력 및 여러 검사 결과와 전문의의 종합적인 판단에 의해 이루어지므로, 추가 평가 또는 전문가의 도움이 필요합니다.",
         },
         "css" : {

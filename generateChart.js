@@ -2,12 +2,10 @@ import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import fs from "fs";
 import labelmake from "labelmake";
-import template from "./labelmake-template.json";
+import template from "./template-latest.json";
 import {fromPath} from "pdf2pic";
 import makeDir from "make-dir";
 import config from "config";
-// const gm = require('gm').subClass({imageMagick: '7+'});
-
 
 // 한글처리
 const NanumGothic = fs.readFileSync("./NanumGothic-Regular.ttf")
@@ -88,7 +86,7 @@ async function generateChart(data) {
         }
     }
     // 연도별 점수 관련 scale은 각각 가는 것으로.
-    const changesByYearScales = { // 3) 연도별
+    const kosssfChangesByYearScales = { // 3) 연도별
 
         x: {
             grid: {
@@ -117,9 +115,170 @@ async function generateChart(data) {
                 stepSize: 25,
             },
             min: 0,
-            max: 100,
+            max: 96,
         }
     }
+    const phq9ChangesByYearScales = { // 3) 연도별
+
+        x: {
+            grid: {
+                display: false,
+                drawBorder: false,
+            },
+            ticks: {
+                font: {
+                    size: 10,
+                    lineHeight: 0.1,
+                    weight: "bold",
+                },
+            },
+        },
+        y: {
+            beginAtZero: true,
+            grid: {
+                drawBorder: false,
+                color: [
+                    'white',
+                ],
+            },
+            ticks: {
+                display: false,
+                beginAtZero: true,
+                stepSize: 25,
+            },
+            min: 0,
+            max: 24,
+        }
+    }
+    const gad7ChangesByYearScales = { // 3) 연도별
+
+        x: {
+            grid: {
+                display: false,
+                drawBorder: false,
+            },
+            ticks: {
+                font: {
+                    size: 10,
+                    lineHeight: 0.1,
+                    weight: "bold",
+                },
+            },
+        },
+        y: {
+            beginAtZero: true,
+            grid: {
+                drawBorder: false,
+                color: [
+                    'white',
+                ],
+            },
+            ticks: {
+                display: false,
+                beginAtZero: true,
+                stepSize: 25,
+            },
+            min: 0,
+            max: 20,
+        }
+    }
+    const adnm4ChangesByYearScales = { // 3) 연도별
+
+        x: {
+            grid: {
+                display: false,
+                drawBorder: false,
+            },
+            ticks: {
+                font: {
+                    size: 10,
+                    lineHeight: 0.1,
+                    weight: "bold",
+                },
+            },
+        },
+        y: {
+            beginAtZero: true,
+            grid: {
+                drawBorder: false,
+                color: [
+                    'white',
+                ],
+            },
+            ticks: {
+                display: false,
+                beginAtZero: true,
+                stepSize: 25,
+            },
+            min: 0,
+            max: 16,
+        }
+    }
+    const pcptsd5ChangesByYearScales = { // 3) 연도별
+
+        x: {
+            grid: {
+                display: false,
+                drawBorder: false,
+            },
+            ticks: {
+                font: {
+                    size: 10,
+                    lineHeight: 0.1,
+                    weight: "bold",
+                },
+            },
+        },
+        y: {
+            beginAtZero: true,
+            grid: {
+                drawBorder: false,
+                color: [
+                    'white',
+                ],
+            },
+            ticks: {
+                display: false,
+                beginAtZero: true,
+                stepSize: 25,
+            },
+            min: 0,
+            max: 4,
+        }
+    }
+    const isiChangesByYearScales = { // 3) 연도별
+
+        x: {
+            grid: {
+                display: false,
+                drawBorder: false,
+            },
+            ticks: {
+                font: {
+                    size: 10,
+                    lineHeight: 0.1,
+                    weight: "bold",
+                },
+            },
+        },
+        y: {
+            beginAtZero: true,
+            grid: {
+                drawBorder: false,
+                color: [
+                    'white',
+                ],
+            },
+            ticks: {
+                display: false,
+                beginAtZero: true,
+                stepSize: 25,
+            },
+            min: 0,
+            max: 24,
+        }
+    }
+
 
 
 
@@ -811,7 +970,7 @@ async function generateChart(data) {
             ]
         },
         options: {
-            scales: changesByYearScales,
+            scales: kosssfChangesByYearScales,
             plugins: {
                 legend: {
                     display: false
@@ -838,7 +997,7 @@ async function generateChart(data) {
             ]
         },
         options: {
-            scales: changesByYearScales,
+            scales: phq9ChangesByYearScales,
             plugins: {
                 legend: {
                     display: false
@@ -865,7 +1024,7 @@ async function generateChart(data) {
             ]
         },
         options: {
-            scales: changesByYearScales,
+            scales: gad7ChangesByYearScales,
             plugins: {
                 legend: {
                     display: false
@@ -892,7 +1051,7 @@ async function generateChart(data) {
             ]
         },
         options: {
-            scales: changesByYearScales,
+            scales: adnm4ChangesByYearScales,
             plugins: {
                 legend: {
                     display: false
@@ -919,7 +1078,7 @@ async function generateChart(data) {
             ]
         },
         options: {
-            scales: changesByYearScales,
+            scales: pcptsd5ChangesByYearScales,
             plugins: {
                 legend: {
                     display: false
@@ -946,7 +1105,7 @@ async function generateChart(data) {
             ]
         },
         options: {
-            scales: changesByYearScales,
+            scales: isiChangesByYearScales,
             plugins: {
                 legend: {
                     display: false
