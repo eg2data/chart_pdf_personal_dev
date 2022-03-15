@@ -25,7 +25,7 @@ const data_0 =
             "autonomy": [2.1, "하위 50"],
             "system": [7.9, "하위 50"],
             "relationship": [3, "하위 25"],
-            "changes-by-year": [24],
+            "changes-by-year": [0], // 24
             "comment-details": "스트레스 측정 점수는 39.5점으로, 참고치 하위 25%에 해당합니다.",
         },
         "phq-9" : {
@@ -669,18 +669,18 @@ amqp.connect('amqp://localhost', (connectionError, connection) => {
             durable: false
         });
         // Step 4: send message to queue
-        for (let i = 0; i < 7; i++) {
-            const message = JSON.stringify(data[i])
-            channel.sendToQueue(queueName, Buffer.from(message), {
-                persistent: true
-            });
-            console.log(`[x] Sent data_${i} successfully.`)
-        }
-        // const message = JSON.stringify(data_0)
-        // channel.sendToQueue(queueName, Buffer.from(message), {
-        //     persistent: true
-        // });
-        // console.log(`[x] Sent data successfully.`)
+        // for (let i = 0; i < 7; i++) {
+        //     const message = JSON.stringify(data[i])
+        //     channel.sendToQueue(queueName, Buffer.from(message), {
+        //         persistent: true
+        //     });
+        //     console.log(`[x] Sent data_${i} successfully.`)
+        // }
+        const message = JSON.stringify(data_6)
+        channel.sendToQueue(queueName, Buffer.from(message), {
+            persistent: true
+        });
+        console.log(`[x] Sent data successfully.`)
     })
     setTimeout(() => {
         connection.close();

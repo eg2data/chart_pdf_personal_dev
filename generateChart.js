@@ -915,37 +915,37 @@ async function generateChart(data) {
     // 1) data
     let kosssfChangesByYearData;
     if (data["koss-sf"]["changes-by-year"] == null) {
-        kosssfChangesByYearData = [0];
+        kosssfChangesByYearData = [-1];
     } else {
         kosssfChangesByYearData = data["koss-sf"]["changes-by-year"]
     }
     let phq9ChangesByYearData;
     if (data["phq-9"]["changes-by-year"] == null) {
-        phq9ChangesByYearData = [0];
+        phq9ChangesByYearData = [-1];
     } else {
         phq9ChangesByYearData = data["phq-9"]["changes-by-year"]
     }
     let gad7ChangesByYearData;
     if (data["gad-7"]["changes-by-year"] == null) {
-        gad7ChangesByYearData = [0];
+        gad7ChangesByYearData = [-1];
     } else {
         gad7ChangesByYearData = data["gad-7"]["changes-by-year"]
     }
     let adnm4ChangesByYearData;
     if (data["adnm-4"]["changes-by-year"] == null) {
-        adnm4ChangesByYearData = [0];
+        adnm4ChangesByYearData = [-1];
     } else {
         adnm4ChangesByYearData = data["adnm-4"]["changes-by-year"]
     }
     let pcptsd5ChangesByYearData;
     if (data["pc-ptsd-5"]["changes-by-year"] == null) {
-        pcptsd5ChangesByYearData = [0];
+        pcptsd5ChangesByYearData = [-1];
     } else {
         pcptsd5ChangesByYearData = data["pc-ptsd-5"]["changes-by-year"]
     }
     let isiChangesByYearData;
     if (data["isi"]["changes-by-year"] == null) {
-        isiChangesByYearData = [0];
+        isiChangesByYearData = [-1];
     } else {
         isiChangesByYearData = data["isi"]["changes-by-year"]
     }
@@ -1113,6 +1113,26 @@ async function generateChart(data) {
             }
         },
     };
+
+    // 3) 입력값이 null일 경우 label 지우기
+    if (kosssfChangeByYearConfig.data.datasets[0].data == -1) {
+        kosssfChangeByYearConfig.data.labels = ""
+    }
+    if (phq9ChangeByYearConfig.data.datasets[0].data == -1) {
+        phq9ChangeByYearConfig.data.labels = ""
+    }
+    if (gad7ChangeByYearConfig.data.datasets[0].data == -1) {
+        gad7ChangeByYearConfig.data.labels = ""
+    }
+    if (adnm4ChangeByYearConfig.data.datasets[0].data == -1) {
+        adnm4ChangeByYearConfig.data.labels = ""
+    }
+    if (pcptsd5ChangeByYearConfig.data.datasets[0].data == -1) {
+        pcptsd5ChangeByYearConfig.data.labels = ""
+    }
+    if (isiChangeByYearConfig.data.datasets[0].data == -1) {
+        isiChangeByYearConfig.data.labels = ""
+    }
 
 // <가로바(점)>
     // 1) data
