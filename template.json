@@ -5,7 +5,7 @@
     "cover-report-date": {"type":"text","position":{"x":68,"y":257.5},"width":28,"height":8,"alignment":"center","fontSize":12,"characterSpacing":1,"lineHeight":1,"fontColor":"#F0F0F0"}
   },
   {
-    "overall-user-name":{"type":"text","position":{"x":10,"y":20},"width":30,"height":6.5,"alignment":"center","fontSize":16,"characterSpacing":1,"lineHeight":1,"fontColor":"#293f6b"},
+    "overall-user-name":{"type":"text","position":{"x":10,"y":20},"width":30,"height":6.5,"alignment":"center","fontSize":16,"characterSpacing":1,"lineHeight":1,"fontColor":"#2B3F66"},
     "overall-koss-sf-signal-texts":{"type":"text","position":{"x":86.25,"y":86.75},"width":20,"height":5,"alignment":"left","fontSize":8,"characterSpacing":0,"lineHeight":1},
     "overall-koss-sf-signals":{"type":"image","position":{"x":62,"y":91.25},"width":36,"height":9},
     "overall-phq-9-signal-texts":{"type":"text","position":{"x":77.25,"y":135.75},"width":20,"height":5,"alignment":"left","fontSize":8,"characterSpacing":0,"lineHeight":1},

@@ -15,6 +15,14 @@ const font = {
         subset: false
     }
 };
+// 글씨체를 바꿔봐도, 적용이 안되고 똑같네.
+// const SDGothic = fs.readFileSync("./AppleSDGothicNeoL.ttf")
+// const font = {
+//     SDGothic : {
+//         data: SDGothic,
+//         subset: false
+//     }
+// };
 
 async function generateChart(data) {
 // <defaults>
