@@ -2,7 +2,7 @@ import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import fs from "fs";
 import labelmake from "labelmake";
-import template from "./template-latest.json";
+import template from "./template.json";
 import {fromPath} from "pdf2pic";
 import makeDir from "make-dir";
 import config from "config";
@@ -18,7 +18,7 @@ const font = {
 
 async function generateChart(data) {
 // <defaults>
-    const signalsScales =  { // 1) 신호등
+    const scalesDefault =  { // 1) 신호등
         x: {
             grid: {
                 drawBorder: false,
@@ -40,54 +40,7 @@ async function generateChart(data) {
             }
         }
     }
-    const rateBarScales =  { // 2) 가로바(채움)
-
-        x: {
-            grid: {
-                drawBorder: false,
-                display: false
-            },
-            ticks: {
-                display: false,
-            },
-            min: 0,
-            max: 100,
-        },
-        y: {
-            grid: {
-                drawBorder: false,
-                display: false,
-            },
-            ticks: {
-                display: false,
-            }
-        }
-    }
-    const kosssfScales =  { // 4) 가로바(점)
-        x: {
-            grid: {
-                drawBorder: false,
-                display: false
-            },
-            ticks: {
-                display: false,
-            },
-            min: 0,
-            max: 20,
-        },
-        y: {
-            grid: {
-                drawBorder: false,
-                display: false,
-            },
-            ticks: {
-                display: false,
-            }
-        }
-    }
-    // 연도별 점수 관련 scale은 각각 가는 것으로.
-    const kosssfChangesByYearScales = { // 3) 연도별
-
+    const scaleByYearKosssf = { // 3) 연도별
         x: {
             grid: {
                 display: false,
@@ -118,7 +71,7 @@ async function generateChart(data) {
             max: 96,
         }
     }
-    const phq9ChangesByYearScales = { // 3) 연도별
+    const scaleByYearPhq9 = { // 3) 연도별
 
         x: {
             grid: {
@@ -150,7 +103,7 @@ async function generateChart(data) {
             max: 24,
         }
     }
-    const gad7ChangesByYearScales = { // 3) 연도별
+    const scaleByYearGad7 = { // 3) 연도별
 
         x: {
             grid: {
@@ -182,8 +135,7 @@ async function generateChart(data) {
             max: 20,
         }
     }
-    const adnm4ChangesByYearScales = { // 3) 연도별
-
+    const scaleByYearAdnm4 = { // 3) 연도별
         x: {
             grid: {
                 display: false,
@@ -214,8 +166,7 @@ async function generateChart(data) {
             max: 16,
         }
     }
-    const pcptsd5ChangesByYearScales = { // 3) 연도별
-
+    const scaleByYearPcptsd5 = { // 3) 연도별
         x: {
             grid: {
                 display: false,
@@ -246,8 +197,7 @@ async function generateChart(data) {
             max: 4,
         }
     }
-    const isiChangesByYearScales = { // 3) 연도별
-
+    const scaleByYearIsi = { // 3) 연도별
         x: {
             grid: {
                 display: false,
@@ -278,9 +228,6 @@ async function generateChart(data) {
             max: 24,
         }
     }
-
-
-
 
 // <canvas>
     const signalsCanvas = new ChartJSNodeCanvas({ width: 240, height: 60 }); // 1) 신호등
@@ -357,7 +304,7 @@ async function generateChart(data) {
         plugins: [ChartDataLabels],
         options: {
             indexAxis: 'y',
-            scales: signalsScales,
+            scales: scalesDefault,
             plugins: {
                 datalabels: {
                     color: [''],
@@ -392,7 +339,7 @@ async function generateChart(data) {
         plugins: [ChartDataLabels],
         options: {
             indexAxis: 'y',
-            scales: signalsScales,
+            scales: scalesDefault,
             plugins: {
                 datalabels: {
                     color: [''],
@@ -427,7 +374,7 @@ async function generateChart(data) {
         plugins: [ChartDataLabels],
         options: {
             indexAxis: 'y',
-            scales: signalsScales,
+            scales: scalesDefault,
             plugins: {
                 datalabels: {
                     color: [''],
@@ -462,7 +409,7 @@ async function generateChart(data) {
         plugins: [ChartDataLabels],
         options: {
             indexAxis: 'y',
-            scales: signalsScales,
+            scales: scalesDefault,
             plugins: {
                 datalabels: {
                     color: [''],
@@ -497,7 +444,7 @@ async function generateChart(data) {
         plugins: [ChartDataLabels],
         options: {
             indexAxis: 'y',
-            scales: signalsScales,
+            scales: scalesDefault,
             plugins: {
                 datalabels: {
                     color: [''],
@@ -532,7 +479,7 @@ async function generateChart(data) {
         plugins: [ChartDataLabels],
         options: {
             indexAxis: 'y',
-            scales: signalsScales,
+            scales: scalesDefault,
             plugins: {
                 datalabels: {
                     color: [''],
@@ -567,7 +514,7 @@ async function generateChart(data) {
         plugins: [ChartDataLabels],
         options: {
             indexAxis: 'y',
-            scales: signalsScales,
+            scales: scalesDefault,
             plugins: {
                 datalabels: {
                     color: [''],
@@ -681,17 +628,21 @@ async function generateChart(data) {
         isiSignalsConfig.options.plugins.datalabels.borderWidth = ""
     }
     if (cssSignalsConfig.data.datasets[0].data == 24) {
-        cssSignalsConfig.options.plugins.datalabels.color[0] = '#1C99AE'
-        cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#1C99AE'
+        // cssSignalsConfig.options.plugins.datalabels.color[0] = '#1C99AE'
+        // cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#1C99AE'
+        cssSignalsConfig.options.plugins.datalabels.borderWidth = ""
     } else if (cssSignalsConfig.data.datasets[0].data == 45) {
-        cssSignalsConfig.options.plugins.datalabels.color[0] = '#E5A614'
-        cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#E5A614'
+        // cssSignalsConfig.options.plugins.datalabels.color[0] = '#E5A614'
+        // cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#E5A614'
+        cssSignalsConfig.options.plugins.datalabels.borderWidth = ""
     } else if (cssSignalsConfig.data.datasets[0].data == 66) {
-        cssSignalsConfig.options.plugins.datalabels.color[0] = '#DE301E'
-        cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#DE301E'
+        // cssSignalsConfig.options.plugins.datalabels.color[0] = '#DE301E'
+        // cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#DE301E'
+        cssSignalsConfig.options.plugins.datalabels.borderWidth = ""
     } else if (cssSignalsConfig.data.datasets[0].data == 87) {
-        cssSignalsConfig.options.plugins.datalabels.color[0] = '#75161A'
-        cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#75161A'
+        // cssSignalsConfig.options.plugins.datalabels.color[0] = '#75161A'
+        // cssSignalsConfig.options.plugins.datalabels.backgroundColor[0] = '#75161A'
+        cssSignalsConfig.options.plugins.datalabels.borderWidth = ""
     } else if (cssSignalsConfig.data.datasets[0].data == -1) {
         cssSignalsConfig.options.plugins.datalabels.borderWidth = ""
     }
@@ -751,7 +702,7 @@ async function generateChart(data) {
         },
         options: {
             indexAxis: 'y',
-            scales: rateBarScales,
+            scales: scalesDefault,
             plugins: {
                 legend: {
                     display: false
@@ -776,7 +727,7 @@ async function generateChart(data) {
         },
         options: {
             indexAxis: 'y',
-            scales: rateBarScales,
+            scales: scalesDefault,
             plugins: {
                 legend: {
                     display: false
@@ -801,7 +752,7 @@ async function generateChart(data) {
         },
         options: {
             indexAxis: 'y',
-            scales: rateBarScales,
+            scales: scalesDefault,
             plugins: {
                 legend: {
                     display: false
@@ -826,7 +777,7 @@ async function generateChart(data) {
         },
         options: {
             indexAxis: 'y',
-            scales: rateBarScales,
+            scales: scalesDefault,
             plugins: {
                 legend: {
                     display: false
@@ -851,7 +802,7 @@ async function generateChart(data) {
         },
         options: {
             indexAxis: 'y',
-            scales: rateBarScales,
+            scales: scalesDefault,
             plugins: {
                 legend: {
                     display: false
@@ -876,7 +827,7 @@ async function generateChart(data) {
         },
         options: {
             indexAxis: 'y',
-            scales: rateBarScales,
+            scales: scalesDefault,
             plugins: {
                 legend: {
                     display: false
@@ -885,6 +836,7 @@ async function generateChart(data) {
             }
         }
     }
+
     // 3) 입력값이 null일 경우 차트 비우기
     if (phq9RateBarConfig.data.datasets[0].data == -1) {
         phq9RateBarConfig.data.datasets[0].barPercentage = ""
@@ -970,7 +922,7 @@ async function generateChart(data) {
             ]
         },
         options: {
-            scales: kosssfChangesByYearScales,
+            scales: scaleByYearKosssf,
             plugins: {
                 legend: {
                     display: false
@@ -997,7 +949,7 @@ async function generateChart(data) {
             ]
         },
         options: {
-            scales: phq9ChangesByYearScales,
+            scales: scaleByYearPhq9,
             plugins: {
                 legend: {
                     display: false
@@ -1024,7 +976,7 @@ async function generateChart(data) {
             ]
         },
         options: {
-            scales: gad7ChangesByYearScales,
+            scales: scaleByYearGad7,
             plugins: {
                 legend: {
                     display: false
@@ -1051,7 +1003,7 @@ async function generateChart(data) {
             ]
         },
         options: {
-            scales: adnm4ChangesByYearScales,
+            scales: scaleByYearAdnm4,
             plugins: {
                 legend: {
                     display: false
@@ -1078,7 +1030,7 @@ async function generateChart(data) {
             ]
         },
         options: {
-            scales: pcptsd5ChangesByYearScales,
+            scales: scaleByYearPcptsd5,
             plugins: {
                 legend: {
                     display: false
@@ -1105,7 +1057,7 @@ async function generateChart(data) {
             ]
         },
         options: {
-            scales: isiChangesByYearScales,
+            scales: scaleByYearIsi,
             plugins: {
                 legend: {
                     display: false
@@ -1194,7 +1146,7 @@ async function generateChart(data) {
         plugins: [ChartDataLabels],
         options: {
             indexAxis: 'y',
-            scales: kosssfScales,
+            scales: scalesDefault,
             plugins: {
                 datalabels: {
                     color: ['red'],
@@ -1229,7 +1181,7 @@ async function generateChart(data) {
         plugins: [ChartDataLabels],
         options: {
             indexAxis: 'y',
-            scales: kosssfScales,
+            scales: scalesDefault,
             plugins: {
                 datalabels: {
                     color: ['red'],
@@ -1264,7 +1216,7 @@ async function generateChart(data) {
         plugins: [ChartDataLabels],
         options: {
             indexAxis: 'y',
-            scales: kosssfScales,
+            scales: scalesDefault,
             plugins: {
                 datalabels: {
                     color: ['red'],
@@ -1299,7 +1251,7 @@ async function generateChart(data) {
         plugins: [ChartDataLabels],
         options: {
             indexAxis: 'y',
-            scales: kosssfScales,
+            scales: scalesDefault,
             plugins: {
                 datalabels: {
                     color: ['red'],
@@ -1334,7 +1286,7 @@ async function generateChart(data) {
         plugins: [ChartDataLabels],
         options: {
             indexAxis: 'y',
-            scales: kosssfScales,
+            scales: scalesDefault,
             plugins: {
                 datalabels: {
                     color: ['red'],
@@ -1369,7 +1321,7 @@ async function generateChart(data) {
         plugins: [ChartDataLabels],
         options: {
             indexAxis: 'y',
-            scales: kosssfScales,
+            scales: scalesDefault,
             plugins: {
                 datalabels: {
                     color: ['red'],
@@ -1404,7 +1356,7 @@ async function generateChart(data) {
         plugins: [ChartDataLabels],
         options: {
             indexAxis: 'y',
-            scales: kosssfScales,
+            scales: scalesDefault,
             plugins: {
                 datalabels: {
                     color: ['red'],
@@ -1425,6 +1377,7 @@ async function generateChart(data) {
             }
         },
     };
+
     // 3) 입력값이 null일 경우 차트 비우기
     if (kosssfCompensationConfig.data.datasets[0].data == 0) {
         kosssfCompensationConfig.options.plugins.datalabels.borderWidth = ""
@@ -1650,7 +1603,10 @@ async function generateFile(data, charts) {
 
     // 7. <generate PDF file>
     const inputs = [
-        {
+        {   "cover-user-name": data["basic-info"]["user-name"],
+            "cover-exam-date": data["path-info"]["exam-date"],
+            "cover-report-date": data["path-info"]["report-date"],
+
             "overall-user-name": data["basic-info"]["user-name"],
             "overall-koss-sf-signal-texts": ": " + data["koss-sf"]["signal-texts"],
             "overall-koss-sf-signals": charts['koss-sf-signals'],
@@ -1827,7 +1783,7 @@ async function generateFile(data, charts) {
         };
         const storeAsImage = fromPath(pdfName, options);
         let pages = 0;
-        for (let i = 1; i < 6; i++) {
+        for (let i = 1; i < 7; i++) {
             await storeAsImage(i);
             pages++;
         }

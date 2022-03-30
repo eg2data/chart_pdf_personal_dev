@@ -7,10 +7,11 @@ const data_0 =
         "path-info": {
             "reservation-number": 1110111011, // 예약번호
             "center-code": 111, // 센터코드
-            "exam-date": "1989-02-17"
+            "exam-date": "1989-02-17",
+            "report-date": "1989-02-19"
         },
         "basic-info": {
-            "user-name": "test-1",
+            "user-name": "박박박",
         },
         "koss-sf" : {
             "signals": [24], // 24, 45, 66, 87
@@ -18,14 +19,14 @@ const data_0 =
             "points" : [24],
             "rates" : ["상위 25"],
             "means" : [3.3],
-            "compensation": [3, "하위 25"],
+            "compensation": [96, "하위 25"],
             "jobInstability": [7.7, "하위 50"],
             "requirements": [4.2, "하위 25"],
             "culture": [15, "하위 25"],
             "autonomy": [2.1, "하위 50"],
             "system": [7.9, "하위 50"],
             "relationship": [3, "하위 25"],
-            "changes-by-year": [0], // 24
+            "changes-by-year": [24], // 24
             "comment-details": "스트레스 측정 점수는 39.5점으로, 참고치 하위 25%에 해당합니다.",
         },
         "phq-9" : {
@@ -62,7 +63,7 @@ const data_0 =
             "comment-details": "검사 결과는 심각한 수준의 적응 스트레스를 자주 느끼고 있습니다. 적응장애 진단은 병력 및 여러 검사 결과와 전문의의 종합적인 판단에 의해 이루어지므로, 추가 평가 또는 전문가의 도움이 필요합니다.",
         },
         "pc-ptsd-5" : {
-            "signals": [24],
+            "signals": [66],
             "signal-texts": "중간",
             "points" : [4],
             "rates": [29.7],
@@ -84,7 +85,7 @@ const data_0 =
             "comment-details": "검사 결과는 경미한 수준의 불면증을 자주 느끼고 있습니다. 2주 이상 지속 시 전문가의 도움이 필요합니다. 불면증 진단은 병력 및 여러 검사 결과와 전문의의 종합적인 판단에 의해 이루어지므로, 추가 평가 또는 전문가의 도움이 필요합니다.",
         },
         "css" : {
-            "signals": [66],
+            "signals": [24],
             "signal-texts": "정상",
             "points" : [33],
             "rates": [65.2],
@@ -99,10 +100,11 @@ const data_1 =
         "path-info": {
             "reservation-number": 1120112011, // 예약번호
             "center-code": 112, // 센터코드
-            "exam-date": "1989-02-17"
+            "exam-date": "1989-02-17",
+            "report-date": "1989-02-19"
         },
         "basic-info": {
-            "user-name": "test-2",
+            "user-name": "박박박박2",
         },
         "koss-sf" : {
             "signals": [87], // 24, 45, 66, 87
@@ -191,10 +193,11 @@ const data_2 =
         "path-info": {
             "reservation-number": 1130113011, // 예약번호
             "center-code": 113, // 센터코드
-            "exam-date": "1989-02-17"
+            "exam-date": "1989-02-17",
+            "report-date": "1989-02-19"
         },
         "basic-info": {
-            "user-name": "test-3",
+            "user-name": "박박박박3",
         },
         "koss-sf" : {
             "signals": [66], // 24, 45, 66, 87
@@ -283,10 +286,11 @@ const data_3 =
         "path-info": {
             "reservation-number": 2110211021, // 예약번호
             "center-code": 211, // 센터코드
-            "exam-date": "1989-02-17"
+            "exam-date": "1989-02-17",
+            "report-date": "1989-02-19"
         },
         "basic-info": {
-            "user-name": "test-4",
+            "user-name": "박박박박4",
         },
         "koss-sf" : {
             "signals": [45], // 24, 45, 66, 87
@@ -375,10 +379,11 @@ const data_4 =
         "path-info": {
             "reservation-number": 6110611061, // 예약번호
             "center-code": 611, // 센터코드
-            "exam-date": "1989-02-17"
+            "exam-date": "1989-02-17",
+            "report-date": "1989-02-19"
         },
         "basic-info": {
-            "user-name": "test-5",
+            "user-name": "박박박박5",
         },
         "koss-sf" : {
             "signals": [24], // 24, 45, 66, 87
@@ -467,10 +472,11 @@ const data_5 =
         "path-info": {
             "reservation-number": 6120612061, // 예약번호
             "center-code": 612, // 센터코드
-            "exam-date": "1989-02-17"
+            "exam-date": "1989-02-17",
+            "report-date": "1989-02-19"
         },
         "basic-info": {
-            "user-name": "test-6",
+            "user-name": "박박박박6",
         },
         "koss-sf" : {
             "signals": [87], // 24, 45, 66, 87
@@ -559,10 +565,11 @@ const data_6 =
         "path-info": {
             "reservation-number": 7110711071, // 예약번호
             "center-code": 711, // 센터코드
-            "exam-date": "1989-02-17"
+            "exam-date": "1989-02-17",
+            "report-date": "1989-02-19"
         },
         "basic-info": {
-            "user-name": "null-test",
+            "user-name": "박박박",
         },
         "koss-sf" : {
             "signals": null,
@@ -669,18 +676,18 @@ amqp.connect('amqp://localhost', (connectionError, connection) => {
             durable: false
         });
         // Step 4: send message to queue
-        // for (let i = 0; i < 7; i++) {
-        //     const message = JSON.stringify(data[i])
-        //     channel.sendToQueue(queueName, Buffer.from(message), {
-        //         persistent: true
-        //     });
-        //     console.log(`[x] Sent data_${i} successfully.`)
-        // }
-        const message = JSON.stringify(data_6)
-        channel.sendToQueue(queueName, Buffer.from(message), {
-            persistent: true
-        });
-        console.log(`[x] Sent data successfully.`)
+        for (let i = 0; i < 7; i++) {
+            const message = JSON.stringify(data[i])
+            channel.sendToQueue(queueName, Buffer.from(message), {
+                persistent: true
+            });
+            console.log(`[x] Sent data_${i} successfully.`)
+        }
+        // const message = JSON.stringify(data_0)
+        // channel.sendToQueue(queueName, Buffer.from(message), {
+        //     persistent: true
+        // });
+        // console.log(`[x] Sent data successfully.`)
     })
     setTimeout(() => {
         connection.close();
