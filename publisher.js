@@ -676,18 +676,18 @@ amqp.connect('amqp://localhost', (connectionError, connection) => {
             durable: false
         });
         // Step 4: send message to queue
-        for (let i = 0; i < 7; i++) {
-            const message = JSON.stringify(data[i])
-            channel.sendToQueue(queueName, Buffer.from(message), {
-                persistent: true
-            });
-            console.log(`[x] Sent data_${i} successfully.`)
-        }
-        // const message = JSON.stringify(data_0)
-        // channel.sendToQueue(queueName, Buffer.from(message), {
-        //     persistent: true
-        // });
-        // console.log(`[x] Sent data successfully.`)
+        // for (let i = 0; i < 7; i++) {
+        //     const message = JSON.stringify(data[i])
+        //     channel.sendToQueue(queueName, Buffer.from(message), {
+        //         persistent: true
+        //     });
+        //     console.log(`[x] Sent data_${i} successfully.`)
+        // }
+        const message = JSON.stringify(data_0)
+        channel.sendToQueue(queueName, Buffer.from(message), {
+            persistent: true
+        });
+        console.log(`[x] Sent data successfully.`)
     })
     setTimeout(() => {
         connection.close();
